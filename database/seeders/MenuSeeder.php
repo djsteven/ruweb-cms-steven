@@ -1,0 +1,52 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Menu;
+use App\Models\MenuItem;
+use Illuminate\Database\Seeder;
+
+class MenuSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $header = Menu::updateOrCreate(
+            ['slug' => 'header'],
+            ['name' => 'Header Menu', 'location' => 'header']
+        );
+
+        if ($header->items()->count() === 0) {
+            MenuItem::create([
+                'menu_id' => $header->id,
+                'label'   => 'Home',
+                'type'    => 'custom_link',
+                'url'     => '/',
+                'target'  => '_self',
+                'order'   => 0,
+            ]);
+
+            MenuItem::create([
+                'menu_id' => $header->id,
+                'label'   => 'Blog',
+                'type'    => 'custom_link',
+                'url'     => '/blog',
+                'target'  => '_self',
+                'order'   => 1,
+            ]);
+
+            MenuItem::create([
+                'menu_id' => $header->id,
+                'label'   => 'About',
+                'type'    => 'custom_link',
+                'url'     => '/about',
+                'target'  => '_self',
+                'order'   => 2,
+            ]);
+        }
+
+        Menu::updateOrCreate(
+            ['slug' => 'footer'],
+            ['name' => 'Footer Menu', 'location' => 'footer']
+        );
+    }
+}

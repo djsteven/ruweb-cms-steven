@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('editor-title', 'Editor') — {{ $siteName }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    @vite(['resources/js/admin.js'])
+</head>
+<body class="bg-[#0a0a0a] text-gray-100 font-sans antialiased h-screen flex flex-col overflow-hidden">
+
+    {{-- Top bar --}}
+    <header class="flex-none flex items-center justify-between px-4 h-12 bg-[#111111] border-b border-white/[0.06]">
+        <div class="flex items-center gap-3 min-w-0">
+            <a href="{{ $editorBackHref ?? route('admin.pages.index') }}"
+               class="text-gray-500 hover:text-gray-300 transition-colors flex-none"
+               title="{{ $editorBackTitle ?? __('admin.back_to_pages') }}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+            </a>
+            <span class="text-sm font-medium text-white truncate">@yield('editor-title', 'Editor')</span>
+        </div>
+
+        <div class="flex items-center gap-3">
+            @yield('editor-actions')
+            <button type="button" id="save-btn" disabled
+                    class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-medium rounded-md transition-colors">
+                {{ __('admin.btn_save_changes') }}
+            </button>
+        </div>
+    </header>
+
+    {{-- Mobile tabs (only when preview is enabled) --}}
+    @if($showPreview ?? true)
+    <div class="lg:hidden flex-none flex bg-[#111111] border-b border-white/[0.06]">
+        <button id="tab-edit"
+                class="flex-1 py-2 text-xs font-medium text-emerald-400 border-b-2 border-emerald-500"
+                onclick="editorSwitchTab('edit')">{{ __('admin.tab_edit') }}</button>
+        <button id="tab-preview"
+                class="flex-1 py-2 text-xs font-medium text-gray-500 border-b-2 border-transparent"
+                onclick="editorSwitchTab('preview')">{{ __('admin.tab_preview') }}</button>
+    </div>
+    @endif
+
+    {{-- Body --}}
+    <div class="flex-1 flex overflow-hidden">
+
+        {{-- Edit panel --}}
+        <aside id="panel-edit"
+               class="w-full {{ ($showPreview ?? true) ? 'lg:w-96 lg:flex-none' : '' }} bg-[#111111] {{ ($showPreview ?? true) ? 'border-r border-white/[0.06]' : '' }} flex flex-col">
+            <div class="flex-1 overflow-y-auto p-5">
+                @include('admin.partials.alerts')
+                @yield('editor-form')
+            </div>
+            @yield('editor-footer')
+        </aside>
+
+        {{-- Preview panel --}}
+        @if($showPreview ?? true)
+        <section id="panel-preview"
+                 class="hidden lg:flex flex-1 flex-col bg-[#0d0d0d]">
+            <div class="flex-none flex items-center justify-between px-4 h-9 border-b border-white/[0.06]">
+                <span class="text-xs text-gray-600">{{ __('admin.live_preview') }}</span>
+                <div class="hidden lg:flex items-center gap-3">
+                    <button id="vp-desktop" onclick="editorSetViewport('desktop')"
+                            class="text-xs text-emerald-400 transition-colors">{{ __('admin.viewport_desktop') }}</button>
+                    <button id="vp-mobile" onclick="editorSetViewport('mobile')"
+                            class="text-xs text-gray-600 hover:text-gray-400 transition-colors">{{ __('admin.viewport_mobile') }}</button>
+                </div>
+            </div>
+            <div id="iframe-wrap"
+                 class="flex-1 flex items-start justify-center overflow-auto bg-[#0d0d0d]">
+                <iframe id="preview-frame"
+                        class="w-full h-full border-0 bg-white"
+                        sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+            </div>
+        </section>
+        @endif
+
+    </div>
+
+    {{-- Toast --}}
+    <div id="editor-toast"
+         class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-lg text-sm font-medium shadow-lg pointer-events-none opacity-0 transition-opacity duration-300">
+    </div>
+
+    @include('admin.media._library-modal')
+
+    @stack('modals')
+    @stack('scripts')
+
+    <script>
+        function showToast(msg, type) {
+            const el = document.getElementById('editor-toast');
+            el.textContent = msg;
+            el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-lg text-sm font-medium shadow-lg pointer-events-none transition-opacity duration-300 '
+                + (type === 'error' ? 'bg-red-500/90 text-white' : 'bg-emerald-600 text-white');
+            el.style.opacity = '1';
+            clearTimeout(el._timer);
+            el._timer = setTimeout(() => { el.style.opacity = '0'; }, 2500);
+        }
+
+        function editorSwitchTab(tab) {
+            const edit = document.getElementById('panel-edit');
+            const preview = document.getElementById('panel-preview');
+            const tabEdit = document.getElementById('tab-edit');
+            const tabPreview = document.getElementById('tab-preview');
+
+            const activeClass = 'flex-1 py-2 text-xs font-medium text-emerald-400 border-b-2 border-emerald-500';
+            const inactiveClass = 'flex-1 py-2 text-xs font-medium text-gray-500 border-b-2 border-transparent';
+
+            if (tab === 'edit') {
+                edit.classList.remove('hidden');
+                preview.classList.add('hidden');
+                preview.classList.remove('flex');
+                tabEdit.className = activeClass;
+                tabPreview.className = inactiveClass;
+            } else {
+                edit.classList.add('hidden');
+                preview.classList.remove('hidden');
+                preview.classList.add('flex');
+                tabPreview.className = activeClass;
+                tabEdit.className = inactiveClass;
+            }
+        }
+
+        function editorSetViewport(vp) {
+            const iframe = document.getElementById('preview-frame');
+            const wrap = document.getElementById('iframe-wrap');
+            const desktopBtn = document.getElementById('vp-desktop');
+            const mobileBtn = document.getElementById('vp-mobile');
+
+            if (vp === 'mobile') {
+                iframe.className = 'border-0 bg-white rounded-2xl shadow-2xl transition-all flex-none';
+                iframe.style.width = '390px';
+                iframe.style.height = '844px';
+                wrap.classList.add('p-6');
+                mobileBtn.className = 'text-xs text-emerald-400 transition-colors';
+                desktopBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
+            } else {
+                iframe.className = 'w-full h-full border-0 bg-white';
+                iframe.style.width = '';
+                iframe.style.height = '';
+                wrap.classList.remove('p-6');
+                desktopBtn.className = 'text-xs text-emerald-400 transition-colors';
+                mobileBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
+            }
+        }
+    </script>
+</body>
+</html>
