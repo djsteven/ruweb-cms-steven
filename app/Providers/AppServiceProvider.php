@@ -39,7 +39,7 @@ class AppServiceProvider extends ServiceProvider
             ]);
         });
 
-        View::composer(['admin.layouts.app', 'admin.layouts.guest', 'admin.layouts.editor', 'admin.partials.sidebar', 'admin.partials.navbar'], function ($view) {
+        View::composer(['admin.layouts.app', 'admin.layouts.guest', 'admin.layouts.editor', 'admin.partials.sidebar', 'admin.partials.navbar', 'admin.auth.*'], function ($view) {
             $view->with('siteName', Setting::get('site_name') ?: config('app.name'));
         });
     }
