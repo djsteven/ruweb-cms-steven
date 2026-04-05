@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
