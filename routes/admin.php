@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\ClaudeMcpController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MenuController;
@@ -22,6 +23,7 @@ Route::middleware(['guest', 'admin.locale'])->prefix('admin')->name('admin.')->g
 Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin')->name('admin.')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('claude-mcp', [ClaudeMcpController::class, 'index'])->name('claude-mcp.index');
     Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::post('profile/mcp-api-key', [ProfileController::class, 'generateMcpApiKey'])->name('profile.mcp-api-key.generate');

@@ -1,3 +1,5 @@
+AddHandler application/x-httpd-ea-php83 .php
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
@@ -5,9 +7,12 @@
 
     RewriteEngine On
 
-    # Handle Authorization Header
+    # Pass Authorization header through Apache CGI/FastCGI (cPanel)
+    CGIPassAuth On
+
+    # Handle Authorization Header (CGI/FastCGI mode for cPanel)
     RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},E=REDIRECT_HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Handle X-XSRF-Token Header
     RewriteCond %{HTTP:x-xsrf-token} .

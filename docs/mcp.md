@@ -18,6 +18,33 @@ Ambas comparten el mismo middleware de autenticación y la misma lógica de nego
 
 ## Autenticación
 
+Hay dos mecanismos de autenticación, ambos usan el header `Authorization: Bearer <token>`.
+
+### OAuth 2.0 (claude.ai custom connectors)
+
+El servidor implementa OAuth 2.0 Authorization Code + PKCE. Es el método requerido para conectar claude.ai como custom connector.
+
+**Endpoints:**
+
+| Endpoint | Descripción |
+|---|---|
+| `GET /.well-known/oauth-authorization-server` | Metadata de discovery |
+| `GET /authorize` | Pantalla de login (redirige desde claude.ai) |
+| `POST /authorize` | Procesa el login y emite un authorization code |
+| `POST /token` | Intercambia el code por un access token (válido 8 horas) |
+
+**Configuración en `.env`:**
+
+```env
+OAUTH_CLIENT_ID=<id que elegiste en claude.ai>
+OAUTH_CLIENT_SECRET=<secret que elegiste en claude.ai>
+OAUTH_ALLOWED_REDIRECT_URIS=https://claude.ai/api/mcp/auth_callback
+```
+
+Los valores del client ID y secret se muestran en `Admin > Claude MCP` para copiarlos al configurar el connector en claude.ai.
+
+### API Key (clientes directos)
+
 Cada usuario puede tener **una API key activa**, gestionada en `Admin > Profile`.
 
 ```http
@@ -309,3 +336,5 @@ curl -X POST http://localhost:8000/mcp/rpc \
     }
   }'
 ```
+
+> `$MCP_API_KEY` puede ser tanto una API key del perfil (`flaxt_mcp_xxx`) como un OAuth access token emitido por el flujo de claude.ai.

@@ -31,9 +31,15 @@ class McpServerController extends Controller
             return $this->errorResponse(null, -32600, 'Invalid Request: jsonrpc must be "2.0".');
         }
 
-        $method = $body['method'] ?? null;
-        $params = $body['params'] ?? [];
-        $id     = $body['id'] ?? null;
+        $method         = $body['method'] ?? null;
+        $params         = $body['params'] ?? [];
+        $id             = $body['id'] ?? null;
+        $isNotification = ! array_key_exists('id', $body);
+
+        // JSON-RPC notifications must not receive a response
+        if ($isNotification) {
+            return response()->json(null, 202);
+        }
 
         try {
             $result = match ($method) {

@@ -18,6 +18,7 @@ return [
     'users'                     => 'Usuarios',
     'settings'                  => 'Ajustes',
     'profile'                   => 'Perfil',
+    'claude_mcp'                => 'Claude MCP',
     'logout'                    => 'Cerrar sesión',
 
     // Dashboard
@@ -266,5 +267,23 @@ return [
     'mcp_api_key_revoke_confirm'=> '¿Revocar la MCP API key actual? Esto invalida el acceso del agente inmediatamente.',
     'mcp_api_key_generated_at'  => 'Generada en',
     'mcp_api_key_last_used_at'  => 'Último uso',
+
+    // Claude MCP
+    'claude_mcp_subtitle'       => 'Conectá tu cuenta de claude.ai a este CMS.',
+    'claude_mcp_step1'          => 'Abrí claude.ai y andá a Settings → Connectors → Add custom connector.',
+    'claude_mcp_step2'          => 'Ingresá los siguientes valores:',
+    'claude_mcp_server_url'     => 'URL del servidor MCP',
+    'claude_mcp_client_id'      => 'OAuth Client ID',
+    'claude_mcp_client_secret'  => 'OAuth Secret',
+    'claude_mcp_step3'          => 'Completá el login en el popup que aparece.',
+    'claude_mcp_step3_hint'     => 'Usá tu email y contraseña del CMS. Cada usuario se autentica individualmente.',
+
+    // Generic actions
+    'copy'                      => 'Copiar',
+    'show'                      => 'Mostrar',
+
+    // Auth errors
+    'invalid_credentials'       => 'Credenciales inválidas.',
+    'unauthorized'              => 'Tu cuenta no tiene acceso.',
 
 ];
