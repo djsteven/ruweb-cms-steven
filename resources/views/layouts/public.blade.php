@@ -8,8 +8,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
 </head>
-<body class="min-h-screen flex flex-col bg-white text-gray-900 font-sans antialiased">
+<body class="min-h-screen flex flex-col bg-white text-gray-900 font-sans antialiased {{ auth()->check() ? 'pt-9' : '' }}">
 
+    @include('partials.admin-bar')
     @include('partials.header')
 
     <main class="flex-1">
