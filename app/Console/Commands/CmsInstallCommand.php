@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use Database\Seeders\HomepageSeeder;
 use Database\Seeders\SettingsSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -106,6 +107,12 @@ class CmsInstallCommand extends Command
             '--force' => true,
         ]);
         $this->info('  ✓ Default settings seeded');
+
+        Artisan::call('db:seed', [
+            '--class' => HomepageSeeder::class,
+            '--force' => true,
+        ]);
+        $this->info('  ✓ Homepage seeded');
 
         // Create admin user
         $this->info('');

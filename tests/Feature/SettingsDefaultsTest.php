@@ -31,6 +31,12 @@ class SettingsDefaultsTest extends TestCase
             'value' => 'A lightweight and extensible CMS starter kit.',
         ]);
 
+        $this->assertDatabaseHas('settings', [
+            'key' => 'homepage_slug',
+            'type' => 'select',
+            'value' => 'inicio',
+        ]);
+
         $this->assertNull(Setting::get('site_favicon'));
     }
 }

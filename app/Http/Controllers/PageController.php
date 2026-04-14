@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Page;
+use App\Models\Setting;
 use Illuminate\View\View;
 
 class PageController extends Controller
 {
     public function home(): View
     {
-        $page = Page::where('slug', 'home')->published()->first();
+        $homepageSlug = (string) (Setting::get('homepage_slug', 'inicio') ?: 'inicio');
+        $page = Page::where('slug', $homepageSlug)->published()->first();
 
         if (! $page) {
             return view('welcome');

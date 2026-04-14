@@ -240,6 +240,13 @@ return [
     'settings_saved'            => 'Settings saved successfully.',
     'settings_subtitle'         => 'Manage your site configuration.',
     'btn_save_settings'         => 'Save Settings',
+    'settings_fields'           => [
+        'homepage_slug' => [
+            'label' => 'Homepage',
+            'help' => 'Choose which published page will be shown at the root URL (/).',
+            'empty' => 'No published pages available',
+        ],
+    ],
 
     // Profile + MCP
     'profile_subtitle'          => 'Manage your account access and MCP integration key.',

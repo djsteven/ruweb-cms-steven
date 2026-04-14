@@ -29,10 +29,21 @@
     @foreach ($groups as $group => $settings)
         <div class="settings-panel space-y-4" data-group="{{ $group }}" style="display:none">
             @foreach ($settings as $setting)
+                @php
+                    $labelKey = 'admin.settings_fields.' . $setting->key . '.label';
+                    $helpKey = 'admin.settings_fields.' . $setting->key . '.help';
+                    $label = __($labelKey) !== $labelKey
+                        ? __($labelKey)
+                        : str_replace('_', ' ', $setting->key);
+                    $help = __($helpKey) !== $helpKey ? __($helpKey) : null;
+                @endphp
                 <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-4">
                     <label class="block text-sm font-medium text-gray-300 mb-1 capitalize">
-                        {{ str_replace('_', ' ', $setting->key) }}
+                        {{ $label }}
                     </label>
+                    @if ($help)
+                        <p class="text-xs text-gray-500 mb-2">{{ $help }}</p>
+                    @endif
 
                     @if ($setting->type === 'select')
                         <select name="settings[{{ $setting->key }}]"

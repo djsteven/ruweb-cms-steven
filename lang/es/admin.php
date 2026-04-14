@@ -240,6 +240,13 @@ return [
     'settings_saved'            => 'Ajustes guardados correctamente.',
     'settings_subtitle'         => 'Administra la configuración del sitio.',
     'btn_save_settings'         => 'Guardar ajustes',
+    'settings_fields'           => [
+        'homepage_slug' => [
+            'label' => 'Página de inicio',
+            'help' => 'Selecciona cuál página publicada se mostrará en la URL raíz (/).',
+            'empty' => 'No hay páginas publicadas disponibles',
+        ],
+    ],
 
     // Profile + MCP
     'profile_subtitle'          => 'Administra el acceso de tu cuenta y la key de integración MCP.',
