@@ -253,7 +253,6 @@ return [
     'settings_groups'           => [
         'general' => 'General',
         'seo' => 'SEO',
-        'social' => 'Redes sociales',
         'admin' => 'Administración',
     ],
     'settings_fields'           => [
@@ -273,18 +272,6 @@ return [
             'label' => 'Página de inicio',
             'help' => 'Selecciona cuál página publicada se mostrará en la URL raíz (/).',
             'empty' => 'No hay páginas publicadas disponibles',
-        ],
-        'footer_text' => [
-            'label' => 'Texto del pie de página',
-        ],
-        'social_facebook' => [
-            'label' => 'URL de Facebook',
-        ],
-        'social_twitter' => [
-            'label' => 'URL de X (Twitter)',
-        ],
-        'social_instagram' => [
-            'label' => 'URL de Instagram',
         ],
         'default_meta_title' => [
             'label' => 'Meta título por defecto',

@@ -253,7 +253,6 @@ return [
     'settings_groups'           => [
         'general' => 'General',
         'seo' => 'SEO',
-        'social' => 'Social',
         'admin' => 'Administration',
     ],
     'settings_fields'           => [
@@ -273,18 +272,6 @@ return [
             'label' => 'Homepage',
             'help' => 'Choose which published page will be shown at the root URL (/).',
             'empty' => 'No published pages available',
-        ],
-        'footer_text' => [
-            'label' => 'Footer Text',
-        ],
-        'social_facebook' => [
-            'label' => 'Facebook URL',
-        ],
-        'social_twitter' => [
-            'label' => 'X (Twitter) URL',
-        ],
-        'social_instagram' => [
-            'label' => 'Instagram URL',
         ],
         'default_meta_title' => [
             'label' => 'Default Meta Title',

@@ -51,7 +51,7 @@ routes/
 2. `PageController::show()` finds the `Page` by slug using the `published` scope
 3. `Page::resolveTemplate()` maps `template_key` to a Blade view in `resources/views/templates/`
 4. The view extends `layouts.public`, which includes the SEO meta component and header/footer partials
-5. The view composer on `layouts.public` shares global settings (site name, logo, social links)
+5. The view composer on `layouts.public` shares global settings (site name and logo)
 
 ### Public Blog Request
 

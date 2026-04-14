@@ -32,10 +32,6 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'siteName' => Setting::get('site_name') ?: config('app.name'),
                 'siteLogo' => $siteLogo?->url(),
-                'footerText' => Setting::get('footer_text'),
-                'socialFacebook' => Setting::get('social_facebook'),
-                'socialTwitter' => Setting::get('social_twitter'),
-                'socialInstagram' => Setting::get('social_instagram'),
             ]);
         });
 

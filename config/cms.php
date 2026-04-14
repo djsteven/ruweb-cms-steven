@@ -41,12 +41,8 @@ return [
             'site_name',
             'site_description',
             'site_favicon',
-            'footer_text',
             'default_meta_title',
             'default_meta_description',
-            'social_facebook',
-            'social_twitter',
-            'social_instagram',
         ],
     ],
 ];

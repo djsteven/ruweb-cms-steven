@@ -1,10 +1,13 @@
 <aside id="sidebar" class="fixed top-0 left-0 z-50 w-56 h-screen bg-[#111111] border-r border-white/[0.06] flex flex-col transition-transform -translate-x-full lg:translate-x-0">
 
     {{-- Logo --}}
-    <div class="flex items-center gap-2.5 px-4 h-14 border-b border-white/[0.06] shrink-0">
+    <a href="{{ route('home') }}"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="flex items-center gap-2.5 px-4 h-14 border-b border-white/[0.06] shrink-0 hover:bg-white/[0.02] transition-colors">
         <span class="w-2 h-2 rounded-full bg-emerald-500 shrink-0"></span>
         <span class="text-sm font-semibold text-white tracking-tight">{{ $siteName }}</span>
-    </div>
+    </a>
 
     {{-- Navigation --}}
     <nav class="flex-1 overflow-y-auto py-3 px-2">

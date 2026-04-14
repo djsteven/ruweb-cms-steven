@@ -18,9 +18,9 @@ Global site settings are stored in the `settings` table as key-value pairs. Each
 
 Settings are organized by `group` (stored as a column). Groups become tabs in the admin settings form. Default groups:
 
-- **general**: site_name, site_description, site_logo, site_favicon, footer_text
+- **general**: site_name, site_description, site_logo, site_favicon, homepage_slug
 - **seo**: default_meta_title, default_meta_description
-- **social**: social_facebook, social_twitter, social_instagram
+- **admin**: admin_locale
 
 ## Usage in Code
 
@@ -38,7 +38,7 @@ $logoUrl = $logo?->url();
 Setting::set('site_name', 'New Name');
 
 // Get all settings in a group
-$socialSettings = Setting::getGroup('social');
+$seoSettings = Setting::getGroup('seo');
 
 // Get all settings grouped
 $allGrouped = Setting::allGrouped();
