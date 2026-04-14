@@ -46,13 +46,13 @@ class MediaController extends Controller
         $extension = strtolower($file->getClientOriginalExtension());
         $allowedExtensions = config('cms.upload.allowed_extensions');
         if (! in_array($extension, $allowedExtensions)) {
-            return response()->json(['error' => 'File extension not allowed.'], 422);
+            return response()->json(['error' => __('admin.media_error_extension_not_allowed')], 422);
         }
 
         if ($extension === 'svg') {
             $content = file_get_contents($file->getRealPath());
             if (preg_match('/<script|on\w+\s*=/i', $content)) {
-                return response()->json(['error' => 'SVG contains potentially malicious content.'], 422);
+                return response()->json(['error' => __('admin.media_error_svg_malicious')], 422);
             }
         }
 
@@ -98,6 +98,6 @@ class MediaController extends Controller
         Storage::disk($media->disk)->delete($media->path);
         $media->delete();
 
-        return response()->json(['message' => 'Media deleted.']);
+        return response()->json(['message' => __('admin.media_deleted')]);
     }
 }

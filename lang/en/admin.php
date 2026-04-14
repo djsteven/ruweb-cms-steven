@@ -28,6 +28,7 @@ return [
     'published'                 => 'Published',
     'drafts'                    => 'Drafts',
     'media_files'               => 'Media files',
+    'published_blog'            => 'Published (blog)',
 
     // Pages index
     'new_page'                  => 'New Page',
@@ -157,6 +158,15 @@ return [
     'confirm_delete_media'      => 'Delete this file permanently?',
     'choose_file'               => 'Choose file',
     'clear'                     => 'Clear',
+    'no_media_found'            => 'No media found.',
+    'loading_media'             => 'Loading media...',
+    'unable_to_load_media_item' => 'Unable to load media item.',
+    'unable_to_load_media_library' => 'Unable to load media library.',
+    'media_error_extension_not_allowed' => 'File extension not allowed.',
+    'media_error_svg_malicious' => 'SVG contains potentially malicious content.',
+    'media_deleted'             => 'Media deleted.',
+    'validation_file_mimetypes' => 'This file type is not allowed.',
+    'validation_file_max'       => 'The file exceeds the maximum allowed size.',
 
     // Pages CRUD messages
     'page_created'              => 'Page created successfully.',
@@ -240,11 +250,57 @@ return [
     'settings_saved'            => 'Settings saved successfully.',
     'settings_subtitle'         => 'Manage your site configuration.',
     'btn_save_settings'         => 'Save Settings',
+    'settings_groups'           => [
+        'general' => 'General',
+        'seo' => 'SEO',
+        'social' => 'Social',
+        'admin' => 'Administration',
+    ],
     'settings_fields'           => [
+        'site_name' => [
+            'label' => 'Site Name',
+        ],
+        'site_description' => [
+            'label' => 'Site Description',
+        ],
+        'site_logo' => [
+            'label' => 'Site Logo',
+        ],
+        'site_favicon' => [
+            'label' => 'Site Favicon',
+        ],
         'homepage_slug' => [
             'label' => 'Homepage',
             'help' => 'Choose which published page will be shown at the root URL (/).',
             'empty' => 'No published pages available',
+        ],
+        'footer_text' => [
+            'label' => 'Footer Text',
+        ],
+        'social_facebook' => [
+            'label' => 'Facebook URL',
+        ],
+        'social_twitter' => [
+            'label' => 'X (Twitter) URL',
+        ],
+        'social_instagram' => [
+            'label' => 'Instagram URL',
+        ],
+        'default_meta_title' => [
+            'label' => 'Default Meta Title',
+        ],
+        'default_meta_description' => [
+            'label' => 'Default Meta Description',
+        ],
+        'admin_locale' => [
+            'label' => 'Admin Locale',
+            'help' => 'Defines the language used by the admin interface.',
+        ],
+    ],
+    'settings_options'          => [
+        'admin_locale' => [
+            'es' => 'Spanish',
+            'en' => 'English',
         ],
     ],
 
@@ -258,6 +314,8 @@ return [
     'field_name'                => 'Full name',
     'field_email'               => 'Email',
     'field_role'                => 'Role',
+    'role_admin'                => 'Admin',
+    'role_editor'               => 'Editor',
     'field_current_password'    => 'Current password',
     'field_new_password'        => 'New password',
     'field_confirm_password'    => 'Confirm password',
@@ -278,6 +336,7 @@ return [
     // Claude MCP
     'claude_mcp_subtitle'       => 'Connect your claude.ai account to this CMS.',
     'claude_mcp_step1'          => 'Open claude.ai and go to Settings → Connectors → Add custom connector.',
+    'claude_mcp_step1_path'     => 'claude.ai → Settings → Connectors → Add custom connector',
     'claude_mcp_step2'          => 'Enter the following values:',
     'claude_mcp_server_url'     => 'MCP Server URL',
     'claude_mcp_client_id'      => 'OAuth Client ID',
@@ -288,6 +347,7 @@ return [
     // Generic actions
     'copy'                      => 'Copy',
     'show'                      => 'Show',
+    'editor_title'              => 'Editor',
 
     // Auth errors
     'invalid_credentials'       => 'Invalid credentials.',

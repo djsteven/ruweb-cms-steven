@@ -17,7 +17,7 @@ class SettingsDefaultsTest extends TestCase
 
         $this->assertDatabaseHas('settings', [
             'key' => 'site_description',
-            'value' => 'A lightweight and extensible CMS starter kit.',
+            'value' => 'Un CMS ligero y extensible para comenzar rápido.',
         ]);
 
         $this->assertDatabaseHas('settings', [
@@ -28,7 +28,7 @@ class SettingsDefaultsTest extends TestCase
 
         $this->assertDatabaseHas('settings', [
             'key' => 'default_meta_description',
-            'value' => 'A lightweight and extensible CMS starter kit.',
+            'value' => 'Un CMS ligero y extensible para comenzar rápido.',
         ]);
 
         $this->assertDatabaseHas('settings', [

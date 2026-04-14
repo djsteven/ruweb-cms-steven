@@ -148,10 +148,14 @@
 
     {{-- User --}}
     <div class="shrink-0 px-3 py-3 border-t border-white/[0.06]">
+        @php
+            $roleKey = 'admin.role_' . auth()->user()->role;
+            $roleLabel = __($roleKey) !== $roleKey ? __($roleKey) : ucfirst(auth()->user()->role);
+        @endphp
         <div class="flex items-center justify-between gap-2">
             <div class="min-w-0">
                 <p class="text-xs font-medium text-gray-300 truncate">{{ auth()->user()->name }}</p>
-                <p class="text-xs text-gray-600 capitalize">{{ auth()->user()->role }}</p>
+                <p class="text-xs text-gray-600 capitalize">{{ $roleLabel }}</p>
             </div>
             <form method="POST" action="{{ route('admin.logout') }}" class="shrink-0">
                 @csrf

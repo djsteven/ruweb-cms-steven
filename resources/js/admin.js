@@ -4,6 +4,8 @@ const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('c
 if (token) {
     window.csrfToken = token;
 }
+const adminI18n = window.adminI18n || {};
+const t = (key, fallback = '') => adminI18n[key] ?? fallback;
 
 const selectors = Array.from(document.querySelectorAll('.media-selector'));
 const libraryModal = document.getElementById('media-library-modal');
@@ -80,10 +82,10 @@ uploadForm?.addEventListener('submit', async (e) => {
             }
         } else {
             const data = await response.json();
-            alert(data.error || data.message || 'Upload failed.');
+            alert(data.error || data.message || t('uploadFailed'));
         }
     } catch {
-        alert('Upload failed.');
+        alert(t('uploadFailed'));
     } finally {
         uploadProgress?.classList.add('hidden');
     }
@@ -124,7 +126,7 @@ function notifySelectorChange(selector) {
 
 function renderSelectorPreview(selector, media) {
     const { input, preview, clear, button } = selectorNodes(selector);
-    const defaultLabel = button?.dataset.label || button?.textContent || 'Choose file';
+    const defaultLabel = button?.dataset.label || button?.textContent || t('chooseFile');
 
     if (!preview || !input || !clear || !button) {
         return;
@@ -167,7 +169,7 @@ async function fetchMediaItem(id) {
     });
 
     if (!response.ok) {
-        throw new Error('Unable to load media item');
+        throw new Error(t('unableToLoadMediaItem'));
     }
 
     return response.json();
@@ -200,7 +202,7 @@ function renderLibraryItems(items) {
     }
 
     if (!items.length) {
-        libraryGrid.innerHTML = '<div class="col-span-full text-sm text-gray-500 py-6 text-center">No media found.</div>';
+        libraryGrid.innerHTML = `<div class="col-span-full text-sm text-gray-500 py-6 text-center">${escapeHtml(t('noMediaFound'))}</div>`;
         return;
     }
 
@@ -243,7 +245,7 @@ async function loadLibrary(search = '') {
         return;
     }
 
-    libraryStatus.textContent = 'Loading media...';
+    libraryStatus.textContent = t('loadingMedia');
     libraryStatus.classList.remove('hidden');
     libraryGrid.innerHTML = '';
 
@@ -261,14 +263,14 @@ async function loadLibrary(search = '') {
         });
 
         if (!response.ok) {
-            throw new Error('Unable to load media library');
+            throw new Error(t('unableToLoadMediaLibrary'));
         }
 
         const payload = await response.json();
         renderLibraryItems(payload.data || []);
         libraryStatus.classList.add('hidden');
     } catch (_) {
-        libraryStatus.textContent = 'Unable to load media library.';
+        libraryStatus.textContent = t('unableToLoadMediaLibrary');
         libraryStatus.classList.remove('hidden');
     }
 }

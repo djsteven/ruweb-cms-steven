@@ -66,8 +66,12 @@
                             <span class="text-sm text-gray-400">{{ $user->email }}</span>
                         </td>
                         <td class="px-4 py-3">
+                            @php
+                                $roleKey = 'admin.role_' . $user->role;
+                                $roleLabel = __($roleKey) !== $roleKey ? __($roleKey) : ucfirst($user->role);
+                            @endphp
                             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize {{ $user->isAdmin() ? 'bg-emerald-500/10 text-emerald-400' : 'bg-sky-500/10 text-sky-400' }}">
-                                {{ $user->role }}
+                                {{ $roleLabel }}
                             </span>
                         </td>
                         <td class="px-4 py-3 text-right">

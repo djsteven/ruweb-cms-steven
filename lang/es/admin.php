@@ -28,6 +28,7 @@ return [
     'published'                 => 'Publicadas',
     'drafts'                    => 'Borradores',
     'media_files'               => 'Archivos multimedia',
+    'published_blog'            => 'Publicadas (blog)',
 
     // Pages index
     'new_page'                  => 'Nueva página',
@@ -157,6 +158,15 @@ return [
     'confirm_delete_media'      => '¿Eliminar este archivo permanentemente?',
     'choose_file'               => 'Elegir archivo',
     'clear'                     => 'Quitar',
+    'no_media_found'            => 'No se encontraron archivos.',
+    'loading_media'             => 'Cargando archivos...',
+    'unable_to_load_media_item' => 'No se pudo cargar el archivo.',
+    'unable_to_load_media_library' => 'No se pudo cargar la biblioteca de archivos.',
+    'media_error_extension_not_allowed' => 'La extensión del archivo no está permitida.',
+    'media_error_svg_malicious' => 'El SVG contiene contenido potencialmente malicioso.',
+    'media_deleted'             => 'Archivo eliminado.',
+    'validation_file_mimetypes' => 'Este tipo de archivo no está permitido.',
+    'validation_file_max'       => 'El archivo supera el tamaño máximo permitido.',
 
     // Pages CRUD messages
     'page_created'              => 'Página creada correctamente.',
@@ -240,11 +250,57 @@ return [
     'settings_saved'            => 'Ajustes guardados correctamente.',
     'settings_subtitle'         => 'Administra la configuración del sitio.',
     'btn_save_settings'         => 'Guardar ajustes',
+    'settings_groups'           => [
+        'general' => 'General',
+        'seo' => 'SEO',
+        'social' => 'Redes sociales',
+        'admin' => 'Administración',
+    ],
     'settings_fields'           => [
+        'site_name' => [
+            'label' => 'Nombre del sitio',
+        ],
+        'site_description' => [
+            'label' => 'Descripción del sitio',
+        ],
+        'site_logo' => [
+            'label' => 'Logo del sitio',
+        ],
+        'site_favicon' => [
+            'label' => 'Favicon del sitio',
+        ],
         'homepage_slug' => [
             'label' => 'Página de inicio',
             'help' => 'Selecciona cuál página publicada se mostrará en la URL raíz (/).',
             'empty' => 'No hay páginas publicadas disponibles',
+        ],
+        'footer_text' => [
+            'label' => 'Texto del pie de página',
+        ],
+        'social_facebook' => [
+            'label' => 'URL de Facebook',
+        ],
+        'social_twitter' => [
+            'label' => 'URL de X (Twitter)',
+        ],
+        'social_instagram' => [
+            'label' => 'URL de Instagram',
+        ],
+        'default_meta_title' => [
+            'label' => 'Meta título por defecto',
+        ],
+        'default_meta_description' => [
+            'label' => 'Meta descripción por defecto',
+        ],
+        'admin_locale' => [
+            'label' => 'Idioma del panel admin',
+            'help' => 'Define el idioma de la interfaz administrativa.',
+        ],
+    ],
+    'settings_options'          => [
+        'admin_locale' => [
+            'es' => 'Español',
+            'en' => 'Inglés',
         ],
     ],
 
@@ -258,6 +314,8 @@ return [
     'field_name'                => 'Nombre completo',
     'field_email'               => 'Email',
     'field_role'                => 'Rol',
+    'role_admin'                => 'Administrador',
+    'role_editor'               => 'Editor',
     'field_current_password'    => 'Contraseña actual',
     'field_new_password'        => 'Nueva contraseña',
     'field_confirm_password'    => 'Confirmar contraseña',
@@ -278,6 +336,7 @@ return [
     // Claude MCP
     'claude_mcp_subtitle'       => 'Conectá tu cuenta de claude.ai a este CMS.',
     'claude_mcp_step1'          => 'Abrí claude.ai y andá a Settings → Connectors → Add custom connector.',
+    'claude_mcp_step1_path'     => 'claude.ai → Settings → Connectors → Add custom connector',
     'claude_mcp_step2'          => 'Ingresá los siguientes valores:',
     'claude_mcp_server_url'     => 'URL del servidor MCP',
     'claude_mcp_client_id'      => 'OAuth Client ID',
@@ -288,6 +347,7 @@ return [
     // Generic actions
     'copy'                      => 'Copiar',
     'show'                      => 'Mostrar',
+    'editor_title'              => 'Editor',
 
     // Auth errors
     'invalid_credentials'       => 'Credenciales inválidas.',

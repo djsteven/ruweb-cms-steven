@@ -27,7 +27,7 @@
     <a href="{{ route('admin.posts.index', ['status' => 'published']) }}"
        class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
         <div class="text-2xl font-semibold text-emerald-400">{{ $publishedPostCount }}</div>
-        <div class="text-sm text-gray-500 mt-1">{{ __('admin.published') }} (blog)</div>
+        <div class="text-sm text-gray-500 mt-1">{{ __('admin.published_blog') }}</div>
     </a>
 </div>
 

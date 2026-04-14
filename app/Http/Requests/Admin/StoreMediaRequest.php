@@ -36,8 +36,8 @@ class StoreMediaRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'file.mimetypes' => 'This file type is not allowed.',
-            'file.max' => 'The file exceeds the maximum allowed size.',
+            'file.mimetypes' => __('admin.validation_file_mimetypes'),
+            'file.max' => __('admin.validation_file_max'),
         ];
     }
 }

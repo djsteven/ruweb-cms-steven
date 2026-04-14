@@ -10,6 +10,7 @@ This index is the entry point for developers and LLM agents working on the start
 - `docs/templates.md` — how page templates are registered and rendered
 - `docs/live-editor.md` — shared editor engine: initEditorEngine API, DOM contract, layout variables, scroll retention
 - `docs/settings.md` — global settings model and usage
+- `docs/admin-translations-guide.md` — i18n rules and verification checklist for admin-only translations (`es/en`)
 
 ## Collections & Modules
 

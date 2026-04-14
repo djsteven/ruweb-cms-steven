@@ -1,13 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') - {{ $siteName }}</title>
+    <title>@yield('title', __('admin.dashboard')) - {{ $siteName }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    @php
+        $adminI18n = [
+            'uploadFailed' => __('admin.upload_failed'),
+            'chooseFile' => __('admin.choose_file'),
+            'noMediaFound' => __('admin.no_media_found'),
+            'loadingMedia' => __('admin.loading_media'),
+            'unableToLoadMediaItem' => __('admin.unable_to_load_media_item'),
+            'unableToLoadMediaLibrary' => __('admin.unable_to_load_media_library'),
+        ];
+    @endphp
+    <script>
+        window.adminI18n = {!! json_encode($adminI18n, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
+    </script>
     @vite(['resources/js/admin.js'])
 </head>
 <body class="bg-[#0a0a0a] text-gray-100 min-h-screen font-sans antialiased">

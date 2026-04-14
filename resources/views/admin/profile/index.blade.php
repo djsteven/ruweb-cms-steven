@@ -31,7 +31,11 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-1">{{ __('admin.field_role') }}</label>
-                    <p class="text-sm text-gray-400 capitalize bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-2">{{ $user->role }}</p>
+                    @php
+                        $roleKey = 'admin.role_' . $user->role;
+                        $roleLabel = __($roleKey) !== $roleKey ? __($roleKey) : ucfirst($user->role);
+                    @endphp
+                    <p class="text-sm text-gray-400 capitalize bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-2">{{ $roleLabel }}</p>
                 </div>
             </div>
         </div>

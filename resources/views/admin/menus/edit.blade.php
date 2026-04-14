@@ -178,9 +178,13 @@ function flattenMenuTree($items, $parentId = null) {
                     <div id="panel-taxonomies" class="hidden border-t border-white/[0.06] px-3 py-3">
                         <div class="space-y-1 max-h-48 overflow-y-auto mb-3">
                             @foreach($taxonomies as $taxonomy)
+                            @php
+                                $taxonomyTypeKey = 'admin.taxonomy_type_' . $taxonomy->type;
+                                $taxonomyTypeLabel = __($taxonomyTypeKey) !== $taxonomyTypeKey ? __($taxonomyTypeKey) : ucfirst($taxonomy->type);
+                            @endphp
                             <label class="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200 cursor-pointer py-0.5">
                                 <input type="checkbox" value="{{ $taxonomy->id }}" data-label="{{ $taxonomy->name }}" class="taxonomy-check rounded border-white/20 bg-[#111111]">
-                                {{ $taxonomy->name }} <span class="text-gray-600 text-xs">({{ $taxonomy->type }})</span>
+                                {{ $taxonomy->name }} <span class="text-gray-600 text-xs">({{ $taxonomyTypeLabel }})</span>
                             </label>
                             @endforeach
                         </div>

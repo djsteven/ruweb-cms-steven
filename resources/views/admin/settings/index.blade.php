@@ -16,11 +16,15 @@
     @php $groupNames = $groups->keys(); @endphp
     <div class="flex gap-1 mb-6 border-b border-white/[0.06]">
         @foreach ($groupNames as $group)
+            @php
+                $groupKey = 'admin.settings_groups.' . $group;
+                $groupLabel = __($groupKey) !== $groupKey ? __($groupKey) : str_replace('_', ' ', $group);
+            @endphp
             <button type="button"
                     class="settings-tab px-3 py-2 text-sm font-medium border-b-2 transition-colors capitalize"
                     data-group="{{ $group }}"
                     onclick="switchTab('{{ $group }}')">
-                {{ $group }}
+                {{ $groupLabel }}
             </button>
         @endforeach
     </div>
@@ -49,8 +53,12 @@
                         <select name="settings[{{ $setting->key }}]"
                                 class="w-full bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
                             @foreach ($setting->options ?? [] as $optValue => $optLabel)
+                                @php
+                                    $optKey = 'admin.settings_options.' . $setting->key . '.' . $optValue;
+                                    $translatedOptLabel = __($optKey) !== $optKey ? __($optKey) : $optLabel;
+                                @endphp
                                 <option value="{{ $optValue }}" {{ $setting->value === $optValue ? 'selected' : '' }}>
-                                    {{ $optLabel }}
+                                    {{ $translatedOptLabel }}
                                 </option>
                             @endforeach
                         </select>
