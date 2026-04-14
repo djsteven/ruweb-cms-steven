@@ -8,6 +8,7 @@ This index is the entry point for developers and LLM agents working on the start
 - `docs/pages-guide.md` — rules and workflow for creating and editing pages (media, content_json, templates, live editor)
 - `docs/content-model.md` — `content_json`/meta structure reference for pages
 - `docs/templates.md` — how page templates are registered and rendered
+- `docs/live-editor.md` — shared editor engine: initEditorEngine API, DOM contract, layout variables, scroll retention
 - `docs/settings.md` — global settings model and usage
 
 ## Collections & Modules

@@ -58,7 +58,44 @@ Correct — image stored as a media ID inside a section:
 
 When a template section needs an image field, store the `media_id` inside `content_json.sections.{section}.image_id` — not the URL or path.
 
-### 2. Featured image uses HasMedia — not content_json
+### 2. Image placeholders are pastel fills — never text or borders
+
+When a section or component renders an image and no media has been set yet, the placeholder **must** be a solid pastel color fill. No placeholder text, no dashed/solid borders, no icons, no labels.
+
+This keeps the visual language consistent with the shortcut cards, slider fallbacks, and other areas of the site that already use the shared pastel palette.
+
+Required pattern:
+
+```blade
+@php
+    $pastelColors = ['#F8B4B4', '#A7C7E7', '#B5EAD7', '#FFDAC1', '#C3B1E1', '#FFE5B4'];
+    $sectionMedia = isset($section['image_id']) ? \App\Models\Media::find($section['image_id']) : null;
+    $placeholderColor = $pastelColors[array_rand($pastelColors)];
+@endphp
+
+@if($sectionMedia)
+    <img src="{{ $sectionMedia->url() }}" alt="{{ $sectionMedia->alt }}">
+@else
+    <div style="background-color: {{ $placeholderColor }};" class="w-full h-full"></div>
+@endif
+```
+
+Rules:
+- Use `array_rand($pastelColors)` (or a deterministic index like `$idx % count($pastelColors)`) to pick a color.
+- No text content inside the placeholder `div`.
+- No CSS borders on the placeholder element.
+- Size and shape come from the parent container, not the placeholder itself.
+
+Forbidden:
+
+```blade
+{{-- NEVER --}}
+<div class="border border-gray-300 flex items-center justify-center">
+    <span>[Foto estacion]</span>
+</div>
+```
+
+### 3. Featured image uses HasMedia — not content_json
 
 The featured image is **not** stored inside `content_json`. It is attached via the polymorphic `mediables` pivot with the collection key `featured_image`.
 
@@ -82,7 +119,7 @@ Validate in FormRequest as:
 'featured_image' => ['nullable', 'integer', 'exists:media,id'],
 ```
 
-### 3. Every section must respect is_visible
+### 4. Every section must respect is_visible
 
 Every section in a Blade template **must** gate its output behind `is_visible`. This field is already rendered as a toggle switch in the admin form for every section — the template must honor it.
 
@@ -101,7 +138,7 @@ Rules:
 
 The toggle is already present in `admin/pages/_form.blade.php` for every section. No extra admin work is needed — this is purely a template-side obligation.
 
-### 4. Content lives in content_json — two keys only
+### 5. Content lives in content_json — two keys only
 
 All editable page content is stored in `content_json` with exactly two top-level keys:
 
@@ -124,9 +161,11 @@ All editable page content is stored in `content_json` with exactly two top-level
 
 Do not add a third top-level key. Do not store media URLs inside `content_json`.
 
-### 4. The edit view must use the live editor layout
+### 6. The edit view must use the live editor layout
 
-Every page uses the live editor — `edit.blade.php` must extend `admin.layouts.editor`. The create view uses `admin.layouts.app`.
+Every page uses the live editor — `edit.blade.php` must extend `admin.layouts.editor`, use the `_editor-footer` partial, and call `initEditorEngine()`. The create view uses `admin.layouts.app`.
+
+> Full details on the editor engine, DOM contract, and layout variables: see `docs/live-editor.md`.
 
 The `previewRender` method mutates the page in memory and renders the resolved template without saving:
 
