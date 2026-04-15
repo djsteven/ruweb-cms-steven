@@ -134,6 +134,7 @@ return [
     'tab_preview'               => 'Preview',
     'live_preview'              => 'Live Preview',
     'viewport_desktop'          => 'Desktop',
+    'viewport_tablet'           => 'Tablet',
     'viewport_mobile'           => 'Mobile',
     'saved_success'             => 'Saved successfully',
     'save_error'                => 'Error saving',

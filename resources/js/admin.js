@@ -1,4 +1,5 @@
 import '../css/admin.css';
+import { initEditorEngine } from './editor-engine.js';
 
 const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 if (token) {
@@ -7,6 +8,7 @@ if (token) {
 const adminI18n = window.adminI18n || {};
 const t = (key, fallback = '') => adminI18n[key] ?? fallback;
 const maxUploadKb = Number(adminI18n.maxUploadKb || 0);
+window.initEditorEngine = initEditorEngine;
 
 const selectors = Array.from(document.querySelectorAll('.media-selector'));
 const libraryModal = document.getElementById('media-library-modal');

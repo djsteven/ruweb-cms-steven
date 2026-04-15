@@ -4,6 +4,34 @@
     $contentJson = old('content_json', $page?->content_json ?? []);
     $currentTemplate = old('template_key', $page?->template_key ?? 'default');
     $featuredImageId = old('featured_image', $page?->featuredImage()?->id);
+
+    $sectionRegistry = [];
+    foreach ($templates as $templateKey => $templateConfig) {
+        foreach ($templateConfig['sections'] as $sectionKey) {
+            if (!isset($sectionRegistry[$sectionKey])) {
+                $sectionRegistry[$sectionKey] = [
+                    'key' => $sectionKey,
+                    'templates' => [],
+                    'partialView' => null,
+                    'partialSourceTemplate' => null,
+                ];
+            }
+
+            if (!in_array($templateKey, $sectionRegistry[$sectionKey]['templates'], true)) {
+                $sectionRegistry[$sectionKey]['templates'][] = $templateKey;
+            }
+
+            if ($sectionRegistry[$sectionKey]['partialView'] === null) {
+                $candidatePath = resource_path("views/admin/pages/sections/{$templateKey}_{$sectionKey}.blade.php");
+                if (file_exists($candidatePath)) {
+                    $sectionRegistry[$sectionKey]['partialView'] = "admin.pages.sections.{$templateKey}_{$sectionKey}";
+                    $sectionRegistry[$sectionKey]['partialSourceTemplate'] = $templateKey;
+                }
+            }
+        }
+    }
+
+    $sectionsForRender = array_values($sectionRegistry);
 @endphp
 
 <form id="editor-form"
@@ -82,49 +110,74 @@
 
     {{-- TAB: Contenido --}}
     <div data-panel="content" class="form-panel hidden space-y-4">
-
         <div id="section-fields" class="space-y-4">
-            @foreach ($templates as $tKey => $tConfig)
-                @foreach ($tConfig['sections'] as $section)
-                    <div class="template-section bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-4 space-y-4"
-                         data-template="{{ $tKey }}"
-                         style="{{ $tKey !== $currentTemplate ? 'display:none' : '' }}">
-                        <div class="flex items-center justify-between">
-                            <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide">{{ str_replace('_', ' ', $section) }}</h3>
-                            <label class="relative inline-flex items-center gap-2 cursor-pointer">
-                                <input type="hidden" name="content_json[sections][{{ $section }}][is_visible]" value="0">
-                                <input type="checkbox"
-                                       name="content_json[sections][{{ $section }}][is_visible]"
-                                       value="1"
-                                       class="sr-only peer"
-                                       {{ ($contentJson['sections'][$section]['is_visible'] ?? 1) ? 'checked' : '' }}>
-                                <div class="w-9 h-5 bg-gray-700 peer-checked:bg-emerald-500 rounded-full transition-colors relative
-                                            after:content-[''] after:absolute after:top-0.5 after:left-0.5
-                                            after:bg-white after:rounded-full after:h-4 after:w-4
-                                            after:transition-transform peer-checked:after:translate-x-4"></div>
-                                <span class="text-xs text-gray-500">{{ __('admin.field_section_visible') }}</span>
-                            </label>
+            @foreach ($sectionsForRender as $sectionConfig)
+                @php
+                    $section = $sectionConfig['key'];
+                    $sectionTemplates = implode(',', $sectionConfig['templates']);
+                    $sectionDomId = preg_replace('/[^a-z0-9\-]+/i', '-', $section);
+                    $sectionBodyId = 'section-body-' . trim($sectionDomId ?: $section, '-');
+                    $isVisible = (bool) ($contentJson['sections'][$section]['is_visible'] ?? 1);
+                @endphp
+
+                <div class="template-section rounded-xl border border-white/[0.08] bg-[#101013] overflow-hidden"
+                     data-templates="{{ $sectionTemplates }}">
+                    <div class="section-accordion-header flex items-center justify-between px-4 py-3 cursor-pointer select-none hover:bg-white/[0.02] transition-colors"
+                         data-accordion-toggle
+                         aria-expanded="false"
+                         aria-controls="{{ $sectionBodyId }}">
+                        <div class="flex items-center gap-2 min-w-0">
+                            <svg data-accordion-icon class="section-chevron w-4 h-4 text-gray-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                            <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide truncate">
+                                {{ str_replace('_', ' ', $section) }}
+                            </h3>
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_section_heading') }}</label>
-                            <input type="text" name="content_json[sections][{{ $section }}][heading]"
-                                   value="{{ $contentJson['sections'][$section]['heading'] ?? '' }}"
-                                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-                                   placeholder="{{ __('admin.field_section_heading_ph') }}">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_section_body') }}</label>
-                            <textarea name="content_json[sections][{{ $section }}][body]" rows="4"
-                                      class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
-                                      placeholder="{{ __('admin.field_section_body_ph') }}">{{ $contentJson['sections'][$section]['body'] ?? '' }}</textarea>
-                        </div>
+                        <label class="relative inline-flex items-center gap-2 cursor-pointer shrink-0" data-visibility-toggle>
+                            <input type="hidden" name="content_json[sections][{{ $section }}][is_visible]" value="0">
+                            <input type="checkbox"
+                                   name="content_json[sections][{{ $section }}][is_visible]"
+                                   value="1"
+                                   class="sr-only peer"
+                                   {{ $isVisible ? 'checked' : '' }}>
+                            <div class="w-9 h-5 bg-gray-700 peer-checked:bg-emerald-500 rounded-full transition-colors relative
+                                        after:content-[''] after:absolute after:top-0.5 after:left-0.5
+                                        after:bg-white after:rounded-full after:h-4 after:w-4
+                                        after:transition-transform peer-checked:after:translate-x-4"></div>
+                            <span class="text-xs text-gray-500">{{ __('admin.field_section_visible') }}</span>
+                        </label>
                     </div>
-                @endforeach
+
+                    <div id="{{ $sectionBodyId }}" data-accordion-body class="hidden border-t border-white/[0.08] p-4 space-y-4">
+                        @if ($sectionConfig['partialView'])
+                            @include($sectionConfig['partialView'], [
+                                'page' => $page,
+                                'sectionKey' => $section,
+                                'contentJson' => $contentJson,
+                                'templateKey' => $sectionConfig['partialSourceTemplate'],
+                            ])
+                        @else
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_section_heading') }}</label>
+                                <input type="text" name="content_json[sections][{{ $section }}][heading]"
+                                       value="{{ $contentJson['sections'][$section]['heading'] ?? '' }}"
+                                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                                       placeholder="{{ __('admin.field_section_heading_ph') }}">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_section_body') }}</label>
+                                <textarea name="content_json[sections][{{ $section }}][body]" rows="4"
+                                          class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                                          placeholder="{{ __('admin.field_section_body_ph') }}">{{ $contentJson['sections'][$section]['body'] ?? '' }}</textarea>
+                            </div>
+                        @endif
+                    </div>
+                </div>
             @endforeach
         </div>
-
     </div>
 
     {{-- TAB: Estado --}}
@@ -231,13 +284,52 @@
     }
     updateTabStyles();
 
-    // Template switcher
+    // Template switcher for shared sections
     const templateSelect = document.getElementById('template_key');
     const sectionBlocks = document.querySelectorAll('.template-section');
 
-    templateSelect.addEventListener('change', () => {
-        sectionBlocks.forEach(block => {
-            block.style.display = block.dataset.template === templateSelect.value ? '' : 'none';
+    function refreshVisibleSections() {
+        if (!templateSelect) {
+            return;
+        }
+
+        sectionBlocks.forEach((block) => {
+            const templates = (block.dataset.templates || '')
+                .split(',')
+                .map((value) => value.trim())
+                .filter(Boolean);
+            const shouldShow = templates.includes(templateSelect.value);
+            block.style.display = shouldShow ? '' : 'none';
+        });
+    }
+
+    templateSelect?.addEventListener('change', refreshVisibleSections);
+    refreshVisibleSections();
+
+    // Accordion behavior
+    const accordionToggles = document.querySelectorAll('[data-accordion-toggle]');
+    accordionToggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+            const section = toggle.closest('.template-section');
+            const body = section?.querySelector('[data-accordion-body]');
+            const icon = section?.querySelector('[data-accordion-icon]');
+
+            if (!body || !icon) {
+                return;
+            }
+
+            const shouldOpen = body.classList.contains('hidden');
+            body.classList.toggle('hidden', !shouldOpen);
+            icon.classList.toggle('rotate-180', shouldOpen);
+            toggle.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        });
+    });
+
+    // Keep visibility toggle independent from accordion click.
+    const visibilityToggles = document.querySelectorAll('[data-visibility-toggle]');
+    visibilityToggles.forEach((label) => {
+        label.addEventListener('click', (event) => {
+            event.stopPropagation();
         });
     });
 
@@ -259,7 +351,7 @@
             .replace(/^-|-$/g, '');
     });
 
-    // Delete button → hidden form
+    // Delete button -> hidden form
     const deleteBtn = document.getElementById('delete-page-btn');
     if (deleteBtn) {
         deleteBtn.addEventListener('click', () => {

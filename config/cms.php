@@ -22,6 +22,10 @@ return [
             'name' => 'Homepage',
             'sections' => ['hero', 'features', 'cta'],
         ],
+        'home-alt' => [
+            'name' => 'Homepage Alt',
+            'sections' => ['hero', 'features', 'cta'],
+        ],
     ],
 
     'default_admin' => [

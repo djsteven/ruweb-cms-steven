@@ -107,6 +107,8 @@
                 <div class="hidden lg:flex items-center gap-3">
                     <button id="vp-desktop" onclick="editorSetViewport('desktop')"
                             class="text-xs text-emerald-400 transition-colors">{{ __('admin.viewport_desktop') }}</button>
+                    <button id="vp-tablet" onclick="editorSetViewport('tablet')"
+                            class="text-xs text-gray-600 hover:text-gray-400 transition-colors">{{ __('admin.viewport_tablet') }}</button>
                     <button id="vp-mobile" onclick="editorSetViewport('mobile')"
                             class="text-xs text-gray-600 hover:text-gray-400 transition-colors">{{ __('admin.viewport_mobile') }}</button>
                 </div>
@@ -171,6 +173,7 @@
             const iframe = document.getElementById('preview-frame');
             const wrap = document.getElementById('iframe-wrap');
             const desktopBtn = document.getElementById('vp-desktop');
+            const tabletBtn = document.getElementById('vp-tablet');
             const mobileBtn = document.getElementById('vp-mobile');
 
             if (vp === 'mobile') {
@@ -180,12 +183,22 @@
                 wrap.classList.add('p-6');
                 mobileBtn.className = 'text-xs text-emerald-400 transition-colors';
                 desktopBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
+                tabletBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
+            } else if (vp === 'tablet') {
+                iframe.className = 'border-0 bg-white rounded-2xl shadow-2xl transition-all flex-none';
+                iframe.style.width = '834px';
+                iframe.style.height = '1112px';
+                wrap.classList.add('p-6');
+                tabletBtn.className = 'text-xs text-emerald-400 transition-colors';
+                desktopBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
+                mobileBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
             } else {
                 iframe.className = 'w-full h-full border-0 bg-white';
                 iframe.style.width = '';
                 iframe.style.height = '';
                 wrap.classList.remove('p-6');
                 desktopBtn.className = 'text-xs text-emerald-400 transition-colors';
+                tabletBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
                 mobileBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
             }
         }

@@ -167,6 +167,13 @@ Every page uses the live editor — `edit.blade.php` must extend `admin.layouts.
 
 > Full details on the editor engine, DOM contract, and layout variables: see `docs/live-editor.md`.
 
+In the `Content` tab, section blocks are accordion cards:
+- collapsed by default
+- multiple sections can be open at once
+- collapsed header only shows section title + `Visible` switch
+
+The layout-level preview also includes three shared viewports: desktop, tablet, and mobile.
+
 The `previewRender` method mutates the page in memory and renders the resolved template without saving:
 
 ```php
@@ -212,7 +219,17 @@ Each page selects a template via `template_key`. Templates live at `resources/vi
 ],
 ```
 
-The `sections` array drives what fields appear in the admin form. Every key listed here gets a `heading` and `body` field by default in `_form.blade.php`. For custom fields per section, extend the form partial.
+The `sections` array drives what fields appear in the admin form. Every key listed here gets a `heading` and `body` field by default in `_form.blade.php`.
+
+The pages editor deduplicates section inputs by key across templates:
+- if two templates share `hero`, the editor renders one `hero` block tagged for both templates
+- switching template keeps the same inputs and current values active
+- this prevents preview/editor data loss when toggling between compatible templates (e.g. `home` and `home-alt`)
+
+For template-specific section UI, optional partials can be placed at:
+`resources/views/admin/pages/sections/{template}_{section}.blade.php`
+
+If a selected template does not have its own partial, the editor falls back to another template partial that shares that section key.
 
 ### Template Blade file
 
