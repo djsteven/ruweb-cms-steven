@@ -23,7 +23,14 @@ class StoreMediaRequest extends FormRequest
 
         return [
             'file' => [
-                'required',
+                'required_without:files',
+                'nullable',
+                'file',
+                "max:{$maxKb}",
+                "mimetypes:{$allowedMimes}",
+            ],
+            'files' => ['required_without:file', 'nullable', 'array', 'min:1'],
+            'files.*' => [
                 'file',
                 "max:{$maxKb}",
                 "mimetypes:{$allowedMimes}",
@@ -39,6 +46,9 @@ class StoreMediaRequest extends FormRequest
             'file.mimetypes' => __('admin.validation_file_mimetypes'),
             'file.max' => __('admin.validation_file_max'),
             'file.uploaded' => __('admin.validation_file_uploaded'),
+            'files.*.mimetypes' => __('admin.validation_file_mimetypes'),
+            'files.*.max' => __('admin.validation_file_max'),
+            'files.*.uploaded' => __('admin.validation_file_uploaded'),
         ];
     }
 }

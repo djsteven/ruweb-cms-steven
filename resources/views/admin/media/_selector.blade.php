@@ -5,9 +5,10 @@
     $name = $name ?? 'media_id';
     $value = $value ?? null;
     $label = $label ?? __('admin.choose_file');
+    $type = $type ?? null;
 @endphp
 
-<div class="media-selector" data-name="{{ $name }}">
+<div class="media-selector" data-name="{{ $name }}" @if($type) data-type="{{ $type }}" @endif>
     <label class="block text-sm font-medium text-gray-300 mb-1">{{ $label }}</label>
     <input type="hidden" name="{{ $name }}" value="{{ $value }}" class="media-selector-input">
 

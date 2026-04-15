@@ -28,7 +28,7 @@
                     </button>
                 </div>
 
-                <input type="file" id="file-input" name="file" class="hidden">
+                <input type="file" id="file-input" name="files[]" multiple class="hidden">
             </div>
 
             <div class="mb-3">

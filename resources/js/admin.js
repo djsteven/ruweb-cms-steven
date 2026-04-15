@@ -18,6 +18,16 @@ const libraryStatus = document.getElementById('media-library-status');
 
 let activeSelector = null;
 let searchTimer = null;
+const LIBRARY_PAGE_SIZE = 20;
+const libraryItemsById = new Map();
+const libraryState = {
+    page: 1,
+    hasMore: true,
+    isLoading: false,
+    requestId: 0,
+    search: '',
+    type: '',
+};
 
 // Upload modal
 const uploadModal = document.getElementById('upload-modal');
@@ -33,11 +43,11 @@ const uploadPreviewImage = document.getElementById('upload-preview-image');
 const uploadRemoveFile = document.getElementById('upload-remove-file');
 
 let uploadFromLibrary = false;
-let selectedUploadFile = null;
+let selectedUploadFiles = [];
 let uploadPreviewUrl = null;
 
-function clearSelectedUploadFile() {
-    selectedUploadFile = null;
+function clearSelectedUploadFiles() {
+    selectedUploadFiles = [];
     if (fileInput) {
         fileInput.value = '';
     }
@@ -54,27 +64,45 @@ function clearSelectedUploadFile() {
     }
     uploadPreviewWrap?.classList.add('hidden');
     uploadEmptyState?.classList.remove('hidden');
+    uploadRemoveFile?.classList.add('hidden');
 }
 
-function setSelectedUploadFile(file) {
-    if (!file) {
-        clearSelectedUploadFile();
+function setSelectedUploadFiles(files) {
+    if (!files?.length) {
+        clearSelectedUploadFiles();
         return;
     }
 
-    selectedUploadFile = file;
-
-    if (maxUploadKb > 0 && file.size > maxUploadKb * 1024) {
-        const maxMb = (maxUploadKb / 1024).toFixed(1);
-        alert(`${t('validationFileMax', t('uploadFailed'))} (max ${maxMb} MB)`);
-        clearSelectedUploadFile();
-        return;
-    }
+    selectedUploadFiles = Array.from(files);
+    const oversizedFile = maxUploadKb > 0
+        ? selectedUploadFiles.find((file) => file.size > maxUploadKb * 1024)
+        : null;
 
     if (fileNameLabel) {
-        fileNameLabel.textContent = file.name;
+        fileNameLabel.textContent = selectedUploadFiles.length === 1
+            ? selectedUploadFiles[0].name
+            : `${selectedUploadFiles.length} files selected`;
     }
 
+    if (oversizedFile) {
+        const maxMb = (maxUploadKb / 1024).toFixed(1);
+        alert(`${t('validationFileMax', t('uploadFailed'))} (max ${maxMb} MB): ${oversizedFile.name}`);
+        clearSelectedUploadFiles();
+        return;
+    }
+
+    if (selectedUploadFiles.length !== 1) {
+        if (uploadPreviewUrl) {
+            URL.revokeObjectURL(uploadPreviewUrl);
+            uploadPreviewUrl = null;
+        }
+        uploadPreviewWrap?.classList.add('hidden');
+        uploadRemoveFile?.classList.remove('hidden');
+        uploadEmptyState?.classList.remove('hidden');
+        return;
+    }
+
+    const file = selectedUploadFiles[0];
     const isImage = String(file.type || '').startsWith('image/');
     if (!isImage) {
         if (uploadPreviewUrl) {
@@ -82,6 +110,7 @@ function setSelectedUploadFile(file) {
             uploadPreviewUrl = null;
         }
         uploadPreviewWrap?.classList.add('hidden');
+        uploadRemoveFile?.classList.remove('hidden');
         uploadEmptyState?.classList.remove('hidden');
         return;
     }
@@ -97,6 +126,7 @@ function setSelectedUploadFile(file) {
     }
     uploadEmptyState?.classList.add('hidden');
     uploadPreviewWrap?.classList.remove('hidden');
+    uploadRemoveFile?.classList.remove('hidden');
 }
 
 function openUpload(fromLibrary = false) {
@@ -107,7 +137,7 @@ function openUpload(fromLibrary = false) {
 function closeUpload() {
     uploadModal?.classList.add('hidden');
     uploadForm?.reset();
-    clearSelectedUploadFile();
+    clearSelectedUploadFiles();
 }
 
 uploadClose?.addEventListener('click', closeUpload);
@@ -123,27 +153,30 @@ dropZone?.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('border-emerald-500/50');
     if (e.dataTransfer.files.length) {
-        setSelectedUploadFile(e.dataTransfer.files[0]);
+        setSelectedUploadFiles(e.dataTransfer.files);
     }
 });
 fileInput?.addEventListener('change', () => {
-    setSelectedUploadFile(fileInput.files?.[0] || null);
+    setSelectedUploadFiles(fileInput.files || []);
 });
 uploadRemoveFile?.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    clearSelectedUploadFile();
+    clearSelectedUploadFiles();
 });
 
 uploadForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!selectedUploadFile) {
+    if (!selectedUploadFiles.length) {
         alert(t('chooseFile', t('uploadFailed')));
         return;
     }
 
     const formData = new FormData(uploadForm);
-    formData.set('file', selectedUploadFile);
+    formData.delete('files[]');
+    selectedUploadFiles.forEach((file) => {
+        formData.append('files[]', file);
+    });
 
     uploadProgress?.classList.remove('hidden');
     try {
@@ -157,12 +190,21 @@ uploadForm?.addEventListener('submit', async (e) => {
             body: formData,
         });
         if (response.ok) {
-            const newMedia = await response.json();
+            const payload = await response.json();
+            const uploadedItems = Array.isArray(payload?.data)
+                ? payload.data
+                : (payload ? [payload] : []);
+
             if (uploadFromLibrary && activeSelector) {
-                renderSelectorPreview(activeSelector, newMedia);
-                notifySelectorChange(activeSelector);
                 closeUpload();
-                closeLibrary();
+
+                if (uploadedItems.length === 1) {
+                    renderSelectorPreview(activeSelector, uploadedItems[0]);
+                    notifySelectorChange(activeSelector);
+                    closeLibrary();
+                } else {
+                    void loadLibrary({ reset: true });
+                }
             } else {
                 window.location.reload();
             }
@@ -271,7 +313,7 @@ function openLibrary(selector) {
     }
 
     libraryModal.classList.remove('hidden');
-    loadLibrary(librarySearch?.value || '');
+    loadLibrary({ reset: true });
 }
 
 function closeLibrary() {
@@ -284,17 +326,19 @@ function closeLibrary() {
     libraryModal.classList.add('hidden');
 }
 
-function renderLibraryItems(items) {
+function renderLibraryItems(items, { append = false } = {}) {
     if (!libraryGrid) {
         return;
     }
 
-    if (!items.length) {
+    if (!append && !items.length) {
+        libraryItemsById.clear();
         libraryGrid.innerHTML = `<div class="col-span-full text-sm text-gray-500 py-6 text-center">${escapeHtml(t('noMediaFound'))}</div>`;
         return;
     }
 
-    libraryGrid.innerHTML = items.map((item) => {
+    const html = items.map((item) => {
+        libraryItemsById.set(String(item.id), item);
         const isImage = String(item.mime_type || '').startsWith('image/');
 
         return `
@@ -312,35 +356,62 @@ function renderLibraryItems(items) {
         `;
     }).join('');
 
-    libraryGrid.querySelectorAll('.media-library-item').forEach((button) => {
-        button.addEventListener('click', async () => {
-            if (!activeSelector) {
-                return;
-            }
+    if (append) {
+        libraryGrid.insertAdjacentHTML('beforeend', html);
+        return;
+    }
 
-            const selected = items.find((item) => String(item.id) === button.dataset.id);
-            const selector = activeSelector;
-
-            renderSelectorPreview(selector, selected);
-            notifySelectorChange(selector);
-            closeLibrary();
-        });
-    });
+    libraryGrid.innerHTML = html;
 }
 
-async function loadLibrary(search = '') {
+function currentLibraryFilters() {
+    return {
+        search: librarySearch?.value?.trim() || '',
+        type: activeSelector?.dataset?.type || '',
+    };
+}
+
+async function loadLibrary({ reset = false } = {}) {
     if (!libraryGrid || !libraryStatus) {
         return;
     }
 
+    if (libraryState.isLoading && !reset) {
+        return;
+    }
+
+    if (!reset && !libraryState.hasMore) {
+        return;
+    }
+
+    if (reset) {
+        libraryState.requestId += 1;
+        libraryState.isLoading = false;
+        const filters = currentLibraryFilters();
+        libraryState.page = 1;
+        libraryState.hasMore = true;
+        libraryState.search = filters.search;
+        libraryState.type = filters.type;
+        libraryItemsById.clear();
+        libraryGrid.innerHTML = '';
+    }
+
+    const requestId = ++libraryState.requestId;
+    const page = libraryState.page;
+
+    libraryState.isLoading = true;
     libraryStatus.textContent = t('loadingMedia');
     libraryStatus.classList.remove('hidden');
-    libraryGrid.innerHTML = '';
 
     const params = new URLSearchParams();
-    if (search) {
-        params.set('search', search);
+    if (libraryState.search) {
+        params.set('search', libraryState.search);
     }
+    if (libraryState.type) {
+        params.set('type', libraryState.type);
+    }
+    params.set('page', String(page));
+    params.set('per_page', String(LIBRARY_PAGE_SIZE));
 
     try {
         const response = await fetch(`/admin/media?${params.toString()}`, {
@@ -355,11 +426,33 @@ async function loadLibrary(search = '') {
         }
 
         const payload = await response.json();
-        renderLibraryItems(payload.data || []);
+        if (requestId !== libraryState.requestId) {
+            return;
+        }
+
+        const items = payload.data || [];
+        renderLibraryItems(items, { append: page > 1 });
+        libraryState.page = Number(payload.current_page || page) + 1;
+        libraryState.hasMore = Boolean(payload.next_page_url);
         libraryStatus.classList.add('hidden');
+
+        if (!libraryGrid.querySelector('.media-library-item') && !libraryState.hasMore) {
+            renderLibraryItems([], { append: false });
+            return;
+        }
+
+        if (libraryState.hasMore && libraryGrid.scrollHeight <= libraryGrid.clientHeight) {
+            void loadLibrary();
+        }
     } catch (_) {
-        libraryStatus.textContent = t('unableToLoadMediaLibrary');
-        libraryStatus.classList.remove('hidden');
+        if (requestId === libraryState.requestId) {
+            libraryStatus.textContent = t('unableToLoadMediaLibrary');
+            libraryStatus.classList.remove('hidden');
+        }
+    } finally {
+        if (requestId === libraryState.requestId) {
+            libraryState.isLoading = false;
+        }
     }
 }
 
@@ -388,9 +481,38 @@ libraryModal?.addEventListener('click', (event) => {
     }
 });
 
-libraryRefresh?.addEventListener('click', () => loadLibrary(librarySearch?.value || ''));
+libraryRefresh?.addEventListener('click', () => loadLibrary({ reset: true }));
 
 librarySearch?.addEventListener('input', () => {
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => loadLibrary(librarySearch.value || ''), 250);
+    searchTimer = setTimeout(() => loadLibrary({ reset: true }), 250);
+});
+
+libraryGrid?.addEventListener('scroll', () => {
+    if (libraryState.isLoading || !libraryState.hasMore) {
+        return;
+    }
+
+    const threshold = 200;
+    const distanceToBottom = libraryGrid.scrollHeight - libraryGrid.scrollTop - libraryGrid.clientHeight;
+    if (distanceToBottom <= threshold) {
+        void loadLibrary();
+    }
+});
+
+libraryGrid?.addEventListener('click', (event) => {
+    const button = event.target.closest('.media-library-item');
+    if (!button || !activeSelector) {
+        return;
+    }
+
+    const selected = libraryItemsById.get(String(button.dataset.id));
+    if (!selected) {
+        return;
+    }
+
+    const selector = activeSelector;
+    renderSelectorPreview(selector, selected);
+    notifySelectorChange(selector);
+    closeLibrary();
 });

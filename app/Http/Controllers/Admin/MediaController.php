@@ -30,7 +30,12 @@ class MediaController extends Controller
             });
         }
 
-        $media = $query->paginate(24);
+        $perPage = 24;
+        if ($request->wantsJson()) {
+            $perPage = min(max((int) $request->input('per_page', 20), 1), 100);
+        }
+
+        $media = $query->paginate($perPage)->withQueryString();
 
         if ($request->wantsJson()) {
             return response()->json($media);
@@ -41,39 +46,48 @@ class MediaController extends Controller
 
     public function store(StoreMediaRequest $request): JsonResponse
     {
-        $file = $request->file('file');
+        $uploadedFiles = $request->file('files') ?: [$request->file('file')];
+        $uploadedFiles = array_values(array_filter((array) $uploadedFiles));
 
-        $extension = strtolower($file->getClientOriginalExtension());
         $allowedExtensions = config('cms.upload.allowed_extensions');
-        if (! in_array($extension, $allowedExtensions)) {
-            return response()->json(['error' => __('admin.media_error_extension_not_allowed')], 422);
-        }
+        $createdMedia = [];
 
-        if ($extension === 'svg') {
-            $content = file_get_contents($file->getRealPath());
-            if (preg_match('/<script|on\w+\s*=/i', $content)) {
-                return response()->json(['error' => __('admin.media_error_svg_malicious')], 422);
+        foreach ($uploadedFiles as $file) {
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (! in_array($extension, $allowedExtensions)) {
+                return response()->json(['error' => __('admin.media_error_extension_not_allowed')], 422);
             }
+
+            if ($extension === 'svg') {
+                $content = file_get_contents($file->getRealPath());
+                if (preg_match('/<script|on\w+\s*=/i', $content)) {
+                    return response()->json(['error' => __('admin.media_error_svg_malicious')], 422);
+                }
+            }
+
+            $filename = Str::uuid() . '.' . $extension;
+            $directory = 'media/' . now()->format('Y/m');
+            $path = $file->storeAs($directory, $filename, 'public');
+
+            $createdMedia[] = Media::create([
+                'filename' => $filename,
+                'original_filename' => $file->getClientOriginalName(),
+                'path' => $path,
+                'mime_type' => $file->getMimeType(),
+                'extension' => $extension,
+                'size' => $file->getSize(),
+                'alt' => $request->input('alt'),
+                'title' => $request->input('title', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)),
+                'disk' => 'public',
+                'uploaded_by' => $request->user()->id,
+            ]);
         }
 
-        $filename = Str::uuid() . '.' . $extension;
-        $directory = 'media/' . now()->format('Y/m');
-        $path = $file->storeAs($directory, $filename, 'public');
+        if (count($createdMedia) === 1) {
+            return response()->json($createdMedia[0], 201);
+        }
 
-        $media = Media::create([
-            'filename' => $filename,
-            'original_filename' => $file->getClientOriginalName(),
-            'path' => $path,
-            'mime_type' => $file->getMimeType(),
-            'extension' => $extension,
-            'size' => $file->getSize(),
-            'alt' => $request->input('alt'),
-            'title' => $request->input('title', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)),
-            'disk' => 'public',
-            'uploaded_by' => $request->user()->id,
-        ]);
-
-        return response()->json($media, 201);
+        return response()->json(['data' => $createdMedia], 201);
     }
 
     public function show(Media $media): JsonResponse

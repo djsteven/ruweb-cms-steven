@@ -37,4 +37,23 @@ class AuthAndMediaSmokeTest extends TestCase
             'uploaded_by' => $admin->id,
         ]);
     }
+
+    public function test_admin_can_upload_multiple_media_files(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->postJson(route('admin.media.store'), [
+            'files' => [
+                UploadedFile::fake()->image('cover-a.jpg'),
+                UploadedFile::fake()->image('cover-b.jpg'),
+            ],
+            'title' => 'Bulk upload',
+            'alt' => 'Bulk upload image',
+        ]);
+
+        $response->assertCreated();
+        $response->assertJsonCount(2, 'data');
+        $this->assertDatabaseCount('media', 2);
+    }
 }
