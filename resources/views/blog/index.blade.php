@@ -18,7 +18,12 @@
                     <article class="border border-gray-200 rounded-xl overflow-hidden bg-white">
                         @if($post->featuredImage())
                             <a href="{{ route('blog.show', $post->slug) }}">
-                                <img src="{{ $post->featuredImage()->url() }}" alt="{{ $post->featuredImage()->alt ?: $post->title }}" class="h-48 w-full object-cover">
+                                <x-responsive-img
+                                    :media="$post->featuredImage()"
+                                    sizes="(min-width: 1024px) 24rem, (min-width: 768px) 50vw, 100vw"
+                                    :fallback-alt="$post->title"
+                                    class="h-48 w-full object-cover"
+                                />
                             </a>
                         @endif
 

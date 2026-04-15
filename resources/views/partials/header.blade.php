@@ -3,8 +3,16 @@
         <div class="flex items-center justify-between h-16">
             {{-- Logo / Site name --}}
             <a href="{{ route('home') }}" class="flex items-center gap-2">
-                @if($siteLogo ?? null)
-                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-8 w-auto">
+                @if($siteLogoMedia ?? null)
+                    <x-responsive-img
+                        :media="$siteLogoMedia"
+                        sizes="128px"
+                        :fallback-alt="$siteName"
+                        class="h-8 w-auto"
+                        loading="eager"
+                    />
+                @elseif($siteLogo ?? null)
+                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-8 w-auto" loading="eager">
                 @endif
                 <span class="text-lg font-semibold text-gray-900">{{ $siteName }}</span>
             </a>

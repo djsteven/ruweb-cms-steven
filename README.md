@@ -69,3 +69,6 @@ CMS_ADMIN_PASSWORD=password
 ## Documentation
 
 Start at `docs/index.md`.
+
+Image optimization and responsive media strategy:
+- `docs/image-strategy.md`

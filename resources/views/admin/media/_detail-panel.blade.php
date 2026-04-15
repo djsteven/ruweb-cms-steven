@@ -28,6 +28,57 @@
                 class="w-full px-3 py-2 bg-[#1a1a1a] border border-white/10 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
         </div>
 
+        <div class="mb-5 border-t border-white/[0.06] pt-4">
+            <button type="button"
+                    id="detail-optimization-toggle"
+                    class="w-full flex items-center justify-between gap-2 text-left">
+                <h3 class="text-xs font-semibold text-white uppercase tracking-wide">{{ __('admin.media_optimization') }}</h3>
+                <svg id="detail-optimization-chevron" class="w-4 h-4 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+
+            <div id="detail-optimization-content" class="hidden mt-3">
+                <div class="space-y-2 mb-3">
+                    <div class="flex items-center justify-between gap-3 text-xs">
+                        <span class="text-gray-500">{{ __('admin.optimization_status') }}</span>
+                        <span id="detail-optimization-status" class="text-gray-300"></span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs">
+                        <span class="text-gray-500">{{ __('admin.optimization_eligible') }}</span>
+                        <span id="detail-optimization-eligible" class="text-gray-300"></span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs">
+                        <span class="text-gray-500">{{ __('admin.optimization_original_size') }}</span>
+                        <span id="detail-original-size" class="text-gray-300"></span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs">
+                        <span class="text-gray-500">{{ __('admin.optimization_original_format') }}</span>
+                        <span id="detail-original-extension" class="text-gray-300"></span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs">
+                        <span class="text-gray-500">{{ __('admin.optimization_bytes_saved') }}</span>
+                        <span id="detail-bytes-saved" class="text-emerald-400"></span>
+                    </div>
+                    <div class="flex items-center justify-between gap-3 text-xs">
+                        <span class="text-gray-500">{{ __('admin.optimization_ratio') }}</span>
+                        <span id="detail-optimization-ratio" class="text-emerald-400"></span>
+                    </div>
+                </div>
+
+                <div id="detail-optimization-reason-wrap" class="hidden rounded-md border border-amber-500/20 bg-amber-500/5 px-2.5 py-2 mb-3">
+                    <p class="text-[11px] uppercase tracking-wide text-amber-400 mb-1">{{ __('admin.optimization_reason') }}</p>
+                    <p id="detail-optimization-reason" class="text-xs text-amber-200"></p>
+                </div>
+
+                <div>
+                    <p class="text-xs font-medium text-gray-500 mb-2">{{ __('admin.optimization_variants') }}</p>
+                    <ul id="detail-variants-list" class="space-y-1"></ul>
+                    <p id="detail-no-variants" class="text-xs text-gray-600">{{ __('admin.optimization_no_variants') }}</p>
+                </div>
+            </div>
+        </div>
+
         <div class="flex gap-2">
             <button id="detail-save" class="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
                 {{ __('admin.btn_media_save') }}

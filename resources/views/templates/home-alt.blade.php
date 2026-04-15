@@ -6,11 +6,23 @@
     $hero = $sections['hero'] ?? [];
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
+    $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
 @endphp
 
 @if(($hero['is_visible'] ?? 1) && ($hero['heading'] ?? null))
-<section class="bg-gray-900 py-20 sm:py-28">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="relative overflow-hidden py-20 sm:py-28 bg-gray-900">
+    @if($heroBackground)
+        <div class="absolute inset-0">
+            <x-responsive-img
+                :media="$heroBackground"
+                sizes="100vw"
+                alt=""
+                class="h-full w-full object-cover"
+            />
+            <div class="absolute inset-0 bg-black/55"></div>
+        </div>
+    @endif
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-tight max-w-4xl">{{ $hero['heading'] }}</h1>
         @if($hero['body'] ?? null)
             <p class="mt-6 text-lg sm:text-xl text-gray-300 max-w-3xl">{{ $hero['body'] }}</p>

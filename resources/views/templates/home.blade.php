@@ -6,15 +6,27 @@
     $hero = $sections['hero'] ?? [];
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
+    $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
 @endphp
 
 {{-- Hero --}}
 @if(($hero['is_visible'] ?? 1) && ($hero['heading'] ?? null))
-<section class="bg-gray-50 py-20 sm:py-28">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight">{{ $hero['heading'] }}</h1>
+<section class="relative overflow-hidden py-20 sm:py-28 {{ $heroBackground ? 'bg-gray-900' : 'bg-gray-50' }}">
+    @if($heroBackground)
+        <div class="absolute inset-0">
+            <x-responsive-img
+                :media="$heroBackground"
+                sizes="100vw"
+                alt=""
+                class="h-full w-full object-cover"
+            />
+            <div class="absolute inset-0 bg-black/45"></div>
+        </div>
+    @endif
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight {{ $heroBackground ? 'text-white' : 'text-gray-900' }}">{{ $hero['heading'] }}</h1>
         @if($hero['body'] ?? null)
-            <p class="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">{{ $hero['body'] }}</p>
+            <p class="mt-6 text-lg sm:text-xl max-w-2xl mx-auto {{ $heroBackground ? 'text-gray-100' : 'text-gray-600' }}">{{ $hero['body'] }}</p>
         @endif
     </div>
 </section>

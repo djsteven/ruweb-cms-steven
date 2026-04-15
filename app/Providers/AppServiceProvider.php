@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'siteName' => Setting::get('site_name') ?: config('app.name'),
                 'siteLogo' => $siteLogo?->url(),
+                'siteLogoMedia' => $siteLogo,
             ]);
         });
 

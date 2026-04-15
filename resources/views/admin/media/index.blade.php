@@ -54,8 +54,19 @@
                  data-title="{{ $item->title }}"
                  data-alt="{{ $item->alt }}"
                  data-size="{{ $item->formattedSize() }}"
+                 data-size-bytes="{{ $item->size }}"
                  data-mime="{{ $item->mime_type }}"
-                 data-filename="{{ $item->original_filename }}">
+                 data-extension="{{ strtolower($item->extension) }}"
+                 data-filename="{{ $item->original_filename }}"
+                 data-is-image="{{ $item->isImage() ? '1' : '0' }}"
+                 data-is-optimized="{{ $item->isOptimizedRaster() ? '1' : '0' }}"
+                 data-optimized-at="{{ $item->optimized_at?->toIso8601String() }}"
+                 data-original-size="{{ $item->original_size }}"
+                 data-original-extension="{{ $item->original_extension }}"
+                 data-bytes-saved="{{ $item->bytes_saved }}"
+                 data-optimization-ratio="{{ $item->optimization_ratio }}"
+                 data-has-variants="{{ $item->hasResponsiveVariants() ? '1' : '0' }}"
+                 data-variants='@json($item->variants ?? [])'>
                 <div class="aspect-square flex items-center justify-center bg-[#1a1a1a]">
                     @if ($item->isImage())
                         <img src="{{ $item->url() }}" alt="{{ $item->alt }}" class="w-full h-full object-contain">
@@ -110,7 +121,48 @@
     // Detail panel
     const detailPanel = document.getElementById('detail-panel');
     const detailClose = document.getElementById('detail-close');
+    const optimizationToggle = document.getElementById('detail-optimization-toggle');
+    const optimizationContent = document.getElementById('detail-optimization-content');
+    const optimizationChevron = document.getElementById('detail-optimization-chevron');
     let activeItem = null;
+    const formatBytes = (bytes) => {
+        const value = Number(bytes || 0);
+        if (!value) return '0 B';
+        if (value >= 1048576) return `${(value / 1048576).toFixed(2)} MB`;
+        if (value >= 1024) return `${(value / 1024).toFixed(2)} KB`;
+        return `${value} B`;
+    };
+
+    const optimizationStatus = (item) => {
+        if (item.dataset.isOptimized === '1') return '{{ __('admin.optimization_status_optimized') }}';
+        if (['jpg', 'jpeg', 'png'].includes(item.dataset.extension || '')) return '{{ __('admin.optimization_status_pending') }}';
+        return '{{ __('admin.optimization_status_not_applicable') }}';
+    };
+
+    const optimizationEligibility = (item) => {
+        const extension = (item.dataset.extension || '').toLowerCase();
+        const isImage = item.dataset.isImage === '1';
+        const isOptimized = item.dataset.isOptimized === '1';
+
+        if (isOptimized) {
+            return { eligible: true, reason: '' };
+        }
+
+        if (!isImage) {
+            return { eligible: false, reason: '{{ __('admin.optimization_reason_not_image') }}' };
+        }
+        if (['jpg', 'jpeg', 'png'].includes(extension)) {
+            return { eligible: true, reason: '' };
+        }
+        if (extension === 'webp') {
+            return { eligible: false, reason: '{{ __('admin.optimization_reason_already_webp') }}' };
+        }
+        if (['svg', 'gif'].includes(extension)) {
+            return { eligible: false, reason: '{{ __('admin.optimization_reason_format_not_supported') }}' };
+        }
+
+        return { eligible: false, reason: '{{ __('admin.optimization_reason_format_not_supported') }}' };
+    };
 
     document.querySelectorAll('.media-item').forEach(item => {
         item.addEventListener('click', () => {
@@ -127,8 +179,64 @@
             document.getElementById('detail-alt').value = item.dataset.alt || '';
             document.getElementById('detail-title').value = item.dataset.title || '';
             detailPanel.dataset.mediaId = item.dataset.id;
+
+            const eligibility = optimizationEligibility(item);
+            document.getElementById('detail-optimization-status').textContent = optimizationStatus(item);
+            document.getElementById('detail-optimization-eligible').textContent = eligibility.eligible
+                ? '{{ __('admin.optimization_eligible_yes') }}'
+                : '{{ __('admin.optimization_eligible_no') }}';
+            document.getElementById('detail-original-size').textContent = item.dataset.originalSize
+                ? formatBytes(item.dataset.originalSize)
+                : '{{ __('admin.not_available') }}';
+            document.getElementById('detail-original-extension').textContent = item.dataset.originalExtension
+                ? item.dataset.originalExtension.toUpperCase()
+                : '{{ __('admin.not_available') }}';
+            document.getElementById('detail-bytes-saved').textContent = item.dataset.bytesSaved
+                ? formatBytes(item.dataset.bytesSaved)
+                : '{{ __('admin.not_available') }}';
+            document.getElementById('detail-optimization-ratio').textContent = item.dataset.optimizationRatio
+                ? `${item.dataset.optimizationRatio}%`
+                : '{{ __('admin.not_available') }}';
+
+            const reasonWrap = document.getElementById('detail-optimization-reason-wrap');
+            const reasonValue = document.getElementById('detail-optimization-reason');
+            if (eligibility.eligible) {
+                reasonWrap.classList.add('hidden');
+                reasonValue.textContent = '';
+            } else {
+                reasonWrap.classList.remove('hidden');
+                reasonValue.textContent = eligibility.reason;
+            }
+
+            const variants = JSON.parse(item.dataset.variants || '[]');
+            const variantsList = document.getElementById('detail-variants-list');
+            const noVariants = document.getElementById('detail-no-variants');
+            variantsList.innerHTML = '';
+            if (Array.isArray(variants) && variants.length > 0) {
+                noVariants.classList.add('hidden');
+                variants.forEach((variant) => {
+                    const width = variant.width ? `${variant.width}w` : '?w';
+                    const size = variant.size ? formatBytes(variant.size) : '{{ __('admin.not_available') }}';
+                    const li = document.createElement('li');
+                    li.className = 'text-xs text-gray-400 flex items-center justify-between gap-2';
+                    li.innerHTML = `<span>${width}</span><span>${size}</span>`;
+                    variantsList.appendChild(li);
+                });
+            } else {
+                noVariants.classList.remove('hidden');
+            }
+
+            optimizationContent?.classList.add('hidden');
+            optimizationChevron?.classList.remove('rotate-180');
+
             detailPanel.classList.remove('hidden');
         });
+    });
+
+    optimizationToggle?.addEventListener('click', () => {
+        const isHidden = optimizationContent?.classList.contains('hidden');
+        optimizationContent?.classList.toggle('hidden', !isHidden);
+        optimizationChevron?.classList.toggle('rotate-180', isHidden);
     });
 
     detailClose?.addEventListener('click', () => {

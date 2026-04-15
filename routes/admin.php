@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\ClaudeMcpController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\MediaHealthController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PostController;
@@ -32,6 +33,7 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
     Route::resource('media', MediaController::class)
         ->only(['index', 'store', 'show', 'update', 'destroy'])
         ->parameter('media', 'media');
+    Route::get('media-health', [MediaHealthController::class, 'index'])->name('media.health');
 
     Route::resource('pages', PageController::class)
         ->except(['show']);

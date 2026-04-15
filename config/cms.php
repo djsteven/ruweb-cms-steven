@@ -9,6 +9,18 @@ return [
         'document_max_size' => env('CMS_DOCUMENT_MAX_SIZE', 10240), // KB
     ],
 
+    'image_optimization' => [
+        'enabled' => env('CMS_IMAGE_OPTIMIZATION_ENABLED', true),
+        'max_width' => env('CMS_IMAGE_OPTIMIZATION_MAX_WIDTH', 2048),
+        'quality' => env('CMS_IMAGE_OPTIMIZATION_QUALITY', 80),
+        'keep_original' => env('CMS_IMAGE_OPTIMIZATION_KEEP_ORIGINAL', false),
+    ],
+
+    'responsive_images' => [
+        'enabled' => env('CMS_RESPONSIVE_IMAGES_ENABLED', true),
+        'widths' => [240, 480, 768, 1024, 1536],
+    ],
+
     'roles' => ['admin', 'editor'],
 
     'statuses' => ['draft', 'published'],

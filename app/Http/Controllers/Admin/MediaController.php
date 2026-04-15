@@ -5,14 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreMediaRequest;
 use App\Models\Media;
+use App\Services\Media\MediaImagePipeline;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Throwable;
 
 class MediaController extends Controller
 {
+    public function __construct(
+        protected MediaImagePipeline $imagePipeline
+    ) {
+    }
+
     public function index(Request $request): View|JsonResponse
     {
         $query = Media::query()->latest();
@@ -81,6 +87,13 @@ class MediaController extends Controller
                 'disk' => 'public',
                 'uploaded_by' => $request->user()->id,
             ]);
+
+            try {
+                $this->imagePipeline->processUploadedMedia($createdMedia[array_key_last($createdMedia)]);
+                $createdMedia[array_key_last($createdMedia)]->refresh();
+            } catch (Throwable $e) {
+                report($e);
+            }
         }
 
         if (count($createdMedia) === 1) {
@@ -109,7 +122,7 @@ class MediaController extends Controller
 
     public function destroy(Media $media): JsonResponse
     {
-        Storage::disk($media->disk)->delete($media->path);
+        $this->imagePipeline->deleteRelatedFiles($media);
         $media->delete();
 
         return response()->json(['message' => __('admin.media_deleted')]);

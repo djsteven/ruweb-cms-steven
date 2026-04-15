@@ -17,7 +17,12 @@
 
         @if($post->featuredImage())
             <figure class="mt-8">
-                <img src="{{ $post->featuredImage()->url() }}" alt="{{ $post->featuredImage()->alt ?: $post->title }}" class="w-full rounded-xl object-cover">
+                <x-responsive-img
+                    :media="$post->featuredImage()"
+                    sizes="(min-width: 1024px) 768px, 100vw"
+                    :fallback-alt="$post->title"
+                    class="w-full rounded-xl object-cover"
+                />
             </figure>
         @endif
 

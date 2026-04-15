@@ -12,6 +12,10 @@ class Media extends Model
         'url',
         'is_image',
         'formatted_size',
+        'bytes_saved',
+        'optimization_ratio',
+        'has_responsive_variants',
+        'is_optimized_raster',
     ];
 
     protected $fillable = [
@@ -21,11 +25,27 @@ class Media extends Model
         'mime_type',
         'extension',
         'size',
+        'width',
+        'height',
+        'variants',
+        'original_size',
+        'original_extension',
+        'original_mime_type',
+        'original_path',
+        'optimized_at',
         'alt',
         'title',
         'disk',
         'uploaded_by',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'variants' => 'array',
+            'optimized_at' => 'datetime',
+        ];
+    }
 
     public function uploader(): BelongsTo
     {
@@ -63,5 +83,69 @@ class Media extends Model
     public function getFormattedSizeAttribute(): string
     {
         return $this->formattedSize();
+    }
+
+    public function srcset(): ?string
+    {
+        if (! $this->hasResponsiveVariants()) {
+            return null;
+        }
+
+        return collect($this->variants)
+            ->sortBy('width')
+            ->filter(fn ($variant) => ! empty($variant['url']) && ! empty($variant['width']))
+            ->map(fn ($variant) => $variant['url'] . ' ' . $variant['width'] . 'w')
+            ->implode(', ');
+    }
+
+    public function hasResponsiveVariants(): bool
+    {
+        return ! empty($this->variants) && is_array($this->variants);
+    }
+
+    public function bytesSaved(): ?int
+    {
+        if ($this->original_size === null || $this->size === null || (int) $this->original_size <= 0) {
+            return null;
+        }
+
+        return max((int) $this->original_size - (int) $this->size, 0);
+    }
+
+    public function optimizationRatio(): ?float
+    {
+        $saved = $this->bytesSaved();
+        if ($saved === null || (int) $this->original_size <= 0) {
+            return null;
+        }
+
+        return round(($saved / (int) $this->original_size) * 100, 2);
+    }
+
+    public function isOptimizedRaster(): bool
+    {
+        return $this->optimized_at !== null
+            && strtolower($this->extension) === 'webp'
+            && $this->original_size !== null;
+    }
+
+    public function getBytesSavedAttribute(): ?int
+    {
+        return $this->bytesSaved();
+    }
+
+    public function getOptimizationRatioAttribute(): ?float
+    {
+        return $this->optimizationRatio();
+    }
+
+    public function getHasResponsiveVariantsAttribute(): bool
+    {
+        return $this->hasResponsiveVariants();
+    }
+
+    public function getIsOptimizedRasterAttribute(): bool
+    {
+        return $this->isOptimizedRaster();
     }
 }
