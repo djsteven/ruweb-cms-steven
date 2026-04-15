@@ -11,12 +11,24 @@
 
         <form id="upload-form" class="p-5">
             <div id="drop-zone" class="border-2 border-dashed border-white/[0.08] rounded-lg p-8 text-center cursor-pointer hover:border-white/20 transition-colors mb-4">
-                <svg class="w-8 h-8 mx-auto text-gray-700 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
-                </svg>
-                <p class="text-sm text-gray-500">{{ __('admin.drag_and_drop') }} <span class="text-emerald-500">{{ __('admin.browse') }}</span></p>
-                <p id="file-name" class="text-xs text-emerald-400 mt-2 min-h-4"></p>
-                <input type="file" id="file-input" name="file" class="hidden" required>
+                <div id="upload-empty-state">
+                    <svg class="w-8 h-8 mx-auto text-gray-700 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                    <p class="text-sm text-gray-500">{{ __('admin.drag_and_drop') }} <span class="text-emerald-500">{{ __('admin.browse') }}</span></p>
+                    <p id="file-name" class="text-xs text-emerald-400 mt-2 min-h-4"></p>
+                </div>
+
+                <div id="upload-preview-wrap" class="hidden relative w-full max-w-[220px] mx-auto">
+                    <img id="upload-preview-image" src="" alt="" class="w-full h-40 object-cover rounded-md border border-white/10">
+                    <button type="button" id="upload-remove-file" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/70 text-white hover:bg-black transition-colors flex items-center justify-center" aria-label="{{ __('admin.clear') }}">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <input type="file" id="file-input" name="file" class="hidden">
             </div>
 
             <div class="mb-3">

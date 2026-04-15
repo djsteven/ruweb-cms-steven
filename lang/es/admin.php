@@ -167,6 +167,7 @@ return [
     'media_deleted'             => 'Archivo eliminado.',
     'validation_file_mimetypes' => 'Este tipo de archivo no está permitido.',
     'validation_file_max'       => 'El archivo supera el tamaño máximo permitido.',
+    'validation_file_uploaded'  => 'No se pudo subir el archivo. Verifica el tamaño máximo permitido por el servidor.',
 
     // Pages CRUD messages
     'page_created'              => 'Página creada correctamente.',

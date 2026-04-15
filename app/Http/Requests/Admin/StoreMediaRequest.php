@@ -38,6 +38,7 @@ class StoreMediaRequest extends FormRequest
         return [
             'file.mimetypes' => __('admin.validation_file_mimetypes'),
             'file.max' => __('admin.validation_file_max'),
+            'file.uploaded' => __('admin.validation_file_uploaded'),
         ];
     }
 }

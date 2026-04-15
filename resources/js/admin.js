@@ -6,6 +6,7 @@ if (token) {
 }
 const adminI18n = window.adminI18n || {};
 const t = (key, fallback = '') => adminI18n[key] ?? fallback;
+const maxUploadKb = Number(adminI18n.maxUploadKb || 0);
 
 const selectors = Array.from(document.querySelectorAll('.media-selector'));
 const libraryModal = document.getElementById('media-library-modal');
@@ -26,8 +27,77 @@ const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const uploadProgress = document.getElementById('upload-progress');
 const fileNameLabel = document.getElementById('file-name');
+const uploadEmptyState = document.getElementById('upload-empty-state');
+const uploadPreviewWrap = document.getElementById('upload-preview-wrap');
+const uploadPreviewImage = document.getElementById('upload-preview-image');
+const uploadRemoveFile = document.getElementById('upload-remove-file');
 
 let uploadFromLibrary = false;
+let selectedUploadFile = null;
+let uploadPreviewUrl = null;
+
+function clearSelectedUploadFile() {
+    selectedUploadFile = null;
+    if (fileInput) {
+        fileInput.value = '';
+    }
+    if (fileNameLabel) {
+        fileNameLabel.textContent = '';
+    }
+    if (uploadPreviewUrl) {
+        URL.revokeObjectURL(uploadPreviewUrl);
+        uploadPreviewUrl = null;
+    }
+    if (uploadPreviewImage) {
+        uploadPreviewImage.src = '';
+        uploadPreviewImage.alt = '';
+    }
+    uploadPreviewWrap?.classList.add('hidden');
+    uploadEmptyState?.classList.remove('hidden');
+}
+
+function setSelectedUploadFile(file) {
+    if (!file) {
+        clearSelectedUploadFile();
+        return;
+    }
+
+    selectedUploadFile = file;
+
+    if (maxUploadKb > 0 && file.size > maxUploadKb * 1024) {
+        const maxMb = (maxUploadKb / 1024).toFixed(1);
+        alert(`${t('validationFileMax', t('uploadFailed'))} (max ${maxMb} MB)`);
+        clearSelectedUploadFile();
+        return;
+    }
+
+    if (fileNameLabel) {
+        fileNameLabel.textContent = file.name;
+    }
+
+    const isImage = String(file.type || '').startsWith('image/');
+    if (!isImage) {
+        if (uploadPreviewUrl) {
+            URL.revokeObjectURL(uploadPreviewUrl);
+            uploadPreviewUrl = null;
+        }
+        uploadPreviewWrap?.classList.add('hidden');
+        uploadEmptyState?.classList.remove('hidden');
+        return;
+    }
+
+    if (uploadPreviewUrl) {
+        URL.revokeObjectURL(uploadPreviewUrl);
+    }
+    uploadPreviewUrl = URL.createObjectURL(file);
+
+    if (uploadPreviewImage) {
+        uploadPreviewImage.src = uploadPreviewUrl;
+        uploadPreviewImage.alt = file.name;
+    }
+    uploadEmptyState?.classList.add('hidden');
+    uploadPreviewWrap?.classList.remove('hidden');
+}
 
 function openUpload(fromLibrary = false) {
     uploadFromLibrary = fromLibrary;
@@ -37,7 +107,7 @@ function openUpload(fromLibrary = false) {
 function closeUpload() {
     uploadModal?.classList.add('hidden');
     uploadForm?.reset();
-    if (fileNameLabel) fileNameLabel.textContent = '';
+    clearSelectedUploadFile();
 }
 
 uploadClose?.addEventListener('click', closeUpload);
@@ -53,22 +123,38 @@ dropZone?.addEventListener('drop', (e) => {
     e.preventDefault();
     dropZone.classList.remove('border-emerald-500/50');
     if (e.dataTransfer.files.length) {
-        fileInput.files = e.dataTransfer.files;
-        if (fileNameLabel) fileNameLabel.textContent = e.dataTransfer.files[0].name;
+        setSelectedUploadFile(e.dataTransfer.files[0]);
     }
 });
 fileInput?.addEventListener('change', () => {
-    if (fileInput.files.length && fileNameLabel) fileNameLabel.textContent = fileInput.files[0].name;
+    setSelectedUploadFile(fileInput.files?.[0] || null);
+});
+uploadRemoveFile?.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    clearSelectedUploadFile();
 });
 
 uploadForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!selectedUploadFile) {
+        alert(t('chooseFile', t('uploadFailed')));
+        return;
+    }
+
+    const formData = new FormData(uploadForm);
+    formData.set('file', selectedUploadFile);
+
     uploadProgress?.classList.remove('hidden');
     try {
         const response = await fetch('/admin/media', {
             method: 'POST',
-            headers: { 'X-CSRF-TOKEN': window.csrfToken },
-            body: new FormData(uploadForm),
+            headers: {
+                'X-CSRF-TOKEN': window.csrfToken,
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: formData,
         });
         if (response.ok) {
             const newMedia = await response.json();
@@ -81,8 +167,10 @@ uploadForm?.addEventListener('submit', async (e) => {
                 window.location.reload();
             }
         } else {
-            const data = await response.json();
-            alert(data.error || data.message || t('uploadFailed'));
+            const contentType = response.headers.get('content-type') || '';
+            const data = contentType.includes('application/json') ? await response.json() : null;
+            const validationError = data?.errors ? Object.values(data.errors).flat()[0] : null;
+            alert(validationError || data?.error || data?.message || t('uploadFailed'));
         }
     } catch {
         alert(t('uploadFailed'));

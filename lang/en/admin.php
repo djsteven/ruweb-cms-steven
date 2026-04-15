@@ -167,6 +167,7 @@ return [
     'media_deleted'             => 'Media deleted.',
     'validation_file_mimetypes' => 'This file type is not allowed.',
     'validation_file_max'       => 'The file exceeds the maximum allowed size.',
+    'validation_file_uploaded'  => 'The file could not be uploaded. Check the server upload size limits.',
 
     // Pages CRUD messages
     'page_created'              => 'Page created successfully.',

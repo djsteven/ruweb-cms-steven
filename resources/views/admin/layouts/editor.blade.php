@@ -9,13 +9,39 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     @php
+        $cmsMaxKb = max((int) config('cms.upload.image_max_size', 0), (int) config('cms.upload.document_max_size', 0));
+        $toKb = static function ($value): int {
+            $value = trim((string) $value);
+            if ($value === '') {
+                return 0;
+            }
+
+            $unit = strtolower(substr($value, -1));
+            $number = (float) $value;
+
+            return match ($unit) {
+                'g' => (int) round($number * 1024 * 1024),
+                'm' => (int) round($number * 1024),
+                'k' => (int) round($number),
+                default => (int) round($number / 1024),
+            };
+        };
+        $uploadMaxKb = $toKb(ini_get('upload_max_filesize'));
+        $postMaxKb = $toKb(ini_get('post_max_size'));
+        $serverCaps = array_filter([$uploadMaxKb, $postMaxKb], static fn (int $value): bool => $value > 0);
+        $serverMaxKb = count($serverCaps) > 0 ? min($serverCaps) : 0;
+        $effectiveMaxKb = $serverMaxKb > 0 ? min($cmsMaxKb, $serverMaxKb) : $cmsMaxKb;
+
         $adminI18n = [
             'uploadFailed' => __('admin.upload_failed'),
+            'validationFileMax' => __('admin.validation_file_max'),
+            'validationFileUploaded' => __('admin.validation_file_uploaded'),
             'chooseFile' => __('admin.choose_file'),
             'noMediaFound' => __('admin.no_media_found'),
             'loadingMedia' => __('admin.loading_media'),
             'unableToLoadMediaItem' => __('admin.unable_to_load_media_item'),
             'unableToLoadMediaLibrary' => __('admin.unable_to_load_media_library'),
+            'maxUploadKb' => $effectiveMaxKb,
         ];
     @endphp
     <script>
