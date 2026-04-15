@@ -20,7 +20,7 @@
                 </div>
 
                 <div id="upload-preview-wrap" class="hidden relative w-full max-w-[220px] mx-auto">
-                    <img id="upload-preview-image" src="" alt="" class="w-full h-40 object-cover rounded-md border border-white/10">
+                    <img id="upload-preview-image" src="" alt="" class="w-full h-40 object-contain rounded-md border border-white/10">
                     <button type="button" id="upload-remove-file" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/70 text-white hover:bg-black transition-colors flex items-center justify-center" aria-label="{{ __('admin.clear') }}">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

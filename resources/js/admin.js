@@ -301,7 +301,7 @@ function renderLibraryItems(items) {
             <button type="button" class="media-library-item text-left bg-[#111111] border border-white/10 rounded-lg overflow-hidden hover:border-emerald-500/50 transition-colors" data-id="${item.id}">
                 <div class="aspect-square bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
                     ${isImage
-                        ? `<img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt || item.title || item.original_filename)}" class="w-full h-full object-cover">`
+                        ? `<img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt || item.title || item.original_filename)}" class="w-full h-full object-contain">`
                         : `<svg class="w-10 h-10 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>`}
                 </div>
                 <div class="p-3">
