@@ -7,6 +7,13 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 - Nota: el commit raíz `4c90c74` sólo creó `.gitignore`/`README` (scaffolding), por eso no se considera un “release” funcional.
 
 ## Unreleased
+
+## 0.9.3 - 2026-04-16
+- Skill del changelog actualizada para versionar el commit actual sin depender de un SHA previo.
+- Nuevo flujo: el siguiente commit completa el SHA faltante de la entrada anterior y crea una nueva entrada sin SHA.
+- `Unreleased` queda reservado solo para trabajo todavía no committeado.
+
+## 0.9.2 - 2026-04-16 (dfd5374)
 - Fix en subidas múltiples: el lote ahora se valida completo antes de persistir archivos o registros.
 - Fix en el live editor: publicar ya no deja el estado `published` pegado si el guardado falla.
 - Ajustado el pipeline de media para tratar GIF como raster soportado en dimensiones y health metrics, sin variantes ni conversión.
