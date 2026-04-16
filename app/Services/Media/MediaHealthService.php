@@ -11,20 +11,24 @@ class MediaHealthService
     {
         $totalMedia = Media::count();
         $rasterMedia = Media::query()
-            ->whereIn('extension', MediaImagePipeline::VARIANT_EXTENSIONS)
+            ->whereIn('extension', MediaImagePipeline::RASTER_EXTENSIONS)
             ->get();
+        $variantEligible = $rasterMedia->filter(
+            fn (Media $media) => in_array(strtolower($media->extension), MediaImagePipeline::VARIANT_EXTENSIONS, true)
+        );
 
         $rasterCount = $rasterMedia->count();
-        $webpCount = $rasterMedia->where('extension', 'webp')->count();
-        $responsiveCount = $rasterMedia->filter(fn (Media $media) => $media->hasResponsiveVariants())->count();
+        $variantEligibleCount = $variantEligible->count();
+        $webpCount = $variantEligible->where('extension', 'webp')->count();
+        $responsiveCount = $variantEligible->filter(fn (Media $media) => $media->hasResponsiveVariants())->count();
         $missingFiles = $this->countMissingPhysicalFiles(Media::all());
         $bytesSaved = $rasterMedia->sum(fn (Media $media) => $media->bytesSaved() ?? 0);
 
         return [
             'total_media' => $totalMedia,
             'raster_images' => $rasterCount,
-            'webp_coverage_percent' => $rasterCount > 0 ? round(($webpCount / $rasterCount) * 100, 2) : 0.0,
-            'responsive_coverage_percent' => $rasterCount > 0 ? round(($responsiveCount / $rasterCount) * 100, 2) : 0.0,
+            'webp_coverage_percent' => $variantEligibleCount > 0 ? round(($webpCount / $variantEligibleCount) * 100, 2) : 0.0,
+            'responsive_coverage_percent' => $variantEligibleCount > 0 ? round(($responsiveCount / $variantEligibleCount) * 100, 2) : 0.0,
             'bytes_saved' => $bytesSaved,
             'missing_files' => $missingFiles,
         ];
@@ -33,13 +37,14 @@ class MediaHealthService
     public function detailed(): array
     {
         $rasterMedia = Media::query()
-            ->whereIn('extension', MediaImagePipeline::VARIANT_EXTENSIONS)
+            ->whereIn('extension', MediaImagePipeline::RASTER_EXTENSIONS)
             ->get();
 
         $optimized = $rasterMedia->filter(fn (Media $media) => $media->isOptimizedRaster());
-        $withVariants = $rasterMedia->filter(fn (Media $media) => $media->hasResponsiveVariants());
+        $variantEligible = $rasterMedia->filter(fn (Media $media) => in_array(strtolower($media->extension), MediaImagePipeline::VARIANT_EXTENSIONS, true));
+        $withVariants = $variantEligible->filter(fn (Media $media) => $media->hasResponsiveVariants());
         $withoutDimensions = $rasterMedia->filter(fn (Media $media) => ! $media->width || ! $media->height);
-        $withoutVariants = $rasterMedia->filter(fn (Media $media) => ! $media->hasResponsiveVariants());
+        $withoutVariants = $variantEligible->filter(fn (Media $media) => ! $media->hasResponsiveVariants());
         $missingPhysical = $this->countMissingPhysicalFiles(Media::all());
         $totalSaved = $optimized->sum(fn (Media $media) => $media->bytesSaved() ?? 0);
         $avgRatio = round((float) $optimized
@@ -105,4 +110,3 @@ class MediaHealthService
         return $missing;
     }
 }
-

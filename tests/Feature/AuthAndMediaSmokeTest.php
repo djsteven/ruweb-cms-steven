@@ -56,4 +56,22 @@ class AuthAndMediaSmokeTest extends TestCase
         $response->assertJsonCount(2, 'data');
         $this->assertDatabaseCount('media', 2);
     }
+
+    public function test_invalid_file_in_batch_rejects_entire_upload(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->postJson(route('admin.media.store'), [
+            'files' => [
+                UploadedFile::fake()->image('cover-a.jpg'),
+                UploadedFile::fake()->create('notes.exe', 1, 'application/octet-stream'),
+            ],
+            'title' => 'Bulk upload',
+        ]);
+
+        $response->assertStatus(422);
+        $this->assertDatabaseCount('media', 0);
+        $this->assertSame([], Storage::disk('public')->allFiles('media/' . now()->format('Y/m')));
+    }
 }

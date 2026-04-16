@@ -86,6 +86,27 @@ class MediaOptimizationTest extends TestCase
         $this->assertFalse($media->hasResponsiveVariants());
     }
 
+    public function test_upload_gif_keeps_original_format_but_stores_dimensions(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->postJson(route('admin.media.store'), [
+            'file' => UploadedFile::fake()->image('animated.gif', 640, 480),
+            'title' => 'Animated asset',
+        ]);
+
+        $response->assertCreated();
+        $media = Media::query()->latest()->firstOrFail();
+
+        $this->assertSame('gif', $media->extension);
+        $this->assertNull($media->optimized_at);
+        $this->assertNull($media->original_size);
+        $this->assertSame(640, $media->width);
+        $this->assertSame(480, $media->height);
+        $this->assertFalse($media->hasResponsiveVariants());
+    }
+
     public function test_media_convert_webp_dry_run_does_not_change_db_or_files(): void
     {
         if (! function_exists('imagewebp')) {

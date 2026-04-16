@@ -7,7 +7,12 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 - Nota: el commit raíz `4c90c74` sólo creó `.gitignore`/`README` (scaffolding), por eso no se considera un “release” funcional.
 
 ## Unreleased
-- Agregado `CHANGELOG.md` inicial (historial desde `0.0.0` hasta `0.9.0`).
+- Fix en subidas múltiples: el lote ahora se valida completo antes de persistir archivos o registros.
+- Fix en el live editor: publicar ya no deja el estado `published` pegado si el guardado falla.
+- Ajustado el pipeline de media para tratar GIF como raster soportado en dimensiones y health metrics, sin variantes ni conversión.
+
+## 0.9.1 - 2026-04-16 (765bc58)
+- Agregado `CHANGELOG.md` inicial con historial desde `0.0.0` hasta `0.9.0`.
 - Agregada skill de repo para estandarizar bumps y formato del changelog.
 
 ## 0.9.0 - 2026-04-14 (a53af7c)

@@ -167,17 +167,15 @@ export function initEditorEngine(config = {}) {
         if (saveDraftBtn) saveDraftBtn.disabled = true;
         headerSaveBtn.disabled = true;
 
-        if (statusOverride) {
-            const statusSelect = form.querySelector('[name="status"]');
-            if (statusSelect) {
-                statusSelect.value = statusOverride;
-            }
-        }
-
         try {
+            const requestData = new FormData(form);
+            if (statusOverride) {
+                requestData.set('status', statusOverride);
+            }
+
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: new FormData(form),
+                body: requestData,
                 headers: {
                     ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
                     Accept: 'application/json',

@@ -8,6 +8,7 @@ use App\Models\Media;
 use App\Services\Media\MediaImagePipeline;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
@@ -59,17 +60,14 @@ class MediaController extends Controller
         $createdMedia = [];
 
         foreach ($uploadedFiles as $file) {
-            $extension = strtolower($file->getClientOriginalExtension());
-            if (! in_array($extension, $allowedExtensions)) {
-                return response()->json(['error' => __('admin.media_error_extension_not_allowed')], 422);
+            $validationError = $this->validateUploadedFile($file, $allowedExtensions);
+            if ($validationError !== null) {
+                return response()->json(['error' => $validationError], 422);
             }
+        }
 
-            if ($extension === 'svg') {
-                $content = file_get_contents($file->getRealPath());
-                if (preg_match('/<script|on\w+\s*=/i', $content)) {
-                    return response()->json(['error' => __('admin.media_error_svg_malicious')], 422);
-                }
-            }
+        foreach ($uploadedFiles as $file) {
+            $extension = strtolower($file->getClientOriginalExtension());
 
             $filename = Str::uuid() . '.' . $extension;
             $directory = 'media/' . now()->format('Y/m');
@@ -101,6 +99,25 @@ class MediaController extends Controller
         }
 
         return response()->json(['data' => $createdMedia], 201);
+    }
+
+    protected function validateUploadedFile(UploadedFile $file, array $allowedExtensions): ?string
+    {
+        $extension = strtolower($file->getClientOriginalExtension());
+        if (! in_array($extension, $allowedExtensions, true)) {
+            return __('admin.media_error_extension_not_allowed');
+        }
+
+        if ($extension !== 'svg') {
+            return null;
+        }
+
+        $content = file_get_contents($file->getRealPath());
+        if ($content !== false && preg_match('/<script|on\w+\s*=/i', $content)) {
+            return __('admin.media_error_svg_malicious');
+        }
+
+        return null;
     }
 
     public function show(Media $media): JsonResponse

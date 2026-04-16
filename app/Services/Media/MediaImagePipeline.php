@@ -11,6 +11,7 @@ use Throwable;
 class MediaImagePipeline
 {
     public const OPTIMIZABLE_EXTENSIONS = ['jpg', 'jpeg', 'png'];
+    public const RASTER_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
     public const VARIANT_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp'];
 
     public function __construct(
@@ -20,7 +21,7 @@ class MediaImagePipeline
 
     public function processUploadedMedia(Media $media): void
     {
-        if (! $this->isVariantEligible($media)) {
+        if (! $this->isRasterSupported($media)) {
             return;
         }
 
@@ -109,7 +110,7 @@ class MediaImagePipeline
 
     public function refreshDimensions(Media $media, bool $dryRun = false): array
     {
-        if (! $this->isVariantEligible($media)) {
+        if (! $this->isRasterSupported($media)) {
             return ['status' => 'skipped', 'reason' => 'unsupported_extension'];
         }
 
@@ -256,9 +257,13 @@ class MediaImagePipeline
         return in_array(strtolower($media->extension), self::VARIANT_EXTENSIONS, true);
     }
 
+    public function isRasterSupported(Media $media): bool
+    {
+        return in_array(strtolower($media->extension), self::RASTER_EXTENSIONS, true);
+    }
+
     protected function warn(string $message): void
     {
         Log::warning($message);
     }
 }
-
