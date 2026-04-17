@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Mail\UserWelcome;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -40,11 +44,23 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        $user = User::create($request->validated());
+        $data = $request->validated();
+        $plainPassword = $data['password'];
+
+        $user = User::create($data);
+        $user->forceFill(['email_verified_at' => now()])->save();
+
+        $mailSent = true;
+        try {
+            Mail::to($user->email)->send(new UserWelcome($user, $plainPassword));
+        } catch (Throwable $e) {
+            $mailSent = false;
+            Log::warning('Welcome email failed for user '.$user->id.': '.$e->getMessage());
+        }
 
         return redirect()
             ->route('admin.users.edit', $user)
-            ->with('success', __('admin.user_created'));
+            ->with('success', $mailSent ? __('admin.user_created_with_email') : __('admin.user_created_email_failed'));
     }
 
     public function edit(User $user): View

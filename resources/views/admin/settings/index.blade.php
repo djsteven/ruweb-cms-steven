@@ -32,6 +32,9 @@
     {{-- Group panels --}}
     @foreach ($groups as $group => $settings)
         <div class="settings-panel space-y-4" data-group="{{ $group }}" style="display:none">
+            @if ($group === 'email')
+                @include('admin.settings._email_instructions')
+            @endif
             @foreach ($settings as $setting)
                 @php
                     $labelKey = 'admin.settings_fields.' . $setting->key . '.label';
@@ -88,6 +91,23 @@
                             'label' => '',
                         ])
 
+                    @elseif ($setting->type === 'password')
+                        @php $hasValue = ! empty($setting->value); @endphp
+                        <div class="relative">
+                            <input type="password" name="settings[{{ $setting->key }}]"
+                                   autocomplete="new-password"
+                                   placeholder="{{ $hasValue ? __('admin.password_stored_placeholder') : '' }}"
+                                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 pr-20 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                            <button type="button"
+                                    class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-emerald-400 px-2 py-1"
+                                    onclick="togglePasswordVisibility(this)">
+                                {{ __('admin.show') }}
+                            </button>
+                        </div>
+                        @if ($hasValue)
+                            <p class="mt-1.5 text-xs text-gray-500">{{ __('admin.password_stored_hint') }}</p>
+                        @endif
+
                     @else
                         <input type="text" name="settings[{{ $setting->key }}]"
                                value="{{ $setting->value }}"
@@ -104,6 +124,24 @@
         </button>
     </div>
 </form>
+
+{{-- Test email form (only active when email tab is open) --}}
+<div class="settings-panel mt-8" data-group="email" style="display:none">
+    <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-4">
+        <h3 class="text-sm font-semibold text-white mb-1">{{ __('admin.email_test_title') }}</h3>
+        <p class="text-xs text-gray-500 mb-3">{{ __('admin.email_test_help') }}</p>
+        <form method="POST" action="{{ route('admin.settings.email.test') }}" class="flex gap-2">
+            @csrf
+            <input type="email" name="test_email" required
+                   value="{{ auth()->user()->email }}"
+                   placeholder="you@example.com"
+                   class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+            <button type="submit" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium rounded-md transition-colors whitespace-nowrap">
+                {{ __('admin.email_test_send') }}
+            </button>
+        </form>
+    </div>
+</div>
 
 @push('scripts')
 <script>
@@ -126,6 +164,17 @@
     }
 
     if (tabs.length) switchTab(tabs[0].dataset.group);
+
+    function togglePasswordVisibility(btn) {
+        const input = btn.parentElement.querySelector('input');
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = @json(__('admin.hide'));
+        } else {
+            input.type = 'password';
+            btn.textContent = @json(__('admin.show'));
+        }
+    }
 </script>
 @endpush
 @endsection

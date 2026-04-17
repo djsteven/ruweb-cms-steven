@@ -4,17 +4,24 @@
 
 ```
 app/
-├── Console/Commands/       # Artisan commands (cms:install)
+├── Console/Commands/       # Artisan commands (cms:install, mail:test)
 ├── Helpers/                # Static helper classes (ContentHelper)
 ├── Http/
 │   ├── Controllers/
-│   │   ├── Admin/          # Admin CRUD controllers (pages, media, posts)
+│   │   ├── Admin/          # Admin CRUD controllers (pages, media, posts, settings)
+│   │   │   └── Auth/       # Login, ForgotPassword, ResetPassword controllers
 │   │   ├── BlogController  # Public blog archive/single rendering
 │   │   └── PageController  # Public page rendering
 │   ├── Middleware/          # RoleMiddleware
 │   └── Requests/           # FormRequest validation classes
+├── Mail/
+│   ├── Transport/
+│   │   └── BrevoTransport.php  # Custom Symfony Mailer transport for Brevo HTTP API
+│   └── UserWelcome.php         # Welcome email with credentials sent on user creation
 ├── Models/                 # Eloquent models (User, Media, Page, Post, Setting)
-├── Providers/              # Service providers
+├── Providers/
+│   ├── AppServiceProvider.php         # Gates, view composers, password reset URL override
+│   └── BrevoMailServiceProvider.php   # Registers brevo driver; reads config from DB at runtime
 └── Traits/                 # Reusable traits (HasMedia)
 
 config/
@@ -27,12 +34,14 @@ database/
 
 resources/views/
 ├── admin/                  # Admin panel views
+│   ├── auth/               # Login, forgot-password, reset-password
 │   ├── layouts/            # Admin layouts (app, guest)
 │   ├── pages/              # Pages CRUD views
 │   ├── media/              # Media manager views
-│   ├── settings/           # Settings form
+│   ├── settings/           # Settings form + _email_instructions partial
 │   └── partials/           # Sidebar, alerts
 ├── components/             # Blade components (seo-meta)
+├── emails/                 # Transactional email templates (user-welcome)
 ├── layouts/                # Public layout
 ├── partials/               # Public header, footer
 ├── templates/              # Page templates (default, home)

@@ -8,6 +8,15 @@ return [
     'email'                     => 'Email',
     'password'                  => 'Contraseña',
     'remember_me'               => 'Recordarme',
+    'forgot_password_link'      => '¿Olvidaste tu contraseña?',
+    'forgot_password'           => 'Recuperar contraseña',
+    'forgot_password_subtitle'  => 'Te enviaremos un enlace a tu email para restablecerla.',
+    'send_reset_link'           => 'Enviar enlace',
+    'back_to_login'             => 'Volver al inicio de sesión',
+    'reset_password'            => 'Restablecer contraseña',
+    'reset_password_subtitle'   => 'Elige una nueva contraseña para tu cuenta.',
+    'new_password'              => 'Nueva contraseña',
+    'confirm_password'          => 'Confirmar contraseña',
 
     // Nav
     'dashboard'                 => 'Dashboard',
@@ -105,6 +114,15 @@ return [
     'total_users'               => 'Usuarios totales',
     'user_password_optional'    => 'Déjalo vacío si no deseas cambiarla.',
     'user_created'              => 'Usuario creado correctamente.',
+    'user_created_with_email'   => 'Usuario creado. Se le ha enviado un email con sus credenciales.',
+    'user_created_email_failed' => 'Usuario creado, pero no se pudo enviar el email de bienvenida. Revisa la configuración de email.',
+    'welcome_email_subject'     => 'Bienvenido a :app — tu cuenta está lista',
+    'welcome_email_greeting'    => 'Hola :name,',
+    'welcome_email_intro'       => 'Se ha creado una cuenta para ti en <strong>:app</strong>. Estas son tus credenciales de acceso:',
+    'welcome_email_credentials' => 'Credenciales',
+    'welcome_email_security'    => 'Por seguridad, te recomendamos cambiar tu contraseña en cuanto ingreses.',
+    'welcome_email_cta'         => 'Acceder al panel',
+    'welcome_email_footer'      => 'Este mensaje fue enviado automáticamente por :app.',
     'user_updated'              => 'Usuario actualizado correctamente.',
     'user_deleted'              => 'Usuario eliminado correctamente.',
     'cannot_delete_self'        => 'No puedes eliminar tu propia cuenta.',
@@ -299,6 +317,7 @@ return [
         'general' => 'General',
         'seo' => 'SEO',
         'admin' => 'Administración',
+        'email' => 'Email',
     ],
     'settings_fields'           => [
         'site_name' => [
@@ -328,6 +347,22 @@ return [
             'label' => 'Idioma del panel admin',
             'help' => 'Define el idioma de la interfaz administrativa.',
         ],
+        'mail_enabled' => [
+            'label' => 'Activar envío de emails',
+            'help' => 'Cuando está desactivado, los emails se escriben al log en lugar de enviarse.',
+        ],
+        'brevo_api_key' => [
+            'label' => 'API Key de Brevo',
+            'help' => 'Se guarda cifrada. Déjala en blanco al editar para conservar la actual.',
+        ],
+        'mail_from_address' => [
+            'label' => 'Email remitente',
+            'help' => 'Dirección desde la que se envían los emails (debe estar verificada en Brevo).',
+        ],
+        'mail_from_name' => [
+            'label' => 'Nombre remitente',
+            'help' => 'Nombre visible en la bandeja de entrada del destinatario.',
+        ],
     ],
     'settings_options'          => [
         'admin_locale' => [
@@ -335,6 +370,36 @@ return [
             'en' => 'Inglés',
         ],
     ],
+
+    // Password field helpers
+    'show'                        => 'Mostrar',
+    'hide'                        => 'Ocultar',
+    'password_stored_placeholder' => '•••••••• (guardada)',
+    'password_stored_hint'        => 'Ya hay una clave guardada. Déjalo en blanco para conservarla, o escribe una nueva para reemplazarla.',
+
+    // Brevo instructions (accordion)
+    'brevo_instructions_title'    => '¿Cómo obtener tu API key de Brevo?',
+    'brevo_instructions_subtitle' => 'Guía paso a paso · plan gratis 300 emails/día',
+    'brevo_step_1'                => 'Crea una cuenta gratuita en <a href="https://app.brevo.com/signup" target="_blank" rel="noopener" class="text-emerald-400 hover:text-emerald-300 underline">app.brevo.com/signup</a> (no requiere tarjeta).',
+    'brevo_step_2'                => 'Desde el menú superior derecho (tu avatar), abre <strong>Settings → SMTP & API</strong> y entra a la pestaña <strong>API Keys</strong>.',
+    'brevo_step_3'                => 'Haz clic en <strong>Generate a new API key</strong>, ponle un nombre (ej. "Flaxt CMS") y genera la clave. Empieza por <code class="text-emerald-400">xkeysib-</code>.',
+    'brevo_step_4'                => '<strong>Copia la clave inmediatamente</strong>: Brevo solo te la muestra una vez. Pégala arriba en el campo "API Key de Brevo".',
+    'brevo_step_5'                => 'En <strong>Senders & IP → Senders</strong> verifica el email remitente que usarás (te llegará un código de 6 dígitos). Úsalo también aquí en "Email remitente".',
+    'brevo_sender_warning_title'  => 'Importante sobre el remitente',
+    'brevo_sender_warning'        => 'No puedes usar direcciones @gmail.com, @yahoo.com ni otros proveedores gratuitos como remitente. Usa un email de tu propio dominio. Para volumen alto o dominios con DMARC estricto, autentica tu dominio con DKIM en Brevo.',
+    'brevo_link_signup'           => 'Crear cuenta Brevo',
+    'brevo_link_api_keys'         => 'Gestionar API keys',
+    'brevo_link_senders'          => 'Verificar remitentes',
+
+    // Email test
+    'email_test_title'            => 'Enviar email de prueba',
+    'email_test_help'             => 'Envía un email de verificación para confirmar que la configuración funciona.',
+    'email_test_send'             => 'Enviar prueba',
+    'email_test_subject'          => '[:app] Email de prueba',
+    'email_test_body'             => "¡Hola!\n\nEste es un email de prueba enviado desde :app para verificar que el envío funciona correctamente.\n\nSi lo recibes, tu configuración de Brevo está OK.",
+    'email_test_success'          => 'Email de prueba enviado a :email. Revisa la bandeja de entrada (o spam).',
+    'email_test_failed'           => 'No se pudo enviar el email: :error',
+    'email_test_no_key'           => 'Configura primero la API Key de Brevo.',
 
     // Analytics
     'analytics_saved'                          => 'Analytics guardado correctamente.',

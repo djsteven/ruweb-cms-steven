@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Crypt;
 
 class Setting extends Model
 {
@@ -44,6 +46,9 @@ class Setting extends Model
         $setting = static::where('key', $key)->first();
 
         if ($setting) {
+            if ($setting->type === 'password' && is_string($value) && $value !== '') {
+                $value = Crypt::encryptString($value);
+            }
             $setting->update(['value' => $value]);
         }
 
@@ -71,7 +76,26 @@ class Setting extends Model
             'boolean' => filter_var($value, FILTER_VALIDATE_BOOLEAN),
             'integer' => (int) $value,
             'media' => $value ? Media::find((int) $value) : null,
+            'password' => static::decryptPassword($value),
             default => $value,
         };
+    }
+
+    protected static function decryptPassword(?string $value): ?string
+    {
+        if (! $value) {
+            return null;
+        }
+
+        try {
+            return Crypt::decryptString($value);
+        } catch (DecryptException) {
+            return null;
+        }
+    }
+
+    public static function hasValue(string $key): bool
+    {
+        return (bool) static::where('key', $key)->value('value');
     }
 }

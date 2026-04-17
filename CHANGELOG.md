@@ -8,7 +8,17 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.11.0 - 2026-04-17
+## 0.12.0 - 2026-04-17
+
+- Sistema de email transaccional con Brevo: transport HTTP API propio (sin paquetes externos), solo requiere pegar una API key en el admin para funcionar.
+- Tab **Email** en Settings con API key cifrada, from address/name, master switch, acordeón de instrucciones paso a paso y botón "Enviar email de prueba".
+- Password reset completo desde el panel admin (flujo forgot → email → reset con vistas propias).
+- Welcome email al crear usuarios: el nuevo usuario recibe sus credenciales por email y su cuenta queda verificada de inmediato.
+- `User` implementa `MustVerifyEmail`; backfill automático en seeder para usuarios existentes.
+- Comando `php artisan mail:test {email}` para verificar la configuración desde CLI.
+- Documentación actualizada: `settings.md` (nuevo tipo `password` y grupo `email`), `architecture.md` (nuevos directorios `app/Mail/`, `emails/`), `maintenance.md` (comando `mail:test`).
+
+## 0.11.0 - 2026-04-17 (4483642)
 - Panel de analytics rediseñado con navegación por tabs (Google tag / Meta Pixel / Search Console) con indicador de estado de configuración por tab.
 - Botón "Guardar cambios" promovido al header para visibilidad inmediata sin scroll.
 - UI estandarizada en los tres tabs: mismo patrón de campo + resumen + acordeón "Cómo configurarlo" colapsado por defecto.

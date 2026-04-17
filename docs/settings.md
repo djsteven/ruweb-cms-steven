@@ -6,13 +6,14 @@ Global site settings are stored in the `settings` table as key-value pairs. Each
 
 ## Types
 
-| Type | Admin Field | PHP Cast |
-|------|-------------|----------|
-| `string` | Text input | `string` |
-| `text` | Textarea | `string` |
-| `boolean` | Toggle switch | `bool` |
-| `integer` | Number input | `int` |
-| `media` | Media selector | `Media` model or `null` |
+| Type | Admin Field | PHP Cast | Notes |
+|------|-------------|----------|-------|
+| `string` | Text input | `string` | |
+| `text` | Textarea | `string` | |
+| `boolean` | Toggle switch | `bool` | |
+| `integer` | Number input | `int` | |
+| `media` | Media selector | `Media` model or `null` | |
+| `password` | Masked input | `string` (decrypted) | Value is encrypted with `Crypt::encryptString` before persisting. The decrypted plaintext is returned by `Setting::get()`. Leaving the field blank on save preserves the current value. |
 
 ## Groups
 
@@ -21,6 +22,20 @@ Settings are organized by `group` (stored as a column). Groups become tabs in th
 - **general**: site_name, site_description, site_logo, site_favicon, homepage_slug
 - **seo**: default_meta_title, default_meta_description
 - **admin**: admin_locale
+- **email**: mail_enabled, brevo_api_key, mail_from_address, mail_from_name
+
+## Email group
+
+The `email` group drives the Brevo mailer at runtime. The `BrevoMailServiceProvider` reads these settings on every request and overrides `mail.default` and `mail.from` accordingly — no `.env` change required.
+
+| Key | Type | Purpose |
+|-----|------|---------|
+| `mail_enabled` | `boolean` | Master switch. When off, the default mailer stays `log`. |
+| `brevo_api_key` | `password` | Brevo API key (`xkeysib-…`). Stored encrypted. |
+| `mail_from_address` | `string` | Verified sender address in Brevo. |
+| `mail_from_name` | `string` | Display name shown in the recipient's inbox. |
+
+> **Note:** `brevo_api_key` is never returned to the admin form as plaintext. The form renders a placeholder `(stored)` when a key already exists.
 
 ## Usage in Code
 

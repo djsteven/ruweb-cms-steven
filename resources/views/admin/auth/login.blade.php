@@ -43,14 +43,19 @@
             >
         </div>
 
-        <div class="flex items-center mb-5">
-            <input
-                type="checkbox"
-                id="remember"
-                name="remember"
-                class="h-3.5 w-3.5 rounded border-white/20 bg-[#1a1a1a] text-emerald-500 focus:ring-emerald-500/50"
-            >
-            <label for="remember" class="ml-2 text-xs text-gray-500">{{ __('admin.remember_me') }}</label>
+        <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center">
+                <input
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                    class="h-3.5 w-3.5 rounded border-white/20 bg-[#1a1a1a] text-emerald-500 focus:ring-emerald-500/50"
+                >
+                <label for="remember" class="ml-2 text-xs text-gray-500">{{ __('admin.remember_me') }}</label>
+            </div>
+            <a href="{{ route('admin.password.request') }}" class="text-xs text-gray-400 hover:text-emerald-400">
+                {{ __('admin.forgot_password_link') }}
+            </a>
         </div>
 
         <button

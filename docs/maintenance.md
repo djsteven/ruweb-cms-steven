@@ -2,6 +2,18 @@
 
 Phase 4 adds operational commands for common maintenance tasks.
 
+## Send test email
+
+```bash
+php artisan mail:test {email}
+```
+
+- Sends a test email via the configured Brevo mailer
+- Reads API key and from-address from DB settings (falls back to `.env`)
+- Useful for verifying Brevo configuration from the CLI without going through the admin UI
+
+---
+
 ## Reset user password
 
 ```bash

@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ClaudeMcpController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -19,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest', 'admin.locale'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login'])->name('login.submit');
+
+    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 });
 
 // Authenticated admin routes
@@ -66,5 +73,6 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
         Route::put('analytics', [AnalyticsController::class, 'update'])->name('analytics.update');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::post('settings/email/test', [SettingController::class, 'sendTestEmail'])->name('settings.email.test');
     });
 });

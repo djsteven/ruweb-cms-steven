@@ -63,20 +63,26 @@
         </div>
     </div>
 
-    <div class="flex items-center gap-2">
+    <div class="flex items-center justify-between gap-4">
         <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.btn_save_changes') }}
         </button>
+
+        @if (! auth()->user()->is($user))
+            <button type="button"
+                    onclick="document.getElementById('delete-user-form').requestSubmit()"
+                    class="px-4 py-2 bg-transparent border border-red-500/30 hover:border-red-500/50 text-red-300 text-sm font-medium rounded-md transition-colors">
+                {{ __('admin.btn_delete_user') }}
+            </button>
+        @endif
     </div>
 </form>
 
 @if (! auth()->user()->is($user))
-    <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="max-w-3xl" onsubmit="return confirm('{{ __('admin.confirm_delete_user') }}')">
+    <form id="delete-user-form" method="POST" action="{{ route('admin.users.destroy', $user) }}"
+          onsubmit="return confirm('{{ __('admin.confirm_delete_user') }}')">
         @csrf
         @method('DELETE')
-        <button type="submit" class="px-4 py-2 bg-transparent border border-red-500/30 hover:border-red-500/50 text-red-300 text-sm font-medium rounded-md transition-colors">
-            {{ __('admin.btn_delete_user') }}
-        </button>
     </form>
 @endif
 @endsection
