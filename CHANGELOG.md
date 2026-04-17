@@ -8,7 +8,15 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.10.0 - 2026-04-16
+## 0.11.0 - 2026-04-17
+- Panel de analytics rediseñado con navegación por tabs (Google tag / Meta Pixel / Search Console) con indicador de estado de configuración por tab.
+- Botón "Guardar cambios" promovido al header para visibilidad inmediata sin scroll.
+- UI estandarizada en los tres tabs: mismo patrón de campo + resumen + acordeón "Cómo configurarlo" colapsado por defecto.
+- Añadidas guías paso a paso para Google tag y Meta Pixel, equivalentes a las que ya tenía Search Console.
+- Eliminadas cajas anidadas redundantes (valor guardado, meta tag generado, acordeón DNS).
+- Tono de avisos informativos cambiado de warning amber a gris neutral.
+
+## 0.10.0 - 2026-04-16 (6d4e0c9)
 - Nueva sección `Analytics` en el admin para centralizar configuración de Google tag, Meta Pixel y Search Console.
 - El frontend público ahora inyecta automáticamente Google tag, Meta Pixel y el meta tag de verificación de Search Console a partir de IDs/tokens normalizados.
 - Validación y copy del panel unificadas para pedir solo IDs/tokens, sin aceptar snippets HTML/JS pegados.
