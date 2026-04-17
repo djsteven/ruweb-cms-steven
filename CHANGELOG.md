@@ -8,7 +8,14 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.9.3 - 2026-04-16
+## 0.10.0 - 2026-04-16
+- Nueva sección `Analytics` en el admin para centralizar configuración de Google tag, Meta Pixel y Search Console.
+- El frontend público ahora inyecta automáticamente Google tag, Meta Pixel y el meta tag de verificación de Search Console a partir de IDs/tokens normalizados.
+- Validación y copy del panel unificadas para pedir solo IDs/tokens, sin aceptar snippets HTML/JS pegados.
+- Documentación SEO actualizada para reflejar la nueva inyección centralizada de analytics y verificación.
+- Cobertura de tests agregada para acceso admin, validación de inputs, renderizado público y defaults de settings.
+
+## 0.9.3 - 2026-04-16 (9a9049b)
 - Skill del changelog actualizada para versionar el commit actual sin depender de un SHA previo.
 - Nuevo flujo: el siguiente commit completa el SHA faltante de la entrada anterior y crea una nueva entrada sin SHA.
 - `Unreleased` queda reservado solo para trabajo todavía no committeado.

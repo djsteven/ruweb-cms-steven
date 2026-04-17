@@ -121,6 +121,18 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('admin.analytics.index') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
+                          {{ request()->routeIs('admin.analytics.*')
+                              ? 'bg-emerald-500/10 text-emerald-400'
+                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3v18M4 14l4-4 4 4 8-8"/>
+                    </svg>
+                    <span>{{ __('admin.analytics') }}</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.settings.index') }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
                           {{ request()->routeIs('admin.settings.*')

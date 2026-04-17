@@ -37,6 +37,24 @@ class SettingsDefaultsTest extends TestCase
             'value' => 'inicio',
         ]);
 
+        $this->assertDatabaseHas('settings', [
+            'key' => 'google_tag_id',
+            'group' => 'analytics',
+            'value' => null,
+        ]);
+
+        $this->assertDatabaseHas('settings', [
+            'key' => 'meta_pixel_id',
+            'group' => 'analytics',
+            'value' => null,
+        ]);
+
+        $this->assertDatabaseHas('settings', [
+            'key' => 'search_console_verification_token',
+            'group' => 'analytics',
+            'value' => null,
+        ]);
+
         $this->assertNull(Setting::get('site_favicon'));
     }
 }

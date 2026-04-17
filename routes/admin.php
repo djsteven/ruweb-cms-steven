@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\Auth\LoginController;
+use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ClaudeMcpController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
@@ -61,6 +62,8 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
         Route::resource('users', UserController::class)
             ->except(['show']);
 
+        Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+        Route::put('analytics', [AnalyticsController::class, 'update'])->name('analytics.update');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
     });

@@ -9,6 +9,15 @@
     @stack('head')
 </head>
 <body class="min-h-screen flex flex-col bg-white text-gray-900 font-sans antialiased {{ auth()->check() ? 'pt-9' : '' }}">
+    @php($metaPixelId = \App\Models\Setting::get('meta_pixel_id'))
+
+    @if($metaPixelId)
+        <noscript>
+            <img height="1" width="1" style="display:none"
+                 src="https://www.facebook.com/tr?id={{ urlencode($metaPixelId) }}&ev=PageView&noscript=1"
+                 alt="">
+        </noscript>
+    @endif
 
     @include('partials.admin-bar')
     @include('partials.header')

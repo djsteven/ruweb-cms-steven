@@ -104,9 +104,64 @@ Every public-facing model uses `meta_json` to store per-item SEO overrides:
 }
 ```
 
-These are rendered via `resources/views/partials/seo-meta.blade.php`. See `content-model.md` for the full implementation.
+These are rendered via `resources/views/components/seo-meta.blade.php`. The component also applies global site-level fallbacks from `settings`, including:
+
+- default meta title
+- default meta description
+- favicon
+- canonical URL
+- Open Graph tags
+- Twitter card tags
+
+See `content-model.md` for the full implementation.
 
 New collections must include a `meta_json` JSON column and a `meta(): array` accessor — see `collections-guide.md` rule 6.
+
+---
+
+## Analytics and verification tags
+
+The public SEO/meta component is also the centralized place where browser-side analytics and Search Console verification tags are injected when configured from the admin.
+
+### Admin-managed integrations
+
+The **Admin → Analytics** screen supports three values:
+
+- `google_tag_id`
+- `meta_pixel_id`
+- `search_console_verification_token`
+
+The CMS stores only normalized IDs/tokens and generates the tags itself. It does **not** store or execute arbitrary pasted HTML/JavaScript snippets.
+
+### What gets rendered
+
+If configured, the public site renders:
+
+- **Google tag** in the public `<head>`
+- **Meta Pixel** base script in the public `<head>`
+- **Meta Pixel** `noscript` fallback in the public `<body>`
+- **Search Console** verification meta tag in the public `<head>`
+
+These integrations are rendered only on the public site layout. Admin pages do not include them.
+
+### Search Console guidance
+
+The Search Console field in the admin expects only the verification token from the HTML tag method, not the full `<meta>` tag. The CMS generates:
+
+```html
+<meta name="google-site-verification" content="YOUR_TOKEN" />
+```
+
+This is intended for **URL-prefix** verification.
+
+For broader ownership coverage across subdomains and protocol variants, prefer a **Domain property** verified through DNS. The admin UI includes a short DNS reminder, but DNS records are still managed outside the CMS.
+
+### Current scope and limitations
+
+- Google support is limited to the base Google tag bootstrap generated from the saved ID.
+- Meta support is limited to the base browser-side Meta Pixel bootstrap plus `PageView`.
+- Search Console support is limited to HTML-tag verification token injection.
+- Meta Conversions API / server-side events are **not** part of the current implementation.
 
 ---
 
@@ -132,4 +187,5 @@ Update the sitemap URL to match `APP_URL` before going live.
 - [ ] Query added to `SitemapController`
 - [ ] URL block added to `sitemap/index.blade.php`
 - [ ] `meta_json` column + `meta()` accessor present on the model
+- [ ] Review whether the collection needs any custom analytics or verification behavior beyond the global tags
 - [ ] `robots.txt` does not accidentally block the collection's URLs
