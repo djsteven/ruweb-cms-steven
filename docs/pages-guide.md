@@ -189,6 +189,8 @@ public function previewRender(Request $request, Page $page): Response
 }
 ```
 
+> **Nota (backend):** Cuando un modelo guarda un bloque JSON flexible como `content_json`, no usar `$request->validated()` como fuente final de persistencia del árbol completo si existen reglas parciales para subclaves anidadas. Validar la request, pero persistir `content_json` desde `$request->input('content_json', ...)`, o definir una estrategia de saneamiento explícita que reconstruya el árbol completo.
+
 The `update` method must return JSON when `$request->wantsJson()` (the editor saves via `fetch`):
 
 ```php
