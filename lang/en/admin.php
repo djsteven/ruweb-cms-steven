@@ -343,6 +343,10 @@ return [
         'default_meta_description' => [
             'label' => 'Default Meta Description',
         ],
+        'default_social_image' => [
+            'label' => 'Default Social Share Image',
+            'help' => 'Image shown as preview when the link is shared on social platforms (WhatsApp, Facebook, Twitter, etc.). Used when a page has no featured image of its own.',
+        ],
         'admin_locale' => [
             'label' => 'Admin Locale',
             'help' => 'Defines the language used by the admin interface.',

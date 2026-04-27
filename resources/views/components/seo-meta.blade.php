@@ -47,6 +47,8 @@
 @endif
 @if($image)
 <meta property="og:image" content="{{ $image }}">
+<meta property="og:image:secure_url" content="{{ $image }}">
+<meta property="og:image:alt" content="{{ $title }}">
 @endif
 
 {{-- Twitter Card --}}
@@ -57,6 +59,7 @@
 @endif
 @if($image)
 <meta name="twitter:image" content="{{ $image }}">
+<meta name="twitter:image:alt" content="{{ $title }}">
 @endif
 
 @if($googleTagId)

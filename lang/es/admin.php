@@ -343,6 +343,10 @@ return [
         'default_meta_description' => [
             'label' => 'Meta descripción por defecto',
         ],
+        'default_social_image' => [
+            'label' => 'Imagen para compartir por defecto',
+            'help' => 'Imagen mostrada como vista previa al compartir el enlace en redes sociales (WhatsApp, Facebook, Twitter, etc.). Se usa cuando una página no tiene imagen destacada propia.',
+        ],
         'admin_locale' => [
             'label' => 'Idioma del panel admin',
             'help' => 'Define el idioma de la interfaz administrativa.',

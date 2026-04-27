@@ -16,12 +16,6 @@
     @endif
 </div>
 
-@if(session('success'))
-    <div class="mb-4 px-4 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-sm text-emerald-400">
-        {{ session('success') }}
-    </div>
-@endif
-
 @if ($menus->isEmpty())
     <div class="text-center py-20 text-gray-600">
         <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

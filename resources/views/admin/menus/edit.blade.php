@@ -49,12 +49,6 @@ function flattenMenuTree($items, $parentId = null) {
     @endif
 </div>
 
-@if(session('success'))
-    <div class="mb-6 px-4 py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg text-sm text-emerald-400">
-        {{ session('success') }}
-    </div>
-@endif
-
 {{-- ── Section 1: Menu Settings ────────────────────────────────── --}}
 <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl mb-6">
     <div class="px-5 py-4 border-b border-white/[0.06]">
@@ -223,6 +217,30 @@ function flattenMenuTree($items, $parentId = null) {
 </div>
 
 @push('scripts')
+<style>
+    .sub-sortable {
+        min-height: 0;
+        transition: min-height .15s ease, padding .15s ease, margin .15s ease, background .15s ease;
+    }
+    .sub-sortable.sub-empty {
+        min-height: 0;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
+    .is-dragging .sub-sortable.sub-empty {
+        min-height: 28px;
+        margin-top: .25rem !important;
+        margin-bottom: .5rem !important;
+        border-radius: .375rem;
+        background: rgba(16,185,129,.05);
+        border: 1px dashed rgba(16,185,129,.25);
+    }
+    .sortable-ghost { opacity: .4; }
+    .sortable-chosen { transform: scale(1.01); box-shadow: 0 0 0 1px rgba(16,185,129,.35); }
+    .sortable-drag { cursor: grabbing !important; }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
 <script>
 (function () {
@@ -328,7 +346,7 @@ function flattenMenuTree($items, $parentId = null) {
                     {{ __('admin.menu_item_remove') }}
                 </button>
             </div>
-            <div class="sub-sortable pl-5 ml-3 border-l border-white/[0.06] space-y-1.5 mt-1 mb-2 ${children.length ? '' : 'hidden'}"></div>
+            <div class="sub-sortable pl-5 ml-3 border-l border-white/[0.06] space-y-1.5 mt-1 mb-2 ${children.length ? '' : 'sub-empty'}"></div>
         `;
 
         div.querySelector('.toggle-btn').addEventListener('click', () => {
@@ -365,13 +383,25 @@ function flattenMenuTree($items, $parentId = null) {
         return div;
     }
 
+    const menuStructurePanel = document.getElementById('menu-sortable').parentElement;
+
     function initSortable(container, parentId) {
         if (container._s) container._s.destroy();
         container._s = new Sortable(container, {
             group: 'menu-items',
             handle: '.handle',
             animation: 150,
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
+            emptyInsertThreshold: 12,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onStart: function () {
+                menuStructurePanel?.classList.add('is-dragging');
+            },
             onEnd: function () {
+                menuStructurePanel?.classList.remove('is-dragging');
                 syncOrderFromDom();
                 markItemsDirty();
             },
@@ -381,7 +411,7 @@ function flattenMenuTree($items, $parentId = null) {
     function syncOrderFromDom() {
         collectOrder(document.getElementById('menu-sortable'), null);
         document.querySelectorAll('.sub-sortable').forEach(sub => {
-            sub.classList.toggle('hidden', sub.children.length === 0);
+            sub.classList.toggle('sub-empty', sub.children.length === 0);
         });
     }
 

@@ -137,6 +137,7 @@
     </div>
 
     @include('admin.media._library-modal')
+    @include('admin.media._upload-modal')
 
     @stack('modals')
     @stack('scripts')

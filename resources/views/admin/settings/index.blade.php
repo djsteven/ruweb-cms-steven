@@ -148,7 +148,9 @@
     const tabs = document.querySelectorAll('.settings-tab');
     const panels = document.querySelectorAll('.settings-panel');
 
-    function switchTab(group) {
+    const STORAGE_KEY = 'admin.settings.activeTab';
+
+    function switchTab(group, persist = true) {
         tabs.forEach(tab => {
             if (tab.dataset.group === group) {
                 tab.classList.add('border-emerald-500', 'text-emerald-400');
@@ -161,9 +163,17 @@
         panels.forEach(panel => {
             panel.style.display = panel.dataset.group === group ? '' : 'none';
         });
+        if (persist) {
+            try { sessionStorage.setItem(STORAGE_KEY, group); } catch (e) {}
+        }
     }
 
-    if (tabs.length) switchTab(tabs[0].dataset.group);
+    if (tabs.length) {
+        let initial = null;
+        try { initial = sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
+        const valid = initial && Array.from(tabs).some(t => t.dataset.group === initial);
+        switchTab(valid ? initial : tabs[0].dataset.group, false);
+    }
 
     function togglePasswordVisibility(btn) {
         const input = btn.parentElement.querySelector('input');

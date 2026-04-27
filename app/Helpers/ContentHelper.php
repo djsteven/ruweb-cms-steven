@@ -31,12 +31,24 @@ class ContentHelper
     {
         $mediaId = $meta['featured_image'] ?? null;
 
-        if (! $mediaId) {
-            return null;
+        if ($mediaId) {
+            $media = Media::find($mediaId);
+            if ($media) {
+                return $media->url();
+            }
         }
 
-        $media = Media::find($mediaId);
+        $fallback = Setting::get('default_social_image');
+        if ($fallback instanceof Media) {
+            return $fallback->url();
+        }
+        if (is_numeric($fallback)) {
+            return Media::find($fallback)?->url();
+        }
+        if (is_string($fallback) && $fallback !== '') {
+            return $fallback;
+        }
 
-        return $media?->url();
+        return null;
     }
 }
