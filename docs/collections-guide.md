@@ -12,6 +12,7 @@ Use this document for:
 
 Do not use this document as a substitute for:
 
+- `docs/editorial-contract.md` for shared publish, SEO, media, and preview contracts
 - `docs/taxonomies.md` for taxonomy internals
 - `docs/live-editor.md` for editor mechanics
 - a collection-specific example document when the repository ships one
@@ -46,9 +47,13 @@ Collections with public output should have a publication state such as:
 
 Public queries should filter through a published scope or equivalent rule.
 
+When using the standard `status` and `published_at` fields, implement the shared `Publishable` contract and use the shared publication trait.
+
 ### 4. Public SEO data should follow the shared metadata contract
 
 If collection entries render public pages, use a metadata shape compatible with the page/entity SEO helpers used by the project.
+
+Public detail entries should implement the shared `Seoable` contract while keeping their own storage shape.
 
 ### 5. The edit experience should use the shared editor where preview is needed
 

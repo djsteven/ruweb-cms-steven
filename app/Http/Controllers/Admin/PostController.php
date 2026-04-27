@@ -129,7 +129,7 @@ class PostController extends Controller
         $post->excerpt = $request->input('excerpt', $post->excerpt);
         $post->content = $request->input('content', $post->content);
 
-        $html = view('blog.show', ['post' => $post])->render();
+        $html = view($post->previewView(), $post->previewData())->render();
 
         return response($html)->header('Content-Type', 'text/html');
     }

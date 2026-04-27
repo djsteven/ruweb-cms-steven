@@ -13,6 +13,8 @@ Use this document for:
 
 Do not use this document as the canonical source for content JSON shape, template registration, or low-level editor internals. Those topics live in `docs/content-model.md`, `docs/templates.md`, and `docs/live-editor.md`.
 
+For shared editorial capabilities such as publishing, SEO, media, and preview contracts, use `docs/editorial-contract.md`.
+
 ## What A Page Is
 
 A page is a URL-addressable content entity with:
@@ -92,3 +94,5 @@ Creation screens may use a simpler admin form when no persisted model exists yet
 ## SEO Notes
 
 Page SEO values should come from the shared `meta` block plus global fallbacks. Keep the page entity focused on declaring content; leave the exact fallback chain to the SEO helper/component implementation.
+
+Pages implement the shared `Seoable` contract by reading metadata from `content_json.meta` and using the page title as the title fallback.

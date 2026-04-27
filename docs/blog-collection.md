@@ -15,6 +15,8 @@ Use this document when you want to inspect how a concrete collection maps the ge
 - shared taxonomy usage for categories
 - a public index route and a public detail route
 
+For the shared contracts behind these behaviors, see `docs/editorial-contract.md`.
+
 ## Typical Domain Shape
 
 Example fields:
@@ -27,6 +29,8 @@ Example fields:
 - `status`
 - `published_at`
 - audit fields such as `created_by` and `updated_by`
+
+`Post` keeps these first-class fields while implementing the shared editorial contracts for publishing, SEO, media, and preview.
 
 ## Typical Application Pieces
 

@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use App\Contracts\Editorial\Mediable;
+use App\Contracts\Editorial\Previewable;
+use App\Contracts\Editorial\Publishable;
+use App\Contracts\Editorial\Seoable;
 use App\Traits\HasMedia;
+use App\Traits\HasPublicationState;
 use App\Traits\HasTaxonomies;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Post extends Model
+class Post extends Model implements Mediable, Previewable, Publishable, Seoable
 {
-    use HasMedia, HasTaxonomies;
+    use HasMedia, HasPublicationState, HasTaxonomies;
 
     protected $fillable = [
         'title',
@@ -29,12 +34,6 @@ class Post extends Model
             'meta_json' => 'array',
             'published_at' => 'datetime',
         ];
-    }
-
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'published')
-            ->where('published_at', '<=', now());
     }
 
     public function creator(): BelongsTo
@@ -57,8 +56,21 @@ class Post extends Model
         return route('blog.show', $this->slug);
     }
 
-    public function isPublished(): bool
+    public function seoTitleFallback(): ?string
     {
-        return $this->status === 'published' && $this->published_at && $this->published_at->lte(now());
+        return $this->title;
+    }
+
+    public function previewView(): string
+    {
+        return 'blog.show';
+    }
+
+    public function previewData(): array
+    {
+        return [
+            'post' => $this,
+            'page' => $this,
+        ];
     }
 }

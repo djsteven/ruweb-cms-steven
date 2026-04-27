@@ -61,6 +61,7 @@ Use `docs/architecture.md` for system structure and request flows.
 Use the feature guides for implementation contracts:
 
 - `docs/content-model.md`
+- `docs/editorial-contract.md`
 - `docs/pages-guide.md`
 - `docs/templates.md`
 - `docs/live-editor.md`

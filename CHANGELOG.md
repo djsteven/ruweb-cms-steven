@@ -8,6 +8,16 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
+## 0.16.0 - 2026-04-27
+
+- Contrato editorial común para Pages y Posts mediante interfaces `Publishable`, `Seoable`, `Mediable` y `Previewable`.
+- Trait compartido para la regla de publicación estándar (`status = published` y `published_at <= now()`).
+- SEO público actualizado para consumir entidades `Seoable` sin depender del tipo concreto de contenido.
+- Documentación del contrato editorial y guías enlazadas para nuevas colecciones.
+- Cobertura de tests para contratos, publicación y metadata SEO de Pages y Posts.
+
+## 0.15.1 - 2026-04-27 (e080e07)
+
 - Live editor: eliminado auto-guardado en localStorage; los cambios solo persisten al guardar explícitamente.
 - Live editor: aviso nativo del navegador al intentar salir con cambios pendientes.
 

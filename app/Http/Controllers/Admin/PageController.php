@@ -109,7 +109,7 @@ class PageController extends Controller
         $page->template_key = $request->input('template_key', $page->template_key);
         $page->content_json = $request->input('content_json', $page->content_json ?? []);
 
-        $html = view($page->resolveTemplate(), ['page' => $page])->render();
+        $html = view($page->previewView(), $page->previewData())->render();
 
         return response($html)->header('Content-Type', 'text/html');
     }

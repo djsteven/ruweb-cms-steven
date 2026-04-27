@@ -2,14 +2,19 @@
 
 namespace App\Models;
 
+use App\Contracts\Editorial\Mediable;
+use App\Contracts\Editorial\Previewable;
+use App\Contracts\Editorial\Publishable;
+use App\Contracts\Editorial\Seoable;
 use App\Traits\HasMedia;
+use App\Traits\HasPublicationState;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\View;
 
-class Page extends Model
+class Page extends Model implements Mediable, Previewable, Publishable, Seoable
 {
-    use HasMedia;
+    use HasMedia, HasPublicationState;
 
     protected $fillable = [
         'title',
@@ -28,12 +33,6 @@ class Page extends Model
             'content_json' => 'array',
             'published_at' => 'datetime',
         ];
-    }
-
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'published')
-            ->where('published_at', '<=', now());
     }
 
     public function creator(): BelongsTo
@@ -58,7 +57,7 @@ class Page extends Model
 
     public function resolveTemplate(): string
     {
-        $template = 'templates.' . $this->template_key;
+        $template = 'templates.'.$this->template_key;
 
         if (View::exists($template)) {
             return $template;
@@ -69,11 +68,21 @@ class Page extends Model
 
     public function url(): string
     {
-        return '/' . ltrim($this->slug, '/');
+        return '/'.ltrim($this->slug, '/');
     }
 
-    public function isPublished(): bool
+    public function seoTitleFallback(): ?string
     {
-        return $this->status === 'published' && $this->published_at && $this->published_at->lte(now());
+        return $this->title;
+    }
+
+    public function previewView(): string
+    {
+        return $this->resolveTemplate();
+    }
+
+    public function previewData(): array
+    {
+        return ['page' => $this];
     }
 }

@@ -7,6 +7,7 @@ This index is the entry point for developers and LLM agents working on the start
 - `docs/framework-philosophy.md` — principles and boundaries that guide framework decisions
 - `docs/architecture.md` — high-level structure, request flow, and system boundaries
 - `docs/content-model.md` — canonical shape of structured content blocks
+- `docs/editorial-contract.md` — shared contracts for publishable, SEO, media, and preview behavior
 - `docs/templates.md` — how template registration and rendering work
 - `docs/live-editor.md` — shared editor shell and preview contract
 - `docs/image-strategy.md` — upload, optimization, and frontend delivery rules
@@ -40,7 +41,7 @@ This index is the entry point for developers and LLM agents working on the start
 
 1. Read `docs/framework-philosophy.md`.
 2. Read `docs/architecture.md`.
-3. Read `docs/content-model.md`, `docs/templates.md`, and `docs/live-editor.md`.
+3. Read `docs/content-model.md`, `docs/editorial-contract.md`, `docs/templates.md`, and `docs/live-editor.md`.
 4. If working with pages, read `docs/pages-guide.md`.
 5. If updating existing structured content, read `docs/update-fields.md`.
 6. If adding a collection, read `docs/collections-guide.md` and `docs/taxonomies.md`.

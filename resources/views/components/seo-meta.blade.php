@@ -1,8 +1,11 @@
 @php
+    use App\Contracts\Editorial\Seoable;
     use App\Helpers\ContentHelper;
     use App\Models\Setting;
 
-    $meta = isset($page) ? $page->meta() : [];
+    $entity = $seoable ?? $page ?? null;
+    $entity = $entity instanceof Seoable ? $entity : null;
+    $meta = $entity ? $entity->meta() : [];
     $siteName = Setting::get('site_name') ?: config('app.name');
     $faviconSetting = Setting::get('site_favicon');
     $googleTagId = Setting::get('google_tag_id');
@@ -13,10 +16,10 @@
         : $faviconSetting?->url();
     $favicon = $favicon ?: '/favicon.ico';
 
-    $title = ContentHelper::metaTitle($meta);
+    $title = ContentHelper::metaTitle($meta, $entity?->seoTitleFallback());
     $description = ContentHelper::metaDescription($meta);
     $image = ContentHelper::metaImage($meta);
-    $url = isset($page) ? url($page->url()) : url()->current();
+    $url = $entity ? url($entity->url()) : url()->current();
 @endphp
 
 <title>{{ $title }}{{ $title !== $siteName ? ' — ' . $siteName : '' }}</title>
