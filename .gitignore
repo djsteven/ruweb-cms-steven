@@ -3,8 +3,10 @@
 .env
 .env.backup
 .env.production
+.obsidian/
 .phpactor.json
 .phpunit.result.cache
+**/.obsidian/
 /.fleet
 /.idea
 /.nova
