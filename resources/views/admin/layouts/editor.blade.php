@@ -41,6 +41,9 @@
             'loadingMedia' => __('admin.loading_media'),
             'unableToLoadMediaItem' => __('admin.unable_to_load_media_item'),
             'unableToLoadMediaLibrary' => __('admin.unable_to_load_media_library'),
+            'previous' => __('admin.previous'),
+            'next' => __('admin.next'),
+            'pageOf' => __('admin.page_of'),
             'maxUploadKb' => $effectiveMaxKb,
         ];
     @endphp

@@ -25,6 +25,8 @@
 
         <div id="media-library-status" class="px-5 py-3 text-sm text-gray-500 hidden"></div>
 
-        <div id="media-library-grid" class="p-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 max-h-[70vh] overflow-y-auto"></div>
+        <div id="media-library-grid" class="p-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 min-h-[200px] max-h-[60vh] overflow-y-auto"></div>
+
+        <div id="media-library-pagination" class="hidden px-5 py-3 border-t border-white/[0.06] flex items-center justify-between gap-3 flex-wrap"></div>
     </div>
 </div>

@@ -17,14 +17,15 @@ const libraryGrid = document.getElementById('media-library-grid');
 const librarySearch = document.getElementById('media-library-search');
 const libraryRefresh = document.getElementById('media-library-refresh');
 const libraryStatus = document.getElementById('media-library-status');
+const libraryPagination = document.getElementById('media-library-pagination');
 
 let activeSelector = null;
 let searchTimer = null;
 const LIBRARY_PAGE_SIZE = 20;
 const libraryItemsById = new Map();
 const libraryState = {
-    page: 1,
-    hasMore: true,
+    currentPage: 1,
+    lastPage: 1,
     isLoading: false,
     requestId: 0,
     search: '',
@@ -205,7 +206,7 @@ uploadForm?.addEventListener('submit', async (e) => {
                     notifySelectorChange(activeSelector);
                     closeLibrary();
                 } else {
-                    void loadLibrary({ reset: true });
+                    void loadLibrary(1);
                 }
             } else {
                 window.location.reload();
@@ -315,7 +316,7 @@ function openLibrary(selector) {
     }
 
     libraryModal.classList.remove('hidden');
-    loadLibrary({ reset: true });
+    void loadLibrary(1);
 }
 
 function closeLibrary() {
@@ -328,18 +329,19 @@ function closeLibrary() {
     libraryModal.classList.add('hidden');
 }
 
-function renderLibraryItems(items, { append = false } = {}) {
+function renderLibraryItems(items) {
     if (!libraryGrid) {
         return;
     }
 
-    if (!append && !items.length) {
-        libraryItemsById.clear();
+    libraryItemsById.clear();
+
+    if (!items.length) {
         libraryGrid.innerHTML = `<div class="col-span-full text-sm text-gray-500 py-6 text-center">${escapeHtml(t('noMediaFound'))}</div>`;
         return;
     }
 
-    const html = items.map((item) => {
+    libraryGrid.innerHTML = items.map((item) => {
         libraryItemsById.set(String(item.id), item);
         const isImage = String(item.mime_type || '').startsWith('image/');
 
@@ -357,13 +359,48 @@ function renderLibraryItems(items, { append = false } = {}) {
             </button>
         `;
     }).join('');
+}
 
-    if (append) {
-        libraryGrid.insertAdjacentHTML('beforeend', html);
+function renderLibraryPagination(currentPage, lastPage) {
+    if (!libraryPagination) {
         return;
     }
 
-    libraryGrid.innerHTML = html;
+    if (lastPage <= 1) {
+        libraryPagination.innerHTML = '';
+        libraryPagination.classList.add('hidden');
+        return;
+    }
+
+    libraryPagination.classList.remove('hidden');
+
+    const btnBase = 'px-3 py-1.5 text-xs rounded-md transition-colors border font-medium';
+    const btnActive = `${btnBase} bg-emerald-600 border-emerald-600 text-white`;
+    const btnInactive = `${btnBase} bg-transparent border-white/10 text-gray-400 hover:bg-gray-800`;
+    const btnDisabled = `${btnBase} bg-transparent border-white/[0.05] text-gray-700 cursor-not-allowed`;
+
+    const prevDisabled = currentPage <= 1;
+    const nextDisabled = currentPage >= lastPage;
+
+    const pageStart = Math.max(1, currentPage - 2);
+    const pageEnd = Math.min(lastPage, currentPage + 2);
+    const pageButtons = [];
+    for (let p = pageStart; p <= pageEnd; p++) {
+        pageButtons.push(
+            `<button type="button" class="${p === currentPage ? btnActive : btnInactive}" data-page="${p}">${p}</button>`
+        );
+    }
+
+    const pageLabel = escapeHtml(t('pageOf').replace(':current', String(currentPage)).replace(':total', String(lastPage)));
+
+    libraryPagination.innerHTML = `
+        <span class="text-xs text-gray-500">${pageLabel}</span>
+        <div class="flex items-center gap-1">
+            <button type="button" class="${prevDisabled ? btnDisabled : btnInactive}" data-page="${currentPage - 1}" ${prevDisabled ? 'disabled' : ''}>${escapeHtml(t('previous'))}</button>
+            ${pageButtons.join('')}
+            <button type="button" class="${nextDisabled ? btnDisabled : btnInactive}" data-page="${currentPage + 1}" ${nextDisabled ? 'disabled' : ''}>${escapeHtml(t('next'))}</button>
+        </div>
+    `;
 }
 
 function currentLibraryFilters() {
@@ -373,35 +410,24 @@ function currentLibraryFilters() {
     };
 }
 
-async function loadLibrary({ reset = false } = {}) {
+async function loadLibrary(page = 1) {
     if (!libraryGrid || !libraryStatus) {
         return;
     }
 
-    if (libraryState.isLoading && !reset) {
+    if (libraryState.isLoading) {
         return;
     }
 
-    if (!reset && !libraryState.hasMore) {
-        return;
-    }
-
-    if (reset) {
-        libraryState.requestId += 1;
-        libraryState.isLoading = false;
+    if (page === 1) {
         const filters = currentLibraryFilters();
-        libraryState.page = 1;
-        libraryState.hasMore = true;
         libraryState.search = filters.search;
         libraryState.type = filters.type;
-        libraryItemsById.clear();
-        libraryGrid.innerHTML = '';
     }
 
     const requestId = ++libraryState.requestId;
-    const page = libraryState.page;
-
     libraryState.isLoading = true;
+    libraryGrid.innerHTML = '';
     libraryStatus.textContent = t('loadingMedia');
     libraryStatus.classList.remove('hidden');
 
@@ -432,24 +458,17 @@ async function loadLibrary({ reset = false } = {}) {
             return;
         }
 
-        const items = payload.data || [];
-        renderLibraryItems(items, { append: page > 1 });
-        libraryState.page = Number(payload.current_page || page) + 1;
-        libraryState.hasMore = Boolean(payload.next_page_url);
+        libraryState.currentPage = Number(payload.current_page || page);
+        libraryState.lastPage = Number(payload.last_page || 1);
+
+        renderLibraryItems(payload.data || []);
+        renderLibraryPagination(libraryState.currentPage, libraryState.lastPage);
         libraryStatus.classList.add('hidden');
-
-        if (!libraryGrid.querySelector('.media-library-item') && !libraryState.hasMore) {
-            renderLibraryItems([], { append: false });
-            return;
-        }
-
-        if (libraryState.hasMore && libraryGrid.scrollHeight <= libraryGrid.clientHeight) {
-            void loadLibrary();
-        }
     } catch (_) {
         if (requestId === libraryState.requestId) {
             libraryStatus.textContent = t('unableToLoadMediaLibrary');
             libraryStatus.classList.remove('hidden');
+            renderLibraryPagination(0, 0);
         }
     } finally {
         if (requestId === libraryState.requestId) {
@@ -483,22 +502,21 @@ libraryModal?.addEventListener('click', (event) => {
     }
 });
 
-libraryRefresh?.addEventListener('click', () => loadLibrary({ reset: true }));
+libraryRefresh?.addEventListener('click', () => loadLibrary(1));
 
 librarySearch?.addEventListener('input', () => {
     clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => loadLibrary({ reset: true }), 250);
+    searchTimer = setTimeout(() => loadLibrary(1), 250);
 });
 
-libraryGrid?.addEventListener('scroll', () => {
-    if (libraryState.isLoading || !libraryState.hasMore) {
+libraryPagination?.addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-page]');
+    if (!btn || btn.disabled) {
         return;
     }
-
-    const threshold = 200;
-    const distanceToBottom = libraryGrid.scrollHeight - libraryGrid.scrollTop - libraryGrid.clientHeight;
-    if (distanceToBottom <= threshold) {
-        void loadLibrary();
+    const page = Number(btn.dataset.page);
+    if (page > 0) {
+        void loadLibrary(page);
     }
 });
 
