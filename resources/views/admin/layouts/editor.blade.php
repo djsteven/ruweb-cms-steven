@@ -48,6 +48,13 @@
         window.adminI18n = {!! json_encode($adminI18n, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!};
     </script>
     @vite(['resources/js/admin.js'])
+    <style>
+        .editor-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .editor-scroll::-webkit-scrollbar-track { background: transparent; }
+        .editor-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 9999px; }
+        .editor-scroll::-webkit-scrollbar-thumb:hover { background: rgba(16,185,129,0.5); }
+        .editor-scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.12) transparent; }
+    </style>
 </head>
 <body class="bg-[#0a0a0a] text-gray-100 font-sans antialiased h-screen flex flex-col overflow-hidden">
 
@@ -91,7 +98,7 @@
         {{-- Edit panel --}}
         <aside id="panel-edit"
                class="w-full {{ ($showPreview ?? true) ? 'lg:w-96 lg:flex-none' : '' }} bg-[#111111] {{ ($showPreview ?? true) ? 'border-r border-white/[0.06]' : '' }} flex flex-col">
-            <div class="flex-1 overflow-y-auto p-5">
+            <div class="flex-1 overflow-y-auto p-5 editor-scroll">
                 @include('admin.partials.alerts')
                 @yield('editor-form')
             </div>
@@ -114,7 +121,7 @@
                 </div>
             </div>
             <div id="iframe-wrap"
-                 class="flex-1 flex items-start justify-center overflow-auto bg-[#0d0d0d]">
+                 class="flex-1 flex items-start justify-center overflow-auto bg-[#0d0d0d] editor-scroll">
                 <iframe id="preview-frame"
                         class="w-full h-full border-0 bg-white"
                         sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
