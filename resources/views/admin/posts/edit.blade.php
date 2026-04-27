@@ -30,7 +30,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     initEditorEngine({
         previewUrl: '{{ route('admin.posts.preview', $post) }}',
-        draftKey: 'post-draft-{{ $post->id }}',
         savedMsg: '{{ __('admin.saved_success') }}',
         errorMsg: '{{ __('admin.save_error') }}',
     });

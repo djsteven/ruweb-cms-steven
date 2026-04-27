@@ -8,7 +8,32 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.12.0 - 2026-04-17
+- Live editor: eliminado auto-guardado en localStorage; los cambios solo persisten al guardar explícitamente.
+- Live editor: aviso nativo del navegador al intentar salir con cambios pendientes.
+
+## 0.15.0 - 2026-04-27 (d6e3a46)
+
+- Paginación por páginas en el modal de la media library, reemplazando el infinite scroll anterior.
+
+## 0.14.0 - 2026-04-27 (97bf5c5)
+
+- Configuración SEO consolidada en la tab General de Settings (antes dispersa en tab propia).
+- Test de email movido a un controller dedicado.
+
+## 0.13.0 - 2026-04-27 (a3e38d2)
+
+- Alertas del panel admin estandarizadas visualmente.
+- La tab activa en Settings persiste entre recargas de página.
+
+## 0.12.2 - 2026-04-27 (0538ecd)
+
+- Scrollbars del live editor estilizados para coincidir con el tema oscuro.
+
+## 0.12.1 - 2026-04-21 (b86aec6)
+
+- Documentación del warning de persistencia de `content_json` en el live editor.
+
+## 0.12.0 - 2026-04-17 (15f3f67)
 
 - Sistema de email transaccional con Brevo: transport HTTP API propio (sin paquetes externos), solo requiere pegar una API key en el admin para funcionar.
 - Tab **Email** en Settings con API key cifrada, from address/name, master switch, acordeón de instrucciones paso a paso y botón "Enviar email de prueba".

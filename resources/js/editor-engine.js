@@ -11,7 +11,6 @@ export function initEditorEngine(config = {}) {
     }
 
     const previewUrl = config.previewUrl || null;
-    const draftKey = config.draftKey || null;
     const savedMsg = config.savedMsg || 'Saved';
     const errorMsg = config.errorMsg || 'Save error';
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
@@ -32,92 +31,15 @@ export function initEditorEngine(config = {}) {
         return entries.join('&');
     }
 
+    function isDirty() {
+        return formSnapshot() !== savedSnapshot;
+    }
+
     function updateDirtyState() {
-        const dirty = formSnapshot() !== savedSnapshot;
+        const dirty = isDirty();
         if (updateBtn) updateBtn.disabled = !dirty;
         if (saveDraftBtn) saveDraftBtn.disabled = !dirty;
         headerSaveBtn.disabled = !dirty;
-    }
-
-    function createDraftPayload() {
-        const data = {};
-        const formData = new FormData(form);
-        formData.delete('_token');
-        formData.delete('_method');
-
-        for (const [key, value] of formData.entries()) {
-            if (Object.hasOwn(data, key)) {
-                if (Array.isArray(data[key])) {
-                    data[key].push(value);
-                } else {
-                    data[key] = [data[key], value];
-                }
-            } else {
-                data[key] = value;
-            }
-        }
-
-        return data;
-    }
-
-    function saveDraftToStorage() {
-        if (!draftKey) {
-            return;
-        }
-
-        try {
-            localStorage.setItem(draftKey, JSON.stringify(createDraftPayload()));
-        } catch (_) {}
-    }
-
-    function clearDraftStorage() {
-        if (!draftKey) {
-            return;
-        }
-
-        localStorage.removeItem(draftKey);
-    }
-
-    function restoreDraftFromStorage() {
-        if (!draftKey) {
-            return;
-        }
-
-        const raw = localStorage.getItem(draftKey);
-        if (!raw) {
-            return;
-        }
-
-        try {
-            const data = JSON.parse(raw);
-            for (const [key, rawValue] of Object.entries(data)) {
-                const values = Array.isArray(rawValue) ? rawValue.map(String) : [String(rawValue)];
-                const elements = form.querySelectorAll(`[name="${CSS.escape(key)}"]`);
-
-                if (!elements.length) {
-                    continue;
-                }
-
-                elements.forEach((element) => {
-                    const type = element.type || '';
-                    if (type === 'checkbox' || type === 'radio') {
-                        element.checked = values.includes(String(element.value));
-                        return;
-                    }
-
-                    if (element.tagName === 'SELECT' && element.multiple) {
-                        Array.from(element.options).forEach((option) => {
-                            option.selected = values.includes(String(option.value));
-                        });
-                        return;
-                    }
-
-                    if (type !== 'hidden') {
-                        element.value = values[0] ?? '';
-                    }
-                });
-            }
-        } catch (_) {}
     }
 
     function refreshPreview() {
@@ -184,7 +106,6 @@ export function initEditorEngine(config = {}) {
 
             if (response.ok) {
                 savedSnapshot = formSnapshot();
-                clearDraftStorage();
                 showToast(savedMsg);
             } else {
                 showToast(errorMsg, 'error');
@@ -199,19 +120,25 @@ export function initEditorEngine(config = {}) {
     function onFormChange() {
         clearTimeout(previewTimer);
         previewTimer = setTimeout(refreshPreview, 600);
-        saveDraftToStorage();
         updateDirtyState();
+    }
+
+    function onBeforeUnload(event) {
+        if (!isDirty()) return;
+        event.preventDefault();
+        event.returnValue = 'unsaved';
+        return 'unsaved';
     }
 
     form.addEventListener('input', onFormChange);
     form.addEventListener('change', onFormChange);
+    window.addEventListener('beforeunload', onBeforeUnload);
 
     if (updateBtn) updateBtn.addEventListener('click', () => save());
     if (saveDraftBtn) saveDraftBtn.addEventListener('click', () => save('draft'));
     if (publishBtn) publishBtn.addEventListener('click', () => save('published'));
     headerSaveBtn.addEventListener('click', () => save());
 
-    restoreDraftFromStorage();
     updateDirtyState();
     refreshPreview();
 }

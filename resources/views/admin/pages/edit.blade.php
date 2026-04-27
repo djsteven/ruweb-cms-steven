@@ -24,7 +24,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     initEditorEngine({
         previewUrl: '{{ route('admin.pages.preview', $page) }}',
-        draftKey: 'page-draft-{{ $page->id }}',
         savedMsg: '{{ __('admin.saved_success') }}',
         errorMsg: '{{ __('admin.save_error') }}',
     });
