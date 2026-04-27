@@ -1,31 +1,33 @@
-# Git Guide for Client Projects
+# Git Guide For Reusable Starters
 
-## Creating a New Project from the Starter
+## Purpose
 
-To create a new client project based on Flaxt CMS **without forking** (keeping the repo independent from the start):
+This guide explains how to create an independent repository from a starter without keeping an unnecessary upstream coupling.
+
+## Creating A New Project From The Starter
 
 ```bash
 # 1. Clone the starter
-git clone git@github.com:your-username/flaxt-cms.git client-name
+git clone git@github.com:your-organization/starter-repo.git new-project
 
 # 2. Enter the directory
-cd client-name
+cd new-project
 
-# 3. Remove connection to the original repo
+# 3. Remove the original origin
 git remote remove origin
 
-# 4. Add the new client remote
-git remote add origin git@github.com:your-username/client-name.git
+# 4. Add the new project remote
+git remote add origin git@github.com:your-organization/new-project.git
 
-# 5. Initial push to the new repo
+# 5. Push the independent repository
 git push -u origin main
 ```
 
-## Why Not Use a Fork?
+## Why Not Use A Fork By Default
 
-- **Noise**: Cross-pull requests with the base repo
-- **Public visibility**: If the fork is public, client code gets exposed
-- **Confusion**: Makes it harder to identify which repo is the "real" one
-- **Dependency**: Maintains unwanted ties to the original project
+- It creates unnecessary coupling between the starter and the client or product repository.
+- It makes ownership and pull request flow less clear.
+- It may expose implementation history or metadata that should not follow the derived project.
+- It suggests an upstream synchronization model that many starter-based projects do not actually want.
 
-This workflow gives you a clean repo with all the starter's history, but **completely independent** from day one.
+Use a fork only when there is an explicit plan to keep syncing with the original repository.

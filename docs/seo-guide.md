@@ -1,191 +1,110 @@
 # SEO Guide
 
-This document covers SEO features built into Flaxt CMS and the conventions for keeping them working as the site grows.
+## Purpose
 
----
+This document defines the shared SEO conventions of the starter.
 
-## Sitemap XML
+Use it for:
 
-The CMS generates a dynamic sitemap at `/sitemap.xml`. It is built by `SitemapController` and cached for 60 minutes.
+- sitemap inclusion rules
+- metadata conventions
+- global analytics and verification tag placement
+- crawler-facing files such as `robots.txt`
 
-### What's included
+## Sitemap
 
-| URL | Priority | Changefreq |
-|-----|----------|------------|
-| `/` (homepage) | 1.0 | daily |
-| `/{slug}` (static pages) | 0.8 | weekly |
-| `/blog` (blog index) | 0.6 | daily |
-| `/blog/{slug}` (posts) | 0.5 | monthly |
+The application may expose a dynamic sitemap such as `/sitemap.xml`.
 
-Only **published** content appears (`status = 'published'` and `published_at <= now()`). Drafts are never included.
+Typical inclusion rules:
 
-### Cache
+- homepage
+- published pages
+- published collection indexes
+- published collection detail pages
 
-The sitemap XML is cached under the key `sitemap-xml` for 3600 seconds (60 minutes). To invalidate immediately after bulk changes, run:
+Only publicly visible content should appear in the sitemap.
 
-```php
-Cache::forget('sitemap-xml');
-```
+## Adding A Collection To The Sitemap
 
-or via Artisan:
+When a new public collection is introduced:
 
-```bash
-php artisan cache:clear
-```
+1. add its published query to the sitemap builder
+2. add its URL entries to the sitemap view or serializer
 
----
+Prerequisites usually include:
 
-## Adding a new collection to the sitemap
+- a published visibility scope or equivalent
+- a `slug`
+- an `updated_at` timestamp or another last-modified signal
 
-When you create a new collection (e.g., `products`), follow these two steps to include it in the sitemap.
+## Priority Conventions
 
-### Prerequisites
+Use stable, intention-revealing priorities.
 
-Your model must have:
-- A `published()` scope (see `collections-guide.md` — mandatory rule 4)
-- A `slug` column
-- An `updated_at` timestamp
-
-### Step 1 — Add the query in `SitemapController`
-
-Open `app/Http/Controllers/SitemapController.php` and add a query inside the `Cache::remember` closure:
-
-```php
-$products = \App\Models\Product::published()->latest('published_at')->get();
-```
-
-Pass it to the view:
-
-```php
-return view('sitemap.index', compact('homePage', 'pages', 'posts', 'latestPostDate', 'products'))->render();
-```
-
-### Step 2 — Add the URL block in the Blade view
-
-Open `resources/views/sitemap/index.blade.php` and add a new block before the closing `</urlset>` tag:
-
-```blade
-{{-- Products --}}
-@foreach($products as $product)
-<url>
-    <loc>{{ url('/products/' . $product->slug) }}</loc>
-    <lastmod>{{ $product->updated_at->toW3cString() }}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-</url>
-@endforeach
-```
-
-Adjust the URL prefix, `changefreq`, and `priority` to match the collection's content type.
-
-### Priority conventions
-
-Use these values as a guide:
+Example guidance:
 
 | Content type | Priority | Changefreq |
 |-------------|----------|------------|
 | Homepage | 1.0 | daily |
 | Top-level index pages | 0.8 | weekly |
-| Section indexes (e.g. `/blog`) | 0.6 | daily |
+| Section indexes | 0.6 | daily |
 | Individual detail pages | 0.5 | monthly |
 | Archived or low-priority content | 0.3 | yearly |
 
----
+## Metadata Model
 
-## Meta tags (per-page SEO)
+Public entities should support metadata overrides for:
 
-Every public-facing model uses `meta_json` to store per-item SEO overrides:
+- description
+- social title override
+- social description override
 
-```json
-{
-    "description": "Page description",
-    "og_title": "Social sharing title (optional)",
-    "og_description": "Social sharing description (optional)"
-}
-```
+These values should integrate with the shared SEO component and global fallbacks.
 
-These are rendered via `resources/views/components/seo-meta.blade.php`. The component also applies global site-level fallbacks from `settings`, including:
+Collections that render public detail pages should expose a metadata shape compatible with the rest of the system.
 
-- `site_name` — fallback page title and `og:site_name`
-- `site_description` — fallback meta description and `og:description`
-- `default_social_image` — fallback Open Graph / Twitter share image
-- `site_favicon` — favicon
-- canonical URL
-- Full Open Graph and Twitter card tags
+## Global Integrations
 
-See `content-model.md` for the full implementation.
+The shared SEO layer is also the correct place for global browser-side integrations such as:
 
-New collections must include a `meta_json` JSON column and a `meta(): array` accessor — see `collections-guide.md` rule 6.
+- analytics tags
+- advertising pixels
+- search verification tokens
 
----
+Guidelines:
 
-## Analytics and verification tags
+- store normalized IDs or tokens, not pasted arbitrary scripts
+- render them only on the public site unless there is a clear reason otherwise
+- keep the integration surface centralized
 
-The public SEO/meta component is also the centralized place where browser-side analytics and Search Console verification tags are injected when configured from the admin.
+## `robots.txt`
 
-### Admin-managed integrations
+The application should ship a crawler policy file that:
 
-The **Admin → Analytics** screen supports three values:
+- blocks non-public admin areas when appropriate
+- points crawlers to the sitemap URL
 
-- `google_tag_id`
-- `meta_pixel_id`
-- `search_console_verification_token`
+Default starter policy:
 
-The CMS stores only normalized IDs/tokens and generates the tags itself. It does **not** store or execute arbitrary pasted HTML/JavaScript snippets.
-
-### What gets rendered
-
-If configured, the public site renders:
-
-- **Google tag** in the public `<head>`
-- **Meta Pixel** base script in the public `<head>`
-- **Meta Pixel** `noscript` fallback in the public `<body>`
-- **Search Console** verification meta tag in the public `<head>`
-
-These integrations are rendered only on the public site layout. Admin pages do not include them.
-
-### Search Console guidance
-
-The Search Console field in the admin expects only the verification token from the HTML tag method, not the full `<meta>` tag. The CMS generates:
-
-```html
-<meta name="google-site-verification" content="YOUR_TOKEN" />
-```
-
-This is intended for **URL-prefix** verification.
-
-For broader ownership coverage across subdomains and protocol variants, prefer a **Domain property** verified through DNS. The admin UI includes a short DNS reminder, but DNS records are still managed outside the CMS.
-
-### Current scope and limitations
-
-- Google support is limited to the base Google tag bootstrap generated from the saved ID.
-- Meta support is limited to the base browser-side Meta Pixel bootstrap plus `PageView`.
-- Search Console support is limited to HTML-tag verification token injection.
-- Meta Conversions API / server-side events are **not** part of the current implementation.
-
----
-
-## robots.txt
-
-A `public/robots.txt` file controls crawler access. At minimum it should point to the sitemap:
-
-```
+```text
 User-agent: *
 Disallow: /admin/
 
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: /sitemap.xml
 ```
 
-Update the sitemap URL to match `APP_URL` before going live.
+## Checklist For A New Public Collection
 
----
+- [ ] It has a public visibility rule.
+- [ ] Its routes are registered before any page catch-all route.
+- [ ] It is included in the sitemap builder.
+- [ ] It exposes compatible metadata fields.
+- [ ] `robots.txt` does not accidentally block its URLs.
 
-## Checklist for a new collection
+## Scope Boundary
 
-- [ ] Model has `published()` scope and `slug` column
-- [ ] Public route registered before the `/{slug}` catch-all in `web.php`
-- [ ] Query added to `SitemapController`
-- [ ] URL block added to `sitemap/index.blade.php`
-- [ ] `meta_json` column + `meta()` accessor present on the model
-- [ ] Review whether the collection needs any custom analytics or verification behavior beyond the global tags
-- [ ] `robots.txt` does not accidentally block the collection's URLs
+This document should not become:
+
+- a per-controller implementation guide
+- a marketing analytics playbook
+- a list of one project's current third-party IDs

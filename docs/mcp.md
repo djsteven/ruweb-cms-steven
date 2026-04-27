@@ -1,88 +1,95 @@
 # MCP Integration
 
-## Overview
+## Purpose
 
-El CMS expone un servidor MCP real sobre HTTP que implementa el protocolo JSON-RPC 2.0.
-Cuando Claude (u otro agente) se conecta, el servidor describe automáticamente todas sus herramientas: nombre, descripción y esquema de parámetros. El agente usa esa información para decidir qué tool llamar y cuándo.
+This document describes the MCP surface exposed by the starter:
 
-Hay dos superficies disponibles:
+- authentication models
+- transport surfaces
+- tool discovery and invocation
+- extension points for adding new tools
 
-| Superficie | Base URL | Uso |
+It should stay focused on the integration contract, not on one specific connector vendor or one project instance.
+
+## Integration Surfaces
+
+The starter can expose two related surfaces:
+
+| Surface | Base URL | Typical use |
 |---|---|---|
-| **MCP Server (JSON-RPC 2.0)** | `POST /mcp/rpc` | Agentes (Claude, etc.) |
-| **REST API** | `GET/POST/PATCH /mcp/*` | Integraciones directas, scripts |
+| MCP Server (JSON-RPC 2.0) | `POST /mcp/rpc` | agents and MCP clients |
+| REST API | `GET/POST/PATCH/PUT/DELETE /mcp/*` | direct integrations and scripts |
 
-Ambas comparten el mismo middleware de autenticación y la misma lógica de negocio.
+These surfaces should share authentication and business rules whenever possible.
 
----
+## Authentication
 
-## Autenticación
+Typical authentication model:
 
-Hay dos mecanismos de autenticación, ambos usan el header `Authorization: Bearer <token>`.
+- `Authorization: Bearer <token>`
 
-### OAuth 2.0 (claude.ai custom connectors)
+Common approaches:
 
-El servidor implementa OAuth 2.0 Authorization Code + PKCE. Es el método requerido para conectar claude.ai como custom connector.
+### OAuth 2.0
 
-**Endpoints:**
+Useful when connecting external agent platforms that require delegated user authorization.
 
-| Endpoint | Descripción |
-|---|---|
-| `GET /.well-known/oauth-authorization-server` | Metadata de discovery |
-| `GET /authorize` | Pantalla de login (redirige desde claude.ai) |
-| `POST /authorize` | Procesa el login y emite un authorization code |
-| `POST /token` | Intercambia el code por un access token (válido 8 horas) |
+Typical endpoints:
 
-**Configuración en `.env`:**
+- `GET /.well-known/oauth-authorization-server`
+- `GET /authorize`
+- `POST /authorize`
+- `POST /token`
+
+Typical environment variables:
 
 ```env
-OAUTH_CLIENT_ID=<id que elegiste en claude.ai>
-OAUTH_CLIENT_SECRET=<secret que elegiste en claude.ai>
-OAUTH_ALLOWED_REDIRECT_URIS=https://claude.ai/api/mcp/auth_callback
+OAUTH_CLIENT_ID=...
+OAUTH_CLIENT_SECRET=...
+OAUTH_ALLOWED_REDIRECT_URIS=https://client.example.com/oauth/callback
 ```
 
-Los valores del client ID y secret se muestran en `Admin > Claude MCP` para copiarlos al configurar el connector en claude.ai.
+### API Key
 
-### API Key (clientes directos)
+Useful for direct system-to-system integrations.
 
-Cada usuario puede tener **una API key activa**, gestionada en `Admin > Profile`.
+Example:
 
 ```http
-Authorization: Bearer flaxt_mcp_xxx...
+Authorization: Bearer mcp_api_key_xxx
 ```
 
-- Generar una nueva key invalida la anterior.
-- Revocar la key elimina el acceso del agente de inmediato.
-- La key autentica al usuario propietario — el agente actúa con sus permisos.
+Guidelines:
 
-### Roles
+- key rotation should invalidate the previous key
+- the key should act with the permissions of its owner
+- revocation should remove access immediately
 
-| Operación | admin | editor |
-|---|---|---|
-| Leer pages, posts, media, settings, menus | ✓ | ✓ |
-| Crear/editar/publicar pages y posts | ✓ | ✓ |
-| Actualizar media y menus | ✓ | ✓ |
-| Crear/eliminar menus | ✓ | — |
-| Actualizar settings | ✓ | — |
+## Authorization
 
----
+The exact permission matrix depends on the project's roles and exposed resources. At minimum, document:
 
-## MCP Server (JSON-RPC 2.0)
+- which roles can read content
+- which roles can create or publish drafts
+- which roles can mutate settings or menus
+
+## MCP Server
 
 ### Endpoint
 
-```
+```text
 POST /mcp/rpc
 Content-Type: application/json
-Authorization: Bearer <api_key>
+Authorization: Bearer <token>
 ```
 
-### Protocolo
+### Protocol
 
-Todos los mensajes siguen JSON-RPC 2.0:
+Requests and responses follow JSON-RPC 2.0.
+
+Example:
 
 ```json
-// Request
 {
   "jsonrpc": "2.0",
   "id": 1,
@@ -92,249 +99,66 @@ Todos los mensajes siguen JSON-RPC 2.0:
     "arguments": { "status": "draft" }
   }
 }
-
-// Response
-{
-  "jsonrpc": "2.0",
-  "id": 1,
-  "result": {
-    "content": [
-      { "type": "text", "text": "{ ... }" }
-    ]
-  }
-}
 ```
 
-### Métodos disponibles
+### Core Methods
 
-| Método | Descripción |
-|---|---|
-| `initialize` | Handshake inicial. Devuelve `protocolVersion`, `capabilities` y `serverInfo`. |
-| `tools/list` | Devuelve todas las tools con su `inputSchema`. El agente lo llama una sola vez al conectarse. |
-| `tools/call` | Ejecuta una tool por nombre. |
+- `initialize`
+- `tools/list`
+- `tools/call`
 
-### Tools disponibles
+## Resource Groups
 
-#### Pages
-| Tool | Descripción | Admin | Editor |
-|---|---|---|---|
-| `pages_list` | Lista páginas con filtros de estado y búsqueda | ✓ | ✓ |
-| `pages_get` | Detalle completo con content_json | ✓ | ✓ |
-| `pages_create_draft` | Crea una página en draft | ✓ | ✓ |
-| `pages_update_draft` | Actualiza una página y la pone en draft | ✓ | ✓ |
-| `pages_publish` | Publica una página | ✓ | ✓ |
+Projects commonly expose tools for:
 
-#### Posts
-| Tool | Descripción | Admin | Editor |
-|---|---|---|---|
-| `posts_list` | Lista posts con filtros | ✓ | ✓ |
-| `posts_get` | Detalle completo con contenido | ✓ | ✓ |
-| `posts_create_draft` | Crea un post en draft | ✓ | ✓ |
-| `posts_update_draft` | Actualiza un post y lo pone en draft | ✓ | ✓ |
-| `posts_publish` | Publica un post | ✓ | ✓ |
+- pages
+- posts or collections
+- media
+- settings
+- menus
 
-#### Media
-| Tool | Descripción | Admin | Editor |
-|---|---|---|---|
-| `media_list` | Lista archivos con filtros de tipo y búsqueda | ✓ | ✓ |
-| `media_get` | Detalle con URL y metadatos | ✓ | ✓ |
-| `media_update_metadata` | Actualiza alt y título | ✓ | ✓ |
-
-#### Settings
-| Tool | Descripción | Admin | Editor |
-|---|---|---|---|
-| `settings_list` | Todos los settings agrupados | ✓ | ✓ |
-| `settings_get` | Valor de un setting por clave | ✓ | ✓ |
-| `settings_update` | Actualiza un setting (allowlist) | ✓ | — |
-
-#### Menus
-| Tool | Descripción | Admin | Editor |
-|---|---|---|---|
-| `menus_list` | Lista menús con cantidad de items | ✓ | ✓ |
-| `menus_get` | Árbol completo de items anidados | ✓ | ✓ |
-| `menus_create` | Crea un menú nuevo | ✓ | — |
-| `menus_update` | Actualiza nombre, slug o location | ✓ | ✓ |
-| `menus_sync_items` | Reemplaza todos los items de forma atómica | ✓ | ✓ |
-| `menus_delete` | Elimina un menú y sus items | ✓ | — |
-
----
+The exact tool list should be discoverable dynamically through `tools/list`. Avoid hardcoding assumptions in clients when discovery is available.
 
 ## REST API
 
-Las rutas REST siguen disponibles para integraciones directas.
+REST endpoints may remain available for direct integrations. If both MCP and REST exist, keep them aligned in:
 
-### Pages
-- `GET /mcp/pages`
-- `GET /mcp/pages/{page}`
-- `POST /mcp/pages/drafts`
-- `PATCH /mcp/pages/{page}/draft`
-- `POST /mcp/pages/{page}/publish`
+- authentication
+- authorization
+- serialization shape
+- validation rules
 
-### Posts
-- `GET /mcp/posts`
-- `GET /mcp/posts/{post}`
-- `POST /mcp/posts/drafts`
-- `PATCH /mcp/posts/{post}/draft`
-- `POST /mcp/posts/{post}/publish`
+## Writable Settings Allowlist
 
-### Media
-- `GET /mcp/media`
-- `GET /mcp/media/{media}`
-- `PATCH /mcp/media/{media}/metadata`
+If settings can be mutated through MCP, document and enforce an allowlist in configuration rather than allowing arbitrary key writes.
 
-### Settings
-- `GET /mcp/settings`
-- `GET /mcp/settings/{key}`
-- `PATCH /mcp/settings/{key}` (admin only, allowlist)
-
-### Menus
-- `GET /mcp/menus`
-- `GET /mcp/menus/{menu}`
-- `POST /mcp/menus` (admin only)
-- `PATCH /mcp/menus/{menu}`
-- `PUT /mcp/menus/{menu}/items`
-- `DELETE /mcp/menus/{menu}` (admin only)
-
-### Settings Update Allowlist
-
-Las claves editables por MCP se configuran en `config/cms.php`:
+Example:
 
 ```php
 'mcp' => [
-    'settings_writable_keys' => ['site.name', 'site.description', ...],
+    'settings_writable_keys' => ['site_name', 'site_description'],
 ],
 ```
 
----
+## Extending The MCP Surface
 
-## Extender el MCP
+Adding a new MCP tool usually requires three steps:
 
-Para agregar nuevas herramientas al MCP server seguís tres pasos. No hay que tocar nada del protocolo.
+1. implement the business logic in the controller or service layer
+2. register the tool definition in the tool registry
+3. route the tool call through the MCP server dispatcher
 
-### 1. Implementar la lógica en `McpController`
+Typical implementation concerns:
 
-Agregá los métodos de negocio en `app/Http/Controllers/McpController.php`, siguiendo el patrón existente: validación con `Validator::make`, autorización con `$this->authorize()` o `$this->authorizeCmsEditor()`, y serialización con un método `serialize*` dedicado.
+- validate inputs explicitly
+- authorize before reading or mutating data
+- serialize responses through dedicated helpers
+- keep tool descriptions clear enough for agents to choose them correctly
 
-```php
-// McpController.php
-public function commentsList(Request $request): JsonResponse
-{
-    $this->authorizeCmsEditor($request);
+## Scope Boundary
 
-    $comments = Comment::query()->latest()->paginate(20);
+This document should not become:
 
-    return response()->json([
-        'data' => $comments->getCollection()->map(fn ($c) => $this->serializeComment($c))->values(),
-        'meta' => [ /* paginación */ ],
-    ]);
-}
-
-protected function serializeComment(Comment $comment): array
-{
-    return [
-        'id'      => $comment->id,
-        'body'    => $comment->body,
-        // ...
-    ];
-}
-```
-
-### 2. Registrar las tools en `ToolRegistry`
-
-Agregá un método privado en `app/Mcp/ToolRegistry.php` y sumalo al array de `all()`:
-
-```php
-// ToolRegistry.php
-
-public static function all(): array
-{
-    return [
-        ...self::pageTools(),
-        ...self::postTools(),
-        // ...
-        ...self::commentTools(), // ← agregar acá
-    ];
-}
-
-private static function commentTools(): array
-{
-    return [
-        [
-            'name'        => 'comments_list',
-            'description' => 'Lista los comentarios del blog. El agente usa esta descripción para saber cuándo llamar la tool.',
-            'inputSchema' => [
-                'type'       => 'object',
-                'properties' => [
-                    'post_id' => ['type' => 'integer', 'description' => 'Filtrar por post.'],
-                ],
-            ],
-        ],
-    ];
-}
-```
-
-**Las descripciones son las instrucciones del agente.** Cuanto más específicas, mejor decide Claude cuándo y cómo usar cada tool.
-
-### 3. Agregar el handler en `McpServerController`
-
-En `app/Http/Controllers/McpServerController.php`, sumá la entrada al array de `resolveHandler()`:
-
-```php
-// McpServerController.php — dentro de resolveHandler()
-
-'comments_list' => fn ($req, $args) =>
-    $this->mcp->commentsList($this->synth($req, $args)),
-
-// Si la tool necesita un modelo por ID:
-'comments_get' => fn ($req, $args) =>
-    $this->mcp->commentsGet(
-        $this->synth($req),
-        Comment::findOrFail($args['comment_id'])
-    ),
-```
-
-El helper `synth()` crea un `Request` sintético con los argumentos del agente y el usuario autenticado del request original. El helper `without()` elimina los IDs de ruta del body antes de pasarlo al controller.
-
-### Resumen
-
-```
-Nueva feature
-    │
-    ├─ app/Http/Controllers/McpController.php   → lógica + serialización
-    ├─ app/Mcp/ToolRegistry.php                  → definición + inputSchema
-    └─ app/Http/Controllers/McpServerController.php → dispatch handler
-```
-
----
-
-## Ejemplo rápido
-
-```bash
-# Handshake
-curl -X POST http://localhost:8000/mcp/rpc \
-  -H "Authorization: Bearer $MCP_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}'
-
-# Ver tools disponibles
-curl -X POST http://localhost:8000/mcp/rpc \
-  -H "Authorization: Bearer $MCP_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}'
-
-# Llamar una tool
-curl -X POST http://localhost:8000/mcp/rpc \
-  -H "Authorization: Bearer $MCP_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "id": 3,
-    "method": "tools/call",
-    "params": {
-      "name": "pages_list",
-      "arguments": { "status": "draft" }
-    }
-  }'
-```
-
-> `$MCP_API_KEY` puede ser tanto una API key del perfil (`flaxt_mcp_xxx`) como un OAuth access token emitido por el flujo de claude.ai.
+- a vendor-specific setup note
+- a complete API reference for every resource
+- a deployment guide

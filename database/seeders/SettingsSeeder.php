@@ -17,10 +17,13 @@ class SettingsSeeder extends Seeder
             ['key' => 'default_social_image',   'value' => null,               'type' => 'media',  'group' => 'general', 'options' => null],
             ['key' => 'homepage_slug',          'value' => 'inicio',           'type' => 'select', 'group' => 'general', 'options' => []],
             ['key' => 'admin_locale',           'value' => 'es',               'type' => 'select', 'group' => 'admin',   'options' => ['es' => 'Español', 'en' => 'English']],
-            ['key' => 'mail_enabled',           'value' => '0',                'type' => 'boolean','group' => 'email',   'options' => null],
-            ['key' => 'brevo_api_key',          'value' => null,               'type' => 'password','group' => 'email',  'options' => null],
+            ['key' => 'mail_enabled',           'value' => '0',                'type' => 'boolean', 'group' => 'email',     'options' => null],
+            ['key' => 'brevo_api_key',          'value' => null,               'type' => 'password', 'group' => 'email',    'options' => null],
             ['key' => 'mail_from_address',      'value' => null,               'type' => 'string', 'group' => 'email',   'options' => null],
             ['key' => 'mail_from_name',         'value' => null,               'type' => 'string', 'group' => 'email',   'options' => null],
+            ['key' => 'google_tag_id',          'value' => null,               'type' => 'string', 'group' => 'analytics', 'options' => null],
+            ['key' => 'meta_pixel_id',          'value' => null,               'type' => 'string', 'group' => 'analytics', 'options' => null],
+            ['key' => 'search_console_verification_token', 'value' => null,     'type' => 'string', 'group' => 'analytics', 'options' => null],
         ];
 
         foreach ($settings as $setting) {

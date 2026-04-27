@@ -1,91 +1,106 @@
-# Deploy en cPanel (flaxt.alemany.dev)
+# Deploy On cPanel
 
-## Requisitos
-- PHP 8.3+ (usar MultiPHP Manager en cPanel)
-- MySQL
-- Acceso a Terminal de cPanel
+## Purpose
 
-## Estructura de carpetas
-El proyecto va directamente en la carpeta del subdominio (al mismo nivel que `public_html`):
-```
-home/zncjmgrc/
+This guide documents a generic cPanel deployment for the starter. Replace placeholder values with the values of the target project and hosting account.
+
+## Assumptions
+
+- PHP 8.3 or newer is available
+- MySQL is available
+- cPanel Terminal access is enabled
+- the domain or subdomain points its document root to the project's `public/` directory
+- required PHP extensions are enabled, including `pdo_mysql`, `mbstring`, `xml`, `fileinfo`, `gd` with WebP support, `zip`, `ctype`, and `openssl`
+
+## Folder Layout
+
+Typical layout:
+
+```text
+/home/ACCOUNT_NAME/
 ├── public_html/
-└── flaxt.alemany.dev/   ← raíz del proyecto
+└── PROJECT_DIRECTORY/
     ├── app/
-    ├── public/          ← document root del subdominio
+    ├── public/
     └── ...
 ```
 
-En cPanel → Domains, el document root del subdominio debe apuntar a:
-```
-/home/zncjmgrc/flaxt.alemany.dev/public
+The domain or subdomain document root should point to:
+
+```text
+/home/ACCOUNT_NAME/PROJECT_DIRECTORY/public
 ```
 
-## Pasos de deploy
+## Deployment Steps
 
-### 1. Preparar localmente
+### 1. Build frontend assets
+
 ```bash
 npm run build
 ```
-Subir todo el proyecto **excepto** `node_modules/` al servidor (zip o FTP).
 
-### 2. PHP en la Terminal
-El PHP del sistema puede ser viejo. Usar el binario de cPanel:
+### 2. Upload project files
+
+Upload the project without transient dependencies such as `node_modules/`.
+
+### 3. Use the hosting PHP binary
+
+Some cPanel environments expose a system PHP version that differs from the selected site version. Confirm the correct binary before running composer or artisan commands.
+
+Example:
+
 ```bash
-alias php=/opt/cpanel/ea-php83/root/usr/bin/php
-php -v  # verificar 8.3+
+alias php=/path/to/cpanel/php
+php -v
 ```
 
-### 3. Instalar dependencias
-El `composer.lock` generado con PHP 8.4 no es compatible con 8.3. Hay que actualizar en el servidor:
-```bash
-php /opt/cpanel/composer/bin/composer update --no-dev --optimize-autoloader
-```
-Esto hace downgrade de Symfony 8.x → 7.x compatible con PHP 8.3.
+### 4. Install dependencies
 
-### 4. Configurar .env
+Prefer:
+
 ```bash
-cp .env.example .env
-nano .env
+composer install --no-dev --optimize-autoloader
 ```
-Valores requeridos:
+
+Use `composer update` only when the lock file is intentionally being regenerated for the target runtime.
+
+### 5. Configure `.env`
+
+Minimum production values:
+
 ```env
 APP_ENV=production
 APP_DEBUG=false
-APP_URL=https://flaxt.alemany.dev
+APP_URL=https://example.com
 DB_CONNECTION=mysql
 DB_HOST=localhost
-DB_DATABASE=zncjmgrc_flaxt
-DB_USERNAME=zncjmgrc_flaxt
+DB_DATABASE=project_database
+DB_USERNAME=project_user
 DB_PASSWORD=...
 ```
-> Nota: `DB_CONNECTION=mysql` es obligatorio, sin él Laravel usa SQLite por defecto.
 
-### 5. Comandos finales
+### 6. Run application setup commands
+
 ```bash
 php artisan key:generate
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
 php artisan migrate --force
 php artisan db:seed
 php artisan storage:link
-mkdir -p storage/app/public/media
-chmod -R 755 storage bootstrap/cache storage/app/public
+php artisan optimize
 ```
 
-## Credenciales admin por defecto
-- Email: `admin@flaxt.local`
-- Password: `password`
+Run only the commands that are appropriate for the environment. For example, skip `db:seed` if production seeding is not desired.
 
-Configurables vía `.env`:
-```env
-CMS_ADMIN_NAME=Admin
-CMS_ADMIN_EMAIL=admin@flaxt.local
-CMS_ADMIN_PASSWORD=password
-```
+### 7. Fix writable permissions
 
-## Notas
-- El alias `php` solo dura la sesión de terminal. Repetirlo en cada sesión nueva.
-- El composer de cPanel está en `/opt/cpanel/composer/bin/composer`.
-- Al actualizar código: subir archivos, correr `composer install` (no update) y `php artisan optimize`.
+Ensure the web server can write to:
+
+- `storage/`
+- `bootstrap/cache/`
+
+## Operational Notes
+
+- The PHP alias may last only for the current shell session.
+- Keep deployment commands consistent between environments.
+- Re-deploys should generally use `composer install`, not `composer update`.
+- Avoid embedding account names, real domains, or credentials in this guide.

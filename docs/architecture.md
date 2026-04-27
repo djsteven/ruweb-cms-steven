@@ -1,88 +1,68 @@
 # Architecture
 
-## Project Structure
+## Purpose
 
-```
+This document describes the starter at a system level: major folders, request flow, and architectural boundaries.
+
+It should stay intentionally high-level. Detailed behavior belongs in the topic-specific guides.
+
+## Typical Project Structure
+
+```text
 app/
-├── Console/Commands/       # Artisan commands (cms:install, mail:test)
-├── Helpers/                # Static helper classes (ContentHelper)
-├── Http/
-│   ├── Controllers/
-│   │   ├── Admin/          # Admin CRUD controllers (pages, media, posts, settings)
-│   │   │   └── Auth/       # Login, ForgotPassword, ResetPassword controllers
-│   │   ├── BlogController  # Public blog archive/single rendering
-│   │   └── PageController  # Public page rendering
-│   ├── Middleware/          # RoleMiddleware
-│   └── Requests/           # FormRequest validation classes
-├── Mail/
-│   ├── Transport/
-│   │   └── BrevoTransport.php  # Custom Symfony Mailer transport for Brevo HTTP API
-│   └── UserWelcome.php         # Welcome email with credentials sent on user creation
-├── Models/                 # Eloquent models (User, Media, Page, Post, Setting)
-├── Providers/
-│   ├── AppServiceProvider.php         # Gates, view composers, password reset URL override
-│   └── BrevoMailServiceProvider.php   # Registers brevo driver; reads config from DB at runtime
-└── Traits/                 # Reusable traits (HasMedia)
-
 config/
-└── cms.php                 # CMS configuration (upload, templates, statuses, roles)
-
 database/
-├── migrations/             # Table schemas
-├── seeders/                # Admin user and default settings
-└── factories/              # Test factories
-
-resources/views/
-├── admin/                  # Admin panel views
-│   ├── auth/               # Login, forgot-password, reset-password
-│   ├── layouts/            # Admin layouts (app, guest)
-│   ├── pages/              # Pages CRUD views
-│   ├── media/              # Media manager views
-│   ├── settings/           # Settings form + _email_instructions partial
-│   └── partials/           # Sidebar, alerts
-├── components/             # Blade components (seo-meta)
-├── emails/                 # Transactional email templates (user-welcome)
-├── layouts/                # Public layout
-├── partials/               # Public header, footer
-├── templates/              # Page templates (default, home)
-└── errors/                 # Error pages (403, 404, 500)
-
+public/
+resources/
 routes/
-├── web.php                 # Public routes (home, catch-all slug)
-└── admin.php               # Admin routes (/admin prefix)
+tests/
 ```
 
-## Request Lifecycle
+Typical responsibilities:
 
-### Public Request
+- `app/` — domain models, controllers, requests, policies, traits, services
+- `config/` — framework and starter configuration
+- `database/` — migrations, seeders, factories
+- `resources/` — Blade views and frontend assets
+- `lang/` — translation files
+- `routes/` — public, admin, and integration routes
+- `tests/` — feature and unit coverage
 
-1. Request hits `routes/web.php`
-2. `PageController::show()` finds the `Page` by slug using the `published` scope
-3. `Page::resolveTemplate()` maps `template_key` to a Blade view in `resources/views/templates/`
-4. The view extends `layouts.public`, which includes the SEO meta component and header/footer partials
-5. The view composer on `layouts.public` shares global settings (site name and logo)
+## Request Flows
 
-### Public Blog Request
+### Public Page Request
 
-1. Request hits `routes/web.php` on `/blog` or `/blog/{slug}`
-2. `BlogController::index()` paginates published posts
-3. `BlogController::show()` resolves a published post by slug
-4. Blog views extend `layouts.public` and reuse shared settings and SEO component
+1. The request hits a public route.
+2. The application resolves the requested entity, usually by slug.
+3. The entity selects a template or view.
+4. The server renders the public layout with shared settings, SEO helpers, and content data.
+
+### Public Collection Request
+
+1. The request hits an explicit collection route.
+2. The controller queries published collection entries.
+3. The server renders list or detail views using the shared public layout.
 
 ### Admin Request
 
-1. Request hits `routes/admin.php` (prefix `/admin`)
-2. Middleware chain: `auth` → `role:admin,editor`
-3. Controller handles CRUD and returns a view extending `admin.layouts.app`
-4. Admin layout includes sidebar navigation and alert partials
+1. The request hits an admin-prefixed route group.
+2. Authentication and authorization middleware run first.
+3. The controller returns an admin layout or JSON response.
+4. Editing flows may use the shared live editor when preview is required.
 
-## Key Patterns
+## Core Patterns
 
-- **HasMedia trait**: Provides polymorphic many-to-many media relationships to any model via the `mediables` pivot table
-- **FormRequest classes**: All validation is declarative in dedicated request classes
-- **JSON content model**: Pages store structured content in a `content_json` column with `meta` and `sections` keys
-- **Collection reference model**: Blog posts store content in first-class fields (`excerpt`, `content`) and optional `meta_json`
-- **Template resolution**: `template_key` on a page maps to `resources/views/templates/{key}.blade.php`
-- **Settings as key-value**: Global settings use a `settings` table with type-aware casting and in-memory request cache
-- **Role hardening with policy**: `PostPolicy` centralizes admin/editor permissions for blog CRUD
-- **Maintenance commands**: `cms:user:reset-password` and `cms:media:audit-orphans` support common operational tasks
+- Structured content is stored separately from template code.
+- Content-managed media goes through the shared media subsystem.
+- Collections reuse shared concerns such as publication state, taxonomies, and SEO metadata.
+- Views stay focused on presentation; validation and persistence stay in request classes, models, and controllers.
+- Operational integrations such as MCP or deployment workflows are documented separately from the core architecture.
+
+## Scope Boundary
+
+This document should not become:
+
+- a deployment guide
+- a per-entity rulebook
+- a product roadmap
+- a file-by-file inventory of one specific project instance

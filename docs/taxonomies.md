@@ -1,6 +1,6 @@
 # Taxonomy System
 
-Flaxt CMS includes a generic, reusable taxonomy system for classifying content. It is modelled after the `media`/`mediables` polymorphic pattern already present in the project.
+This starter includes a generic, reusable taxonomy system for classifying content. It is modelled after the shared polymorphic relationship patterns already present in the project.
 
 ---
 
@@ -74,7 +74,7 @@ $post->categories();                    // shorthand for taxonomiesByType('categ
 $post->syncTaxonomies([1, 3], 'category'); // replace this model's categories
 ```
 
-`syncTaxonomies` only touches terms of the given type, leaving other types untouched.
+`syncTaxonomies` only removes existing terms of the given type, leaving other types untouched. Callers should validate that incoming IDs belong to the intended type before syncing.
 
 ---
 
@@ -136,9 +136,19 @@ Post::published()
     ->latest('published_at')
     ->paginate(10);
 
-// All categories that have at least one published post
+// All categories attached to at least one published post
+$categoryIds = Post::published()
+    ->whereHas('taxonomies', fn ($q) => $q->where('type', 'category'))
+    ->with('taxonomies')
+    ->get()
+    ->flatMap(fn ($post) => $post->taxonomies->where('type', 'category')->pluck('id'))
+    ->unique()
+    ->values();
+
 Taxonomy::ofType('category')
-    ->whereHas('taxables', fn ($q) => $q->where('taxable_type', Post::class))
+    ->whereIn('id', $categoryIds)
     ->ordered()
     ->get();
 ```
+
+The base `Taxonomy` model does not currently define an inverse `taxables` relation, so public queries should go through the content model relationship unless the project intentionally adds that inverse relation.

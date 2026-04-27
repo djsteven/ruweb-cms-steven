@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePostRequest extends FormRequest
 {
@@ -26,7 +27,7 @@ class StorePostRequest extends FormRequest
             'meta_json.og_title' => ['nullable', 'string', 'max:255'],
             'meta_json.og_description' => ['nullable', 'string', 'max:320'],
             'categories' => ['nullable', 'array'],
-            'categories.*' => ['integer', 'exists:taxonomies,id'],
+            'categories.*' => ['integer', Rule::exists('taxonomies', 'id')->where('type', 'category')],
         ];
     }
 }

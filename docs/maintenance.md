@@ -1,71 +1,83 @@
 # Maintenance Commands
 
-Phase 4 adds operational commands for common maintenance tasks.
+## Purpose
 
-## Send test email
+This document lists recurring operational commands and how to think about their use.
+
+It should stay focused on maintenance workflows, not implementation history.
+
+## Typical Maintenance Areas
+
+- email delivery verification
+- credential recovery or password reset
+- orphaned media auditing
+- image optimization and variant generation
+- media health auditing
+
+Initial project setup is handled by `php artisan cms:install`. This guide focuses on recurring operational commands after installation.
+
+## Send A Test Email
 
 ```bash
 php artisan mail:test {email}
 ```
 
-- Sends a test email via the configured Brevo mailer
-- Reads API key and from-address from DB settings (falls back to `.env`)
-- Useful for verifying Brevo configuration from the CLI without going through the admin UI
+Use this to verify outbound email configuration without going through the admin UI.
 
----
-
-## Reset user password
+## Reset A User Password
 
 ```bash
 php artisan cms:user:reset-password {email?}
 ```
 
-- Resets password for an existing admin/editor user
-- You can pass email as argument or enter it interactively
-- Enforces minimum length of 8 chars
+Use this when an administrator or editor needs a controlled password reset from the command line.
 
-## Audit orphaned media
+## Audit Orphaned Media
 
 ```bash
 php artisan cms:media:audit-orphans
 ```
 
-- Lists media records not referenced by `mediables`
-- Excludes media IDs currently used by settings of type `media`
+Use this to find media records that are no longer referenced by the application.
 
-To remove them:
+If the command supports deletion, review output carefully before using destructive flags such as `--delete`.
 
-```bash
-php artisan cms:media:audit-orphans --delete
-```
+## Image Optimization Workflow
 
-- Deletes both physical file and DB record for each orphan
-- Review output table before using `--delete`
-
-## Image optimization workflow
-
-Run these commands in order, never in parallel:
+Typical sequence:
 
 ```bash
 php artisan media:convert-webp
 php artisan media:generate-variants
 ```
 
-Dry-run support:
+Guideline:
 
-```bash
-php artisan media:convert-webp --dry-run
-php artisan media:generate-variants --dry-run
-```
+- run sequentially, not in parallel
 
-Force-regenerate responsive variants:
+Useful options may include:
 
-```bash
-php artisan media:generate-variants --force
-```
+- `--dry-run`
+- `--force`
 
-Audit live media health (DB + storage):
+## Audit Media Health
 
 ```bash
 php artisan media:audit-health
 ```
+
+Use this to compare database state and physical storage state for media assets.
+
+## Operational Guidance
+
+- prefer dry-run modes when available
+- review output before destructive operations
+- document environment-specific differences outside this file
+
+## Scope Boundary
+
+This document should not become:
+
+- a deployment guide
+- a troubleshooting log for one environment
+- a changelog of when commands were introduced

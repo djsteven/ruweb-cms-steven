@@ -1,63 +1,123 @@
 # Content Model
 
-## Overview
+## Purpose
 
-Each page stores its content in a `content_json` column (MySQL JSON type). This column has two top-level keys: `meta` and `sections`.
+This document defines the canonical shape of structured content stored in a JSON column such as `content_json`. It is the source of truth for data shape only.
 
-## Structure
+Use this document to understand:
+
+- which top-level keys exist
+- which fields are reserved
+- how section payloads are organized
+
+Do not use this document for template registration, page lifecycle, or editor behavior. Those topics live in `docs/templates.md`, `docs/pages-guide.md`, and `docs/live-editor.md`.
+
+## Canonical Shape
 
 ```json
 {
     "meta": {
+        "title": "Optional page title override",
         "description": "Page description for search engines",
-        "og_title": "Optional override for social sharing title",
-        "og_description": "Optional override for social sharing description"
+        "og_title": "Optional social sharing title override",
+        "og_description": "Optional social sharing description override",
+        "featured_image": 42
     },
     "sections": {
         "hero": {
             "is_visible": 1,
-            "heading": "Welcome to our site",
-            "body": "A brief introduction..."
+            "heading": "Welcome",
+            "body": "A short introduction."
         },
         "features": {
             "is_visible": 0,
             "heading": "What we offer",
-            "body": "Feature descriptions..."
+            "body": "Feature descriptions."
         }
     }
 }
 ```
 
+## Top-Level Keys
+
+Only two top-level keys are part of the standard structured content contract:
+
+- `meta`
+- `sections`
+
+Do not introduce additional top-level keys unless the project intentionally defines a different contract and documents it separately.
+
 ## Meta Block
 
-The `meta` block unifies SEO and social sharing metadata:
+The `meta` block stores SEO and social-sharing values.
 
-| Field | Purpose | Fallback |
-|-------|---------|----------|
-| `description` | Meta description tag | `site_description` setting |
-| `og_title` | Open Graph / Twitter title | Page `title` field → `site_name` setting |
-| `og_description` | Open Graph / Twitter description | `description` → `site_description` setting |
+| Field | Purpose | Typical fallback |
+|-------|---------|------------------|
+| `title` | Optional title override for meta output | Entity title or site name |
+| `description` | Meta description tag | Global site description setting |
+| `og_title` | Open Graph / social title override | Entity title |
+| `og_description` | Open Graph / social description override | `description` |
+| `featured_image` | Optional social image media identifier | Global default social image setting |
 
-The page `title` (database column, not inside `content_json`) is the primary title. `og_title` only needs to be set when you want a different title for social sharing.
+Notes:
 
-### Featured Image
-
-The featured image is not stored inside `content_json`. It uses the polymorphic `mediables` relationship with collection `'featured_image'`. Access it via `$page->featuredImage()`.
+- The primary title should remain in the entity's first-class column such as `title`; use `meta.title` only when the SEO/browser title intentionally differs.
+- `og_title` should be populated only when the social title differs from the main title.
+- Featured or social images should be resolved through the media system. Store media identifiers, not raw URLs.
+- Entity-level featured images should stay in the shared media relationship. `meta.featured_image` is for an explicit social image override.
 
 ## Sections Block
 
-Each key in `sections` corresponds to a template section. The available sections are defined per template in `config/cms.php`:
+The `sections` object stores all editable presentation content keyed by logical section name.
 
-```php
-'templates' => [
-    'home' => [
-        'name' => 'Homepage',
-        'sections' => ['hero', 'features', 'cta'],
-    ],
-],
+Example:
+
+```json
+{
+    "sections": {
+        "hero": {
+            "is_visible": 1,
+            "heading": "Welcome",
+            "body": "Short introduction",
+            "image_id": 42
+        },
+        "faq": {
+            "is_visible": 1,
+            "heading": "Frequently asked questions",
+            "items": [
+                { "question": "Question A", "answer": "Answer A" }
+            ]
+        }
+    }
+}
 ```
 
-Every section object has a mandatory `is_visible` field (integer `0` or `1`). The admin form renders a toggle switch for it automatically. Blade templates must always gate section output behind this flag:
+Rules:
+
+- Each section key must match a section expected by the selected template.
+- Each section should include `is_visible`.
+- Additional keys are allowed inside a section when required by the template.
+- Media references inside sections should store media identifiers such as `image_id`, not file paths or external URLs.
+
+## Visibility Contract
+
+`is_visible` is the standard section visibility flag.
+
+- `1` means the section may render.
+- `0` means the section must not render.
+- If a section omits the field, templates should usually treat it as visible by default.
+
+## Access Pattern
+
+Typical server-side access:
+
+```php
+$meta = $entity->meta();
+$sections = $entity->sections();
+$hero = $sections['hero'] ?? [];
+```
+
+Typical template guard:
 
 ```blade
 @if(($hero['is_visible'] ?? 1) && ($hero['heading'] ?? null))
@@ -65,28 +125,11 @@ Every section object has a mandatory `is_visible` field (integer `0` or `1`). Th
 @endif
 ```
 
-Default to `1` when the field is absent (`?? 1`) so new sections appear by default.
+## Non-Goals
 
-Beyond `is_visible`, the default admin form provides `heading` and `body` fields per section. You can extend sections with any additional fields your template needs.
+This document does not define:
 
-## SEO Fallback Chain
-
-The `ContentHelper` class and `seo-meta` Blade component implement this fallback chain:
-
-- **Title**: `og_title` → page `title` → `site_name` setting
-- **Description**: `og_description` → `description` → `site_description` setting
-- **Image**: Featured image media URL (via `mediables` relationship) → `default_social_image` setting
-
-## Accessing Content in Templates
-
-```blade
-{{-- In a Blade template --}}
-@php
-    $meta = $page->meta();
-    $sections = $page->sections();
-    $hero = $sections['hero'] ?? [];
-@endphp
-
-<h1>{{ $hero['heading'] ?? '' }}</h1>
-<p>{{ $hero['body'] ?? '' }}</p>
-```
+- how templates are registered
+- how page routes are resolved
+- how the admin editor works
+- how collections implement first-class columns such as `excerpt` or `content`

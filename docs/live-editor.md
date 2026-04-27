@@ -1,115 +1,108 @@
 # Live Editor Engine
 
-The live editor is the core editorial UX of Flaxt CMS. Pages, posts, and future collections should use the same editor shell and runtime behavior.
+## Purpose
 
----
+The live editor is the shared editorial shell for content types that need side-by-side editing and preview.
 
-## Architecture
+This document defines the editor contract only:
 
+- shared shell pieces
+- runtime API
+- required DOM hooks
+- backend expectations
+
+## Shared Pieces
+
+```text
+resources/views/admin/layouts/editor.blade.php
+resources/js/editor-engine.js
+resources/views/admin/partials/_editor-footer.blade.php
 ```
-resources/views/admin/layouts/editor.blade.php    ← shared shell (top bar, edit pane, preview pane, viewports, toast)
-resources/js/editor-engine.js                      ← shared runtime (dirty state, draft storage, preview, async save)
-resources/views/admin/partials/_editor-footer.blade.php ← shared footer actions
-```
 
-The `edit.blade.php` for each content type should only provide:
-- form include
-- optional top-right actions (e.g. "view live")
-- editor engine config (preview URL + draft key + messages)
+Each content type should provide:
 
----
+- the form partial
+- optional header actions
+- editor engine configuration
 
 ## `initEditorEngine(config)`
 
 Export: `initEditorEngine(config)`
 
-Config:
-
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `previewUrl` | `string` | POST endpoint returning rendered HTML preview |
-| `draftKey` | `string` | localStorage key for editor draft |
-| `savedMsg` | `string` | Toast message for successful save |
-| `errorMsg` | `string` | Toast message for failed save |
+| `previewUrl` | `string` | POST endpoint that returns rendered HTML |
+| `savedMsg` | `string` | success toast message |
+| `errorMsg` | `string` | error toast message |
 
 Behavior:
-1. Builds form snapshots (ignores `_token` and `_method`).
-2. Computes dirty state and enables/disables save controls.
-3. Saves/restores drafts in localStorage.
-4. Refreshes preview with debounced POST (600ms).
-5. Saves asynchronously with `Accept: application/json`.
-6. Supports `status` override for draft/publish buttons.
-7. Preserves iframe scroll position across preview refreshes.
 
-DOM contract:
-- required: `#editor-form`, `#save-btn`
-- required when preview is enabled: `#preview-frame`
-- optional footer controls: `#update-btn`, `#save-draft-btn`, `#publish-btn`
+1. Builds form snapshots.
+2. Tracks dirty state.
+3. Refreshes preview with debounce.
+4. Saves asynchronously using JSON-aware requests.
+5. Supports draft and publish actions when configured.
+6. Preserves preview scroll position during refresh.
+7. Warns before leaving a dirty form.
 
----
+The current engine does not persist unsaved local drafts to `localStorage`. Draft state is represented by the model status and saved through the normal form endpoint.
+
+## DOM Contract
+
+Required:
+
+- `#editor-form`
+- `#save-btn`
+
+Required when preview is enabled:
+
+- `#preview-frame`
+
+Optional:
+
+- `#update-btn`
+- `#save-draft-btn`
+- `#publish-btn`
 
 ## Shared Footer Partial
-
-Path: `resources/views/admin/partials/_editor-footer.blade.php`
 
 Usage:
 
 ```blade
 @section('editor-footer')
-    @include('admin.partials._editor-footer', ['model' => $page])
+    @include('admin.partials._editor-footer', ['model' => $model])
 @endsection
 ```
 
-Requirements:
-- `$model->isPublished()` must exist.
+Expectation:
 
-Output:
-- published content: one `Save changes` button (`#update-btn`)
-- draft content: `Save draft` (`#save-draft-btn`) and `Publish` (`#publish-btn`)
-
----
+- `$model->isPublished()` should exist or an equivalent helper should be supplied
 
 ## Preview Viewports
 
-The shared editor layout provides three preview modes:
-- `desktop`
-- `tablet`
-- `mobile`
+The shared editor layout provides built-in preview modes:
 
-Switching mode updates iframe dimensions in-place:
-- desktop: full available width/height
-- tablet: fixed medium portrait frame
-- mobile: fixed narrow portrait frame
+- desktop
+- tablet
+- mobile
 
-Because viewports live in `admin.layouts.editor`, pages/posts/collections inherit them automatically.
-
----
-
-## Pages Content UX: Shared Sections + Accordions
-
-`admin/pages/_form.blade.php` now treats template sections as shared keys:
-- one rendered block per section key
-- section block tagged with all template keys using `data-templates`
-- template switch only shows blocks that include the selected template key
-
-This avoids duplicate inputs when switching between templates that share the same sections (e.g. `home` and `home-alt`).
-
-Content sections in the `Content` tab are rendered as accordions:
-- all sections start collapsed
-- multiple sections can stay open at the same time
-- collapsed row shows only:
-  - section title
-  - visibility switch
-
-If section-specific partials are used in the future (`admin/pages/sections/{template}_{section}.blade.php`), the form resolves a fallback partial from the first template that provides that section partial.
-
----
+Content types should inherit these viewports from the shared layout instead of reimplementing viewport controls per entity.
 
 ## Backend Contract
 
-The editor runtime is frontend-only. Backend requirements per content type:
-1. `previewRender(Request $request, Model $model): Response` that returns raw HTML.
-2. `update()` must return JSON when `$request->wantsJson()`.
-3. A preview POST route (e.g. `admin.pages.preview`, `admin.posts.preview`).
+Each content type using live preview should provide:
 
-No database changes are required for the live editor engine itself.
+1. a `previewRender(Request $request, Model $model): Response` action that renders unsaved changes in memory
+2. an `update()` flow that can return JSON for async save requests
+3. a preview POST route
+
+The async save request posts the form with `Accept: application/json`. Forms should include Laravel method spoofing when the route expects `PUT` or `PATCH`.
+
+## Scope Boundary
+
+This document does not define:
+
+- the page content JSON shape
+- collection-specific fields
+- template registration
+- taxonomy behavior

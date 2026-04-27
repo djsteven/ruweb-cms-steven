@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Post;
+use App\Models\Taxonomy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -46,5 +47,42 @@ class BlogPublicTest extends TestCase
         $response = $this->get(route('blog.show', 'future-post'));
 
         $response->assertNotFound();
+    }
+
+    public function test_blog_index_can_filter_posts_by_category(): void
+    {
+        $news = Taxonomy::create([
+            'name' => 'News',
+            'slug' => 'news',
+            'type' => 'category',
+        ]);
+
+        $updates = Taxonomy::create([
+            'name' => 'Updates',
+            'slug' => 'updates',
+            'type' => 'category',
+        ]);
+
+        $newsPost = Post::create([
+            'title' => 'News Post',
+            'slug' => 'news-post',
+            'status' => 'published',
+            'published_at' => now()->subHour(),
+        ]);
+        $newsPost->taxonomies()->attach($news);
+
+        $updatesPost = Post::create([
+            'title' => 'Updates Post',
+            'slug' => 'updates-post',
+            'status' => 'published',
+            'published_at' => now()->subHour(),
+        ]);
+        $updatesPost->taxonomies()->attach($updates);
+
+        $response = $this->get(route('blog.index', ['category' => 'news']));
+
+        $response->assertOk();
+        $response->assertSee('News Post');
+        $response->assertDontSee('Updates Post');
     }
 }

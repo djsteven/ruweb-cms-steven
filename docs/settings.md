@@ -1,91 +1,114 @@
 # Settings
 
+## Purpose
+
+This document explains how runtime settings work in the starter architecture.
+
+Use it for:
+
+- the settings data model
+- supported field types
+- grouping and admin organization
+- runtime access patterns
+- rules for adding new settings
+
 ## Overview
 
-Global site settings are stored in the `settings` table as key-value pairs. Each setting has a `type` that determines how it's rendered in the admin form and how its value is cast when retrieved.
+Global settings are stored as key-value records in the `settings` table. Each record has a `type` that determines:
 
-## Types
+- how it is rendered in the admin
+- how it is cast when read in application code
+- how it should be validated when updated
 
-| Type | Admin Field | PHP Cast | Notes |
-|------|-------------|----------|-------|
-| `string` | Text input | `string` | |
-| `text` | Textarea | `string` | |
-| `boolean` | Toggle switch | `bool` | |
-| `integer` | Number input | `int` | |
-| `media` | Media selector | `Media` model or `null` | |
-| `password` | Masked input | `string` (decrypted) | Value is encrypted with `Crypt::encryptString` before persisting. The decrypted plaintext is returned by `Setting::get()`. Leaving the field blank on save preserves the current value. |
+This allows the starter to keep environment-like values, site-wide content, and integration identifiers in a runtime-editable layer instead of scattering them through templates.
+
+## Common Types
+
+| Type | Admin field | Runtime shape | Notes |
+|------|-------------|---------------|-------|
+| `string` | text input | `string` | single-line value |
+| `text` | textarea | `string` | multi-line value |
+| `boolean` | toggle | `bool` | feature flags and switches |
+| `integer` | number input | `int` | numeric values |
+| `select` | select input | `string` | constrained choices stored in `options` |
+| `media` | media selector | media model or `null` | for logos, images, files |
+| `password` | masked input | decrypted `string` | should be stored encrypted |
 
 ## Groups
 
-Settings are organized by `group` (stored as a column). Groups become tabs in the admin settings form. Default groups:
+Settings are typically organized by `group`. Groups usually map to admin tabs or sections.
 
-- **general**: site_name, site_description, site_logo, site_favicon, default_social_image, homepage_slug
-- **admin**: admin_locale
-- **email**: mail_enabled, brevo_api_key, mail_from_address, mail_from_name
+Common examples:
 
-## Email group
+- `general`
+- `admin`
+- `email`
+- `analytics`
+- `integrations`
 
-The `email` group drives the Brevo mailer at runtime. The `BrevoMailServiceProvider` reads these settings on every request and overrides `mail.default` and `mail.from` accordingly — no `.env` change required.
+The exact groups are project-defined, but the grouping model should remain stable and predictable.
 
-| Key | Type | Purpose |
-|-----|------|---------|
-| `mail_enabled` | `boolean` | Master switch. When off, the default mailer stays `log`. |
-| `brevo_api_key` | `password` | Brevo API key (`xkeysib-…`). Stored encrypted. |
-| `mail_from_address` | `string` | Verified sender address in Brevo. |
-| `mail_from_name` | `string` | Display name shown in the recipient's inbox. |
+Some groups may be managed by dedicated admin screens instead of the general settings screen. For example, email or analytics settings can still be stored as settings while being edited through specialized controllers.
 
-> **Note:** `brevo_api_key` is never returned to the admin form as plaintext. The form renders a placeholder `(stored)` when a key already exists.
+## Runtime Usage
 
-## Usage in Code
+Typical access patterns:
 
 ```php
 use App\Models\Setting;
 
-// Get a setting value (type-aware casting)
 $siteName = Setting::get('site_name', 'Default Name');
-
-// Get a media setting (returns Media model)
 $logo = Setting::get('site_logo');
-$logoUrl = $logo?->url();
-
-// Set a value
-Setting::set('site_name', 'New Name');
-
-// Get all settings in a group
-$generalSettings = Setting::getGroup('general');
-
-// Get all settings grouped
+$general = Setting::getGroup('general');
 $allGrouped = Setting::allGrouped();
 ```
 
-## Adding a New Setting
+Guidelines:
 
-### 1. Add to the seeder
+- read settings through a single model or service abstraction
+- keep type-aware casting centralized
+- avoid duplicating settings lookup logic in controllers and views
 
-In `database/seeders/SettingsSeeder.php`, add your setting to the `$settings` array:
+## Adding A New Setting
 
-```php
-['key' => 'analytics_id', 'value' => '', 'type' => 'string', 'group' => 'general'],
-```
+Typical workflow:
 
-### 2. Run the seeder
+1. add the setting definition in the bootstrap source, such as a seeder
+2. assign the correct `type` and `group`
+3. add admin translations for its label and group
+4. read the value through the shared settings API
 
-```bash
-php artisan db:seed --class=SettingsSeeder
-```
-
-The seeder uses `updateOrCreate` on the `key`, so it won't overwrite existing values.
-
-### 3. Use it
+Example definition:
 
 ```php
-$analyticsId = Setting::get('analytics_id');
+['key' => 'analytics_id', 'value' => '', 'type' => 'string', 'group' => 'integrations'],
 ```
+
+## Sensitive Values
+
+Sensitive settings such as API secrets should:
+
+- use a protected type such as `password`
+- be encrypted at rest
+- avoid rendering plaintext back into admin forms
+- preserve the existing value when the field is submitted blank
 
 ## Caching
 
-Settings use an in-memory static cache within each request. Multiple calls to `Setting::get()` in the same request only query the database on the first call per key. The cache is cleared by calling `Setting::clearCache()`.
+Settings should use a request-local or application-level cache strategy to avoid repeated queries during a single request.
 
-## Admin Access
+If a cache exists, provide an explicit invalidation path.
 
-The settings admin page is restricted to the `admin` role. Editors cannot view or modify settings.
+The starter model uses a static in-process cache and clears it after updates. It is not a persistent Laravel cache store.
+
+## Authorization
+
+Settings mutation should be restricted to privileged roles. Read access may be broader depending on the setting category, but write access should remain explicit and limited.
+
+## Scope Boundary
+
+This document should not become:
+
+- a list of one project's current keys
+- a guide for one specific email provider
+- a duplicate of admin translation rules

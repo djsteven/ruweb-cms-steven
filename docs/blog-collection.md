@@ -1,78 +1,62 @@
 # Blog Collection Reference
 
-This document describes the `blog` collection added in phase 4 and how to replicate the same pattern for future collections.
+## Purpose
 
-## Domain Model
+This document is an example implementation of a collection. It is not the source of truth for collection rules.
 
-`posts` table:
+Use this document when you want to inspect how a concrete collection maps the generic rules from `docs/collections-guide.md` into actual files and routes.
 
-- `title` (string)
-- `slug` (unique string)
-- `excerpt` (text, optional)
-- `content` (longText, optional)
-- `meta_json` (json, optional)
-- `status` (`draft` / `published`)
-- `published_at` (datetime, optional)
-- `created_by`, `updated_by` (FK to users, optional)
-- timestamps
+## What This Example Demonstrates
 
-Model: `App\Models\Post`
+- a collection with first-class content fields such as `excerpt` and `content`
+- publication state through `status` and `published_at`
+- optional metadata for SEO
+- shared media usage for featured images
+- shared taxonomy usage for categories
+- a public index route and a public detail route
 
-- uses `HasMedia` trait
-- scope `published()` for public visibility
-- helper methods: `meta()`, `url()`, `isPublished()`
+## Typical Domain Shape
 
-## Admin CRUD
+Example fields:
 
-- Controller: `App\Http\Controllers\Admin\PostController`
-- Requests:
-  - `StorePostRequest`
-  - `UpdatePostRequest`
-- Views:
-  - `resources/views/admin/posts/index.blade.php`
-  - `resources/views/admin/posts/create.blade.php`
-  - `resources/views/admin/posts/edit.blade.php`
-  - `resources/views/admin/posts/_form.blade.php`
+- `title`
+- `slug`
+- `excerpt`
+- `content`
+- `meta_json`
+- `status`
+- `published_at`
+- audit fields such as `created_by` and `updated_by`
 
-Routes (admin):
+## Typical Application Pieces
+
+- model: `App\Models\Post`
+- admin controller: `App\Http\Controllers\Admin\PostController`
+- public controller: `App\Http\Controllers\BlogController`
+- admin views under `resources/views/admin/posts/`
+- public views under `resources/views/blog/`
+- category terms through `App\Models\Taxonomy` with type `category`
+
+## Typical Routes
+
+Admin:
 
 ```php
 Route::resource('posts', PostController::class)->except(['show']);
 ```
 
-## Public Frontend
-
-- Controller: `App\Http\Controllers\BlogController`
-- Views:
-  - `resources/views/blog/index.blade.php`
-  - `resources/views/blog/show.blade.php`
-
-Routes (public):
+Public:
 
 ```php
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 ```
 
-## SEO + Media
+## Why This Stays As An Example
 
-- SEO uses `meta_json` with the same keys used by pages (`description`, `og_title`, `og_description`)
-- featured image uses existing polymorphic media relation with collection key `featured_image`
+This document exists to show one complete reference implementation, but it should not duplicate:
 
-## Permissions
-
-`PostPolicy`:
-
-- `admin`: full CRUD
-- `editor`: create/update/view
-- `editor` cannot delete
-
-This keeps editorial flexibility while preserving destructive actions for admins.
-
-## How to create another collection
-
-1. Create migration + model with `status` and `published_at`.
-2. Add admin requests, controller, and views following `posts` structure.
-3. Add public controller + routes before page catch-all routes.
-4. Reuse media selector and SEO meta shape.
-5. Add policy and feature tests for role boundaries.
+- generic collection rules
+- taxonomy rules
+- editor engine internals
+- deployment or project-specific content workflows

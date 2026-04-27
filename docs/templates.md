@@ -1,32 +1,57 @@
 # Templates
 
-## How Templates Work
+## Purpose
 
-Each page has a `template_key` that maps to a Blade view at `resources/views/templates/{key}.blade.php`. Templates define the visual structure and which sections of `content_json` they render.
+This document explains how templates are registered, resolved, and rendered.
 
-## Creating a New Template
+Use this document for:
 
-### 1. Register in config
+- template registration
+- section declarations per template
+- template view conventions
+- fallback behavior
 
-Add your template to `config/cms.php`:
+Do not use this document as the source of truth for JSON data shape or editor behavior. Those topics live in `docs/content-model.md` and `docs/live-editor.md`.
+
+## How Template Resolution Works
+
+Each page-like entity stores a `template_key`. That key maps to a server-rendered view such as:
+
+```text
+resources/views/templates/{key}.blade.php
+```
+
+The template is responsible for presentation only. It reads structured content and decides how to render it.
+
+## Registering A Template
+
+Register templates in configuration:
 
 ```php
 'templates' => [
-    // ...existing templates...
+    'default' => [
+        'name' => 'Default',
+        'sections' => ['hero', 'body'],
+    ],
     'landing' => [
-        'name' => 'Landing Page',
+        'name' => 'Landing',
         'sections' => ['hero', 'benefits', 'testimonials', 'cta'],
     ],
 ],
 ```
 
-The `sections` array defines which content sections appear in the admin form for this template.
+The `sections` array declares which section keys belong to that template. It is a contract between:
 
-### 2. Create the Blade view
+- configuration
+- the editor form
+- the rendered template
 
-Create `resources/views/templates/landing.blade.php`:
+## Creating The View
+
+Create the corresponding template file:
 
 ```blade
+{{-- resources/views/templates/landing.blade.php --}}
 @extends('layouts.public')
 
 @section('content')
@@ -34,46 +59,57 @@ Create `resources/views/templates/landing.blade.php`:
     $sections = $page->sections();
     $hero = $sections['hero'] ?? [];
     $benefits = $sections['benefits'] ?? [];
-    $testimonials = $sections['testimonials'] ?? [];
-    $cta = $sections['cta'] ?? [];
 @endphp
 
-{{-- Hero --}}
-@if($hero['heading'] ?? null)
-<section class="py-20">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1 class="text-5xl font-bold">{{ $hero['heading'] }}</h1>
+@if(($hero['is_visible'] ?? 1) && ($hero['heading'] ?? null))
+    <section>
+        <h1>{{ $hero['heading'] }}</h1>
         @if($hero['body'] ?? null)
-            <p class="mt-6 text-xl text-gray-600">{{ $hero['body'] }}</p>
+            <p>{{ $hero['body'] }}</p>
         @endif
-    </div>
-</section>
+    </section>
 @endif
-
-{{-- Add more sections as needed --}}
 @endsection
 ```
 
-### 3. Use it
+## Template Conventions
 
-When creating or editing a page in the admin, select your new template from the dropdown. The form will show the section fields you defined in the config.
+- Templates should read data from structured content and first-class entity fields only.
+- Templates should not hardcode editable copy.
+- Templates should not hardcode media URLs or local asset paths for content-managed images.
+- Templates should guard section output with `is_visible` and meaningful content checks.
+- Templates may define additional section-specific fields beyond `heading` and `body`.
 
-## Template Data
+## Editor Relationship
 
-Every template receives a `$page` variable (the `Page` model instance). Access content via:
+The editor uses the registered `sections` array to know which section blocks to expose for a given template.
 
-- `$page->title` — The page title
-- `$page->meta()` — Returns the `meta` block from `content_json` (description, og_title, og_description, featured_image)
-- `$page->sections()` — Returns the `sections` block from `content_json`
-- `$page->featuredImage()` — Returns the featured `Media` model (via HasMedia trait)
-- `$page->url()` — Returns the public URL
+If multiple templates share the same section keys, the editor may reuse the same input block for those keys. This allows safer template switching without duplicating data entry.
 
-## Section Fields
+Template-specific editor partials, when used, should be treated as UI concerns rather than part of the template rendering contract.
 
-In the admin, each section renders two default fields: **heading** and **body**. These are stored in `content_json.sections.{section_name}.heading` and `content_json.sections.{section_name}.body`.
+The page form looks for section editor partials using this convention:
 
-To add custom fields per section, modify the `_form.blade.php` partial or create a custom form for your template.
+```text
+resources/views/admin/pages/sections/{template_key}_{section_key}.blade.php
+```
 
-## Fallback
+If no matching partial exists, the form falls back to generic `heading` and `body` fields for that section.
 
-If a page references a `template_key` that has no corresponding Blade view, it falls back to `templates.default`.
+## Data Available In The View
+
+Typical template inputs:
+
+- `$page->title`
+- `$page->meta()`
+- `$page->sections()`
+- `$page->featuredImage()`
+- `$page->url()`
+
+Projects may expose equivalent helpers on other entities.
+
+## Fallback Behavior
+
+If an entity references a `template_key` with no matching view, the system should fall back to a safe default template and log or surface the mismatch during development.
+
+The current page model falls back to `templates.default`. It does not log that mismatch by itself.

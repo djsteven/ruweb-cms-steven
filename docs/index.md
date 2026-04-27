@@ -2,34 +2,46 @@
 
 This index is the entry point for developers and LLM agents working on the starter.
 
-## Core
+## Canonical Docs
 
-- `docs/architecture.md` — folders, lifecycle, and architectural patterns
-- `docs/pages-guide.md` — rules and workflow for creating and editing pages (media, content_json, templates, live editor)
-- `docs/content-model.md` — `content_json`/meta structure reference for pages
-- `docs/templates.md` — how page templates are registered and rendered
-- `docs/live-editor.md` — shared editor engine: initEditorEngine API, DOM contract, layout variables, scroll retention
-- `docs/settings.md` — global settings model and usage
-- `docs/admin-translations-guide.md` — i18n rules and verification checklist for admin-only translations (`es/en`)
-- `docs/image-strategy.md` — image optimization pipeline, traceability model, responsive delivery, and media health metrics
+- `docs/framework-philosophy.md` — principles and boundaries that guide framework decisions
+- `docs/architecture.md` — high-level structure, request flow, and system boundaries
+- `docs/content-model.md` — canonical shape of structured content blocks
+- `docs/templates.md` — how template registration and rendering work
+- `docs/live-editor.md` — shared editor shell and preview contract
+- `docs/image-strategy.md` — upload, optimization, and frontend delivery rules
+- `docs/settings.md` — global settings model, grouping, and runtime access
+- `docs/admin-translations-guide.md` — admin-only translation conventions and checks
 
-## Collections & Modules
+## Content Types
 
-- `docs/collections-guide.md` — rules and step-by-step guide for creating new collections (media, taxonomies, SEO, permissions)
-- `docs/blog-collection.md` — complete blog collection reference (model, routes, admin, frontend)
-- `docs/taxonomies.md` — taxonomy system, adding types, attaching to models, conventions
-- `docs/modules.md` — how to organize project-specific custom modules
-- `docs/maintenance.md` — operational commands for password reset, media orphan audit, and image optimization workflow
+- `docs/pages-guide.md` — rules specific to the page entity
+- `docs/update-fields.md` — safe workflow for updating existing structured content
+- `docs/collections-guide.md` — contract for adding a new collection type
+- `docs/blog-collection.md` — optional example collection implementation
+- `docs/taxonomies.md` — shared taxonomy system used by collections
+- `docs/menu-guide.md` — navigational menus, locations, and rendering
 
-## Phase 5 Additions
+## Integrations And Operations
 
-- `docs/mcp.md` — MCP authentication model, exposed endpoints, and integration usage
+- `docs/mcp.md` — MCP authentication, endpoints, and extension points
+- `docs/maintenance.md` — operational commands and maintenance workflows
+- `docs/deploy-cpanel.md` — generic cPanel deployment guide
+- `docs/deploy-droplet.md` — generic single-server droplet deployment guide
+- `docs/git-guide.md` — creating an independent repository from the starter
 
-## Quick Workflow
+## Packaged Skills
 
-1. Start from `docs/architecture.md`.
-2. **For pages**, read `docs/pages-guide.md` before creating or extending them.
-3. **For collections**, read `docs/collections-guide.md` — it defines mandatory rules.
-4. Use `docs/blog-collection.md` as the reference collection implementation.
-5. Keep project-specific logic inside modules documented in `docs/modules.md`.
-6. Use maintenance commands from `docs/maintenance.md` for operations.
+- `docs/skills/create-page.md` — reusable prompt for creating or extending pages using the canonical docs
+- `docs/skills/create-collection.md` — reusable prompt for creating or extending collections using the canonical docs
+- `docs/skills/create-config.md` — reusable prompt for configuration and settings changes using the canonical docs
+
+## Suggested Reading Order
+
+1. Read `docs/framework-philosophy.md`.
+2. Read `docs/architecture.md`.
+3. Read `docs/content-model.md`, `docs/templates.md`, and `docs/live-editor.md`.
+4. If working with pages, read `docs/pages-guide.md`.
+5. If updating existing structured content, read `docs/update-fields.md`.
+6. If adding a collection, read `docs/collections-guide.md` and `docs/taxonomies.md`.
+7. Use `docs/blog-collection.md` only as an implementation example, not as the source of truth for collection rules.

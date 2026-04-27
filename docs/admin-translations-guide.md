@@ -1,168 +1,98 @@
-# Guía de traducciones del Admin
+# Admin Translations Guide
 
-Esta guía define cómo mantener las traducciones del panel de administración (`/admin`) en español e inglés.
+## Purpose
 
-## Alcance
+This guide defines how to keep the administration interface translatable and consistent across supported locales.
 
-Incluye solo el lado admin:
+Use it for:
+
+- admin-facing Blade text
+- admin JavaScript messages
+- admin validation and JSON responses
+- translation key conventions
+
+## Scope
+
+Applies to the administration surface only, such as:
 
 - `resources/views/admin/**`
-- `resources/js/admin.js`
+- admin JavaScript entry points
 - `app/Http/Controllers/Admin/**`
 - `app/Http/Requests/Admin/**`
-- `lang/es/admin.php`
-- `lang/en/admin.php`
+- admin translation files under `lang/*/admin.php`
 
-No incluye el frontend público:
+It does not define public-site translation rules.
 
-- `resources/views/templates/**`
-- `resources/views/layouts/public.blade.php`
-- `resources/views/blog/**`
-- `resources/views/partials/**` (excepto parciales admin)
+## Source Of Truth
 
-## Fuente de verdad
+Visible admin text should come from translation keys, not hardcoded strings.
 
-Todas las etiquetas, textos, placeholders, mensajes y confirmaciones del admin deben salir de:
+Typical pattern:
 
 - `__('admin.<key>')`
 
-Archivos de idioma:
+Every supported locale should contain the same keys.
 
-- `lang/es/admin.php`
-- `lang/en/admin.php`
+## Key Naming Conventions
 
-Regla: cada clave nueva en `es` debe existir también en `en` y viceversa.
+Use stable prefixes by concern:
 
-## Convenciones de claves
+- `settings_*`
+- `menu_*`
+- `taxonomy_*`
+- `field_*`
+- `btn_*`
+- `confirm_*`
+- `role_*`
 
-Usar prefijos consistentes por módulo:
+For nested structures, prefer grouped arrays:
 
-- `settings_*` para ajustes
-- `menu_*` para menús
-- `taxonomy_*` para taxonomías
-- `field_*` para labels de campos
-- `btn_*` para acciones
-- `confirm_*` para confirmaciones
-- `role_*` para etiquetas de roles
-
-Para estructuras anidadas usar arrays, por ejemplo:
-
-- `settings_fields.homepage_slug.label`
+- `settings_fields.site_name.label`
 - `settings_groups.general`
-- `settings_options.admin_locale.es`
+- `settings_options.locale.en`
 
-## Regla especial para Settings (obligatoria)
+## Settings Rule
 
-Cada setting creado en `database/seeders/SettingsSeeder.php` debe tener traducción en ambos idiomas para:
+If a setting is created through a seeder or other bootstrap path, its admin label and group label should exist in every supported locale.
 
-- `settings_fields.<key>.label`
-- `settings_groups.<group>`
-- `settings_options.<key>.<option>` (si el setting es `select`)
+If a setting exposes selectable options, those option labels should also be translated.
 
-Si falta alguna, la UI cae a fallback y puede mostrar inglés aunque el admin esté en español.
+## Blade Rules
 
-## Blade (admin)
+- avoid visible literal text in admin views
+- use translation keys for labels, placeholders, help text, and actions
+- provide a safe fallback for dynamic values when a locale key is missing
 
-En vistas de admin evitar texto literal visible.
+## JavaScript Rules
 
-Ejemplos:
+Admin JavaScript should not hardcode visible UI messages.
 
-```blade
-<h1>{{ __('admin.settings') }}</h1>
-<input placeholder="{{ __('admin.search_placeholder') }}">
-<button>{{ __('admin.btn_save_changes') }}</button>
-```
+Inject a translation dictionary from the layout or page and read from it in JS.
 
-Para valores dinámicos (roles, tipos) usar fallback seguro:
+If legacy code still contains visible literals, treat this guide as the target standard and move those strings into the injected dictionary when touching the related code.
 
-```blade
-@php
-$roleKey = 'admin.role_' . $user->role;
-$roleLabel = __($roleKey) !== $roleKey ? __($roleKey) : ucfirst($user->role);
-@endphp
-```
+## Controller And Request Rules
 
-## JavaScript del admin
+Admin JSON messages, exceptions, and validation messages should use translation keys instead of literal strings.
 
-`resources/js/admin.js` no debe tener textos hardcodeados. Usar diccionario inyectado desde layout:
+## Verification Checklist
 
-```blade
-<script>
-window.adminI18n = @json([
-  'uploadFailed' => __('admin.upload_failed'),
-  'chooseFile' => __('admin.choose_file'),
-]);
-</script>
-```
+1. No visible admin text is hardcoded.
+2. Every new admin key exists in every supported locale.
+3. Admin JavaScript reads visible messages from an injected dictionary.
+4. Public templates do not depend on admin translation namespaces.
+5. Dynamic labels have a deterministic fallback when a translation is missing.
 
-Y consumirlo en JS:
+## Useful Checks
 
-```js
-const t = (key, fallback = '') => window.adminI18n?.[key] ?? fallback;
-alert(t('uploadFailed', 'Upload failed.'));
-```
+- compare flattened keys across locale files
+- search admin code for literal visible strings
+- verify seeded settings have matching translation keys
 
-## Controladores y Requests del admin
+## Scope Boundary
 
-Mensajes JSON, errores y validaciones del admin deben usar traducciones:
+This document should not become:
 
-```php
-return response()->json(['error' => __('admin.media_error_extension_not_allowed')], 422);
-```
-
-```php
-public function messages(): array
-{
-    return [
-        'file.mimetypes' => __('admin.validation_file_mimetypes'),
-    ];
-}
-```
-
-## Checklist antes de merge
-
-1. No hay texto visible hardcodeado en archivos de admin.
-2. Toda clave nueva existe en `lang/es/admin.php` y `lang/en/admin.php`.
-3. `resources/js/admin.js` usa `window.adminI18n` para mensajes visibles.
-4. No se agregaron claves `admin.*` dentro de vistas públicas.
-5. Los textos de roles/tipos dinámicos tienen traducción o fallback.
-
-## Comandos útiles de verificación
-
-Comparar claves `es/en`:
-
-```bash
-php -r '$es=require "lang/es/admin.php"; $en=require "lang/en/admin.php"; $f=function($a,$p="") use (&$f){$r=[]; foreach($a as $k=>$v){$key=$p===""?$k:"$p.$k"; if(is_array($v)){$r+=$f($v,$key);} else {$r[$key]=1;}} return $r;}; $esf=$f($es); $enf=$f($en); echo "missing_in_en=".count(array_diff_key($esf,$enf)).PHP_EOL; echo "missing_in_es=".count(array_diff_key($enf,$esf)).PHP_EOL;'
-```
-
-Buscar uso de traducciones admin fuera del admin:
-
-```bash
-rg -n "__\('admin\.|@lang\('admin\." resources/views | rg -v "resources/views/admin|resources/views/partials/admin-bar"
-```
-
-Buscar textos sospechosos en JS admin:
-
-```bash
-rg -n "Upload failed|Loading media|No media found|Unable to load" resources/js/admin.js
-```
-
-Validar cobertura de traducciones para settings seeded:
-
-```bash
-php <<'PHP'
-<?php
-$es = require 'lang/es/admin.php';
-$en = require 'lang/en/admin.php';
-$code = file_get_contents('database/seeders/SettingsSeeder.php');
-preg_match_all("/\\['key'\\s*=>\\s*'([^']+)'[^\\]]*'group'\\s*=>\\s*'([^']+)'/", $code, $m, PREG_SET_ORDER);
-$get = function($arr, $dot){$parts=explode('.', $dot);$v=$arr;foreach($parts as $p){if(!is_array($v)||!array_key_exists($p,$v)) return null;$v=$v[$p];}return $v;};
-foreach ($m as $row) {
-  [$full, $key, $group] = $row;
-  $paths = ["settings_fields.$key.label", "settings_groups.$group"];
-  foreach ($paths as $path) {
-    if ($get($es,$path)===null || $get($en,$path)===null) echo "MISSING: $path\n";
-  }
-}
-PHP
-```
+- a general i18n guide for the public site
+- a copywriting guide
+- a catalog of all current admin strings

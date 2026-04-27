@@ -1,6 +1,6 @@
 # Menu System
 
-Flaxt CMS includes an administrable menu system similar to WordPress menus. Menus are database-driven, support nested items, and can be assigned to theme locations (header, footer, etc.).
+This starter includes an administrable menu system similar to WordPress menus. Menus are database-driven, support nested items, and can be assigned to theme locations (header, footer, etc.).
 
 ---
 
@@ -69,6 +69,8 @@ $item->resolveUrl(); // Returns the final href string
 - `page` / `post` → calls `$this->linkable->url()`
 - `taxonomy` → builds `route('blog.index', ['category' => $this->linkable->slug])`
 - orphaned or unknown → returns `#`
+
+The default blog index honors the `category` query parameter for category taxonomy links.
 
 ---
 
@@ -183,5 +185,6 @@ Policy: `App\Policies\MenuPolicy`.
 - **Slugs** must be lowercase alphanumeric with hyphens: `^[a-z0-9]+(?:-[a-z0-9]+)*$`.
 - **Nesting** is supported at any depth, but keep it shallow (≤ 2 levels) for usability.
 - **Item save** is always a full replace — the entire item tree is submitted and recreated. There is no partial update for individual items.
+- **Link validation** should ensure linked IDs exist and match the selected type before saving custom extensions to the builder.
 - **Orphaned links** — if a linked page, post, or taxonomy is deleted, the menu item stays but `resolveUrl()` returns `#`. Clean them up manually in the admin.
 - **One menu per location** — the convention is one active menu per location, but the system does not enforce uniqueness on `location`. `findByLocation()` returns the first match.
