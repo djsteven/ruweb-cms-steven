@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\ClaudeMcpController;
+use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MediaHealthController;
@@ -71,8 +72,10 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
 
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
         Route::put('analytics', [AnalyticsController::class, 'update'])->name('analytics.update');
+        Route::get('email', [EmailController::class, 'index'])->name('email.index');
+        Route::put('email', [EmailController::class, 'update'])->name('email.update');
+        Route::post('email/test', [EmailController::class, 'sendTestEmail'])->name('email.test');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
-        Route::post('settings/email/test', [SettingController::class, 'sendTestEmail'])->name('settings.email.test');
     });
 });

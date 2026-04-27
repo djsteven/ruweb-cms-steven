@@ -19,8 +19,7 @@ Global site settings are stored in the `settings` table as key-value pairs. Each
 
 Settings are organized by `group` (stored as a column). Groups become tabs in the admin settings form. Default groups:
 
-- **general**: site_name, site_description, site_logo, site_favicon, homepage_slug
-- **seo**: default_meta_title, default_meta_description
+- **general**: site_name, site_description, site_logo, site_favicon, default_social_image, homepage_slug
 - **admin**: admin_locale
 - **email**: mail_enabled, brevo_api_key, mail_from_address, mail_from_name
 
@@ -53,7 +52,7 @@ $logoUrl = $logo?->url();
 Setting::set('site_name', 'New Name');
 
 // Get all settings in a group
-$seoSettings = Setting::getGroup('seo');
+$generalSettings = Setting::getGroup('general');
 
 // Get all settings grouped
 $allGrouped = Setting::allGrouped();

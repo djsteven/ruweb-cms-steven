@@ -64,7 +64,7 @@
         </div>
         <div class="bg-[#1a1a1a] rounded-lg p-3">
             <div class="text-gray-500">{{ __('admin.bytes_saved') }}</div>
-            <div class="text-white font-semibold mt-1">{{ number_format($mediaHealth['bytes_saved']) }}</div>
+            <div class="text-white font-semibold mt-1">{{ number_format($mediaHealth['bytes_saved'] / 1048576, 2) }} MB</div>
         </div>
         <div class="bg-[#1a1a1a] rounded-lg p-3">
             <div class="text-gray-500">{{ __('admin.missing_files') }}</div>

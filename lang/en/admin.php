@@ -46,7 +46,7 @@ return [
     'raster_images'             => 'Optimizable images',
     'webp_coverage'             => 'WebP coverage',
     'responsive_coverage'       => 'Responsive coverage',
-    'bytes_saved'               => 'Bytes saved',
+    'bytes_saved'               => 'MB saved',
     'missing_files'             => 'Missing files',
     'total_raster_eligible'     => 'Total optimizable images',
     'total_optimized'           => 'Total optimized',
@@ -209,7 +209,7 @@ return [
     'optimization_reason_format_not_supported' => 'This image format is not converted in the current strategy.',
     'optimization_original_size' => 'Original size',
     'optimization_original_format' => 'Original format',
-    'optimization_bytes_saved'  => 'Saved bytes',
+    'optimization_bytes_saved'  => 'Saved MB',
     'optimization_ratio'        => 'Reduction ratio',
     'optimization_variants'     => 'Generated variants',
     'optimization_no_variants'  => 'No responsive variants generated.',
@@ -315,7 +315,6 @@ return [
     'btn_save_settings'         => 'Save Settings',
     'settings_groups'           => [
         'general' => 'General',
-        'seo' => 'SEO',
         'admin' => 'Administration',
         'email' => 'Email',
     ],
@@ -325,6 +324,7 @@ return [
         ],
         'site_description' => [
             'label' => 'Site Description',
+            'help' => 'Used as the default meta description when a page has none of its own.',
         ],
         'site_logo' => [
             'label' => 'Site Logo',
@@ -336,12 +336,6 @@ return [
             'label' => 'Homepage',
             'help' => 'Choose which published page will be shown at the root URL (/).',
             'empty' => 'No published pages available',
-        ],
-        'default_meta_title' => [
-            'label' => 'Default Meta Title',
-        ],
-        'default_meta_description' => [
-            'label' => 'Default Meta Description',
         ],
         'default_social_image' => [
             'label' => 'Default Social Share Image',
@@ -394,6 +388,11 @@ return [
     'brevo_link_signup'           => 'Create Brevo account',
     'brevo_link_api_keys'         => 'Manage API keys',
     'brevo_link_senders'          => 'Verify senders',
+    'brevo_last_updated'          => 'Last updated: April 27, 2026. If you can\'t find the resources described here, check Brevo\'s documentation for updates.',
+
+    // Email page
+    'email_subtitle'              => 'Configure transactional email delivery via Brevo.',
+    'email_saved'                 => 'Email settings saved successfully.',
 
     // Email test
     'email_test_title'            => 'Send a test email',

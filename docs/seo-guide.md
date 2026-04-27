@@ -106,12 +106,12 @@ Every public-facing model uses `meta_json` to store per-item SEO overrides:
 
 These are rendered via `resources/views/components/seo-meta.blade.php`. The component also applies global site-level fallbacks from `settings`, including:
 
-- default meta title
-- default meta description
-- favicon
+- `site_name` — fallback page title and `og:site_name`
+- `site_description` — fallback meta description and `og:description`
+- `default_social_image` — fallback Open Graph / Twitter share image
+- `site_favicon` — favicon
 - canonical URL
-- Open Graph tags
-- Twitter card tags
+- Full Open Graph and Twitter card tags
 
 See `content-model.md` for the full implementation.
 

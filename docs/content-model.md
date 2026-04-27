@@ -34,9 +34,9 @@ The `meta` block unifies SEO and social sharing metadata:
 
 | Field | Purpose | Fallback |
 |-------|---------|----------|
-| `description` | Meta description tag | `default_meta_description` setting |
-| `og_title` | Open Graph / Twitter title | Page `title` field → `default_meta_title` setting |
-| `og_description` | Open Graph / Twitter description | `description` → `default_meta_description` setting |
+| `description` | Meta description tag | `site_description` setting |
+| `og_title` | Open Graph / Twitter title | Page `title` field → `site_name` setting |
+| `og_description` | Open Graph / Twitter description | `description` → `site_description` setting |
 
 The page `title` (database column, not inside `content_json`) is the primary title. `og_title` only needs to be set when you want a different title for social sharing.
 
@@ -73,9 +73,9 @@ Beyond `is_visible`, the default admin form provides `heading` and `body` fields
 
 The `ContentHelper` class and `seo-meta` Blade component implement this fallback chain:
 
-- **Title**: `og_title` → page `title` → `default_meta_title` setting → `app.name` config
-- **Description**: `og_description` → `description` → `default_meta_description` setting
-- **Image**: Featured image media URL (via `mediables` relationship)
+- **Title**: `og_title` → page `title` → `site_name` setting
+- **Description**: `og_description` → `description` → `site_description` setting
+- **Image**: Featured image media URL (via `mediables` relationship) → `default_social_image` setting
 
 ## Accessing Content in Templates
 

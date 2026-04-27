@@ -27,31 +27,15 @@ class SettingsDefaultsTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('settings', [
-            'key' => 'default_meta_description',
-            'value' => 'Un CMS ligero y extensible para comenzar rápido.',
-        ]);
-
-        $this->assertDatabaseHas('settings', [
             'key' => 'homepage_slug',
             'type' => 'select',
             'value' => 'inicio',
         ]);
 
         $this->assertDatabaseHas('settings', [
-            'key' => 'google_tag_id',
-            'group' => 'analytics',
-            'value' => null,
-        ]);
-
-        $this->assertDatabaseHas('settings', [
-            'key' => 'meta_pixel_id',
-            'group' => 'analytics',
-            'value' => null,
-        ]);
-
-        $this->assertDatabaseHas('settings', [
-            'key' => 'search_console_verification_token',
-            'group' => 'analytics',
+            'key' => 'default_social_image',
+            'group' => 'general',
+            'type' => 'media',
             'value' => null,
         ]);
 

@@ -71,7 +71,7 @@
             </div>
             <div class="flex justify-between text-gray-400">
                 <span>{{ __('admin.bytes_saved') }}</span>
-                <span class="text-white">{{ number_format($summary['bytes_saved']) }}</span>
+                <span class="text-white">{{ number_format($summary['bytes_saved'] / 1048576, 2) }} MB</span>
             </div>
         </div>
     </div>
@@ -95,7 +95,7 @@
                     @foreach($detail['top_savings'] as $row)
                         <tr>
                             <td class="py-1">{{ $row['filename'] }}</td>
-                            <td class="py-1">{{ number_format($row['saved_bytes']) }}</td>
+                            <td class="py-1">{{ number_format($row['saved_bytes'] / 1048576, 2) }} MB</td>
                             <td class="py-1">{{ $row['saved_percent'] }}%</td>
                         </tr>
                     @endforeach
@@ -121,7 +121,7 @@
                         <tr>
                             <td class="py-1">{{ $row['filename'] }}</td>
                             <td class="py-1 uppercase">{{ $row['extension'] }}</td>
-                            <td class="py-1">{{ number_format($row['size']) }}</td>
+                            <td class="py-1">{{ number_format($row['size'] / 1048576, 2) }} MB</td>
                         </tr>
                     @endforeach
                 </tbody>

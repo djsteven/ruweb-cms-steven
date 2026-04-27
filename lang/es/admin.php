@@ -46,7 +46,7 @@ return [
     'raster_images'             => 'Imágenes optimizables',
     'webp_coverage'             => 'Cobertura WebP',
     'responsive_coverage'       => 'Cobertura responsive',
-    'bytes_saved'               => 'Bytes ahorrados',
+    'bytes_saved'               => 'MB ahorrados',
     'missing_files'             => 'Archivos faltantes',
     'total_raster_eligible'     => 'Total de imágenes optimizables',
     'total_optimized'           => 'Total optimizadas',
@@ -209,7 +209,7 @@ return [
     'optimization_reason_format_not_supported' => 'Este formato de imagen no se convierte en la estrategia actual.',
     'optimization_original_size' => 'Tamaño original',
     'optimization_original_format' => 'Formato original',
-    'optimization_bytes_saved'  => 'Bytes ahorrados',
+    'optimization_bytes_saved'  => 'MB ahorrados',
     'optimization_ratio'        => 'Ratio de reducción',
     'optimization_variants'     => 'Variantes generadas',
     'optimization_no_variants'  => 'No se generaron variantes responsive.',
@@ -315,7 +315,6 @@ return [
     'btn_save_settings'         => 'Guardar ajustes',
     'settings_groups'           => [
         'general' => 'General',
-        'seo' => 'SEO',
         'admin' => 'Administración',
         'email' => 'Email',
     ],
@@ -325,6 +324,7 @@ return [
         ],
         'site_description' => [
             'label' => 'Descripción del sitio',
+            'help' => 'Se usa como meta descripción por defecto cuando una página no tiene la suya propia.',
         ],
         'site_logo' => [
             'label' => 'Logo del sitio',
@@ -336,12 +336,6 @@ return [
             'label' => 'Página de inicio',
             'help' => 'Selecciona cuál página publicada se mostrará en la URL raíz (/).',
             'empty' => 'No hay páginas publicadas disponibles',
-        ],
-        'default_meta_title' => [
-            'label' => 'Meta título por defecto',
-        ],
-        'default_meta_description' => [
-            'label' => 'Meta descripción por defecto',
         ],
         'default_social_image' => [
             'label' => 'Imagen para compartir por defecto',
@@ -394,6 +388,11 @@ return [
     'brevo_link_signup'           => 'Crear cuenta Brevo',
     'brevo_link_api_keys'         => 'Gestionar API keys',
     'brevo_link_senders'          => 'Verificar remitentes',
+    'brevo_last_updated'          => 'Última actualización: 27 de abril de 2026. Si no encontrás los recursos indicados aquí, verificá actualizaciones en la documentación de Brevo.',
+
+    // Email page
+    'email_subtitle'              => 'Configura el envío de emails transaccionales mediante Brevo.',
+    'email_saved'                 => 'Configuración de email guardada correctamente.',
 
     // Email test
     'email_test_title'            => 'Enviar email de prueba',

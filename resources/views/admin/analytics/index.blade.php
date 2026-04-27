@@ -50,8 +50,8 @@
                     <p class="text-sm text-gray-500 mt-1">{{ __('admin.analytics_google_help') }}</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-white/[0.04] text-gray-300 hover:bg-white/[0.08] transition-colors">{{ __('admin.analytics_google_analytics_link') }}</a>
-                    <a href="https://tagmanager.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-white/[0.04] text-gray-300 hover:bg-white/[0.08] transition-colors">{{ __('admin.analytics_google_tag_manager_link') }}</a>
+                    <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_google_analytics_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
+                    <a href="https://tagmanager.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_google_tag_manager_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
                 </div>
             </div>
 
@@ -67,13 +67,13 @@
             <p class="text-xs text-gray-500 mt-4">{{ __('admin.analytics_google_summary') }}</p>
 
             <div class="mt-6">
-                <details class="group rounded-lg border border-white/[0.06] bg-[#101010] open:bg-[#111]">
-                    <summary class="flex items-center justify-between cursor-pointer list-none px-4 py-3">
-                        <span class="text-sm font-medium text-white">{{ __('admin.analytics_google_steps_title') }}</span>
-                        <svg class="w-4 h-4 text-gray-500 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <details class="group rounded-lg border border-white/[0.06] bg-[#101010]">
+                    <summary class="flex items-center justify-between cursor-pointer list-none px-4 py-3 select-none">
+                        <span class="text-sm font-medium text-gray-300 group-open:text-white transition-colors">{{ __('admin.analytics_google_steps_title') }}</span>
+                        <svg class="w-4 h-4 text-gray-600 transition-transform group-open:rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </summary>
-                    <div class="px-4 pb-4 pt-1 border-t border-white/[0.04]">
-                        <ol class="space-y-1.5 text-sm text-gray-300 list-decimal list-inside marker:text-gray-600">
+                    <div class="px-4 pb-4 pt-3 border-t border-white/[0.08]">
+                        <ol class="space-y-2 text-sm text-gray-400 list-decimal list-outside ml-4 marker:text-gray-600">
                             <li>{{ __('admin.analytics_google_step_1') }}</li>
                             <li>{{ __('admin.analytics_google_step_2') }}</li>
                             <li>{{ __('admin.analytics_google_step_3') }}</li>
@@ -92,7 +92,7 @@
                     <h2 class="text-base font-semibold text-white">{{ __('admin.analytics_meta_title') }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ __('admin.analytics_meta_help') }}</p>
                 </div>
-                <a href="https://business.facebook.com/events_manager2/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-white/[0.04] text-gray-300 hover:bg-white/[0.08] transition-colors">{{ __('admin.analytics_meta_events_manager_link') }}</a>
+                <a href="https://business.facebook.com/events_manager2/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_meta_events_manager_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
             </div>
 
             <label for="meta_pixel_id" class="block text-sm font-medium text-gray-300 mb-1">{{ __('admin.analytics_meta_field') }}</label>
@@ -114,13 +114,13 @@
             </div>
 
             <div class="mt-4">
-                <details class="group rounded-lg border border-white/[0.06] bg-[#101010] open:bg-[#111]">
-                    <summary class="flex items-center justify-between cursor-pointer list-none px-4 py-3">
-                        <span class="text-sm font-medium text-white">{{ __('admin.analytics_meta_steps_title') }}</span>
-                        <svg class="w-4 h-4 text-gray-500 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <details class="group rounded-lg border border-white/[0.06] bg-[#101010]">
+                    <summary class="flex items-center justify-between cursor-pointer list-none px-4 py-3 select-none">
+                        <span class="text-sm font-medium text-gray-300 group-open:text-white transition-colors">{{ __('admin.analytics_meta_steps_title') }}</span>
+                        <svg class="w-4 h-4 text-gray-600 transition-transform group-open:rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </summary>
-                    <div class="px-4 pb-4 pt-1 border-t border-white/[0.04]">
-                        <ol class="space-y-1.5 text-sm text-gray-300 list-decimal list-inside marker:text-gray-600">
+                    <div class="px-4 pb-4 pt-3 border-t border-white/[0.08]">
+                        <ol class="space-y-2 text-sm text-gray-400 list-decimal list-outside ml-4 marker:text-gray-600">
                             <li>{{ __('admin.analytics_meta_step_1') }}</li>
                             <li>{{ __('admin.analytics_meta_step_2') }}</li>
                             <li>{{ __('admin.analytics_meta_step_3') }}</li>
@@ -139,7 +139,7 @@
                     <h2 class="text-base font-semibold text-white">{{ __('admin.analytics_search_console_title') }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ __('admin.analytics_search_console_help') }}</p>
                 </div>
-                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3 py-1.5 rounded-md text-xs font-medium bg-white/[0.04] text-gray-300 hover:bg-white/[0.08] transition-colors">{{ __('admin.analytics_search_console_link') }}</a>
+                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_search_console_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
             </div>
 
             <label for="search_console_verification_token" class="block text-sm font-medium text-gray-300 mb-1">{{ __('admin.analytics_search_console_field') }}</label>
@@ -154,13 +154,13 @@
             <p class="text-xs text-gray-500 mt-4">{{ __('admin.analytics_search_console_summary') }}</p>
 
             <div class="mt-6">
-                <details class="group rounded-lg border border-white/[0.06] bg-[#101010] open:bg-[#111]">
-                    <summary class="flex items-center justify-between cursor-pointer list-none px-4 py-3">
-                        <span class="text-sm font-medium text-white">{{ __('admin.analytics_search_console_steps_title') }}</span>
-                        <svg class="w-4 h-4 text-gray-500 transition-transform group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                <details class="group rounded-lg border border-white/[0.06] bg-[#101010]">
+                    <summary class="flex items-center justify-between cursor-pointer list-none px-4 py-3 select-none">
+                        <span class="text-sm font-medium text-gray-300 group-open:text-white transition-colors">{{ __('admin.analytics_search_console_steps_title') }}</span>
+                        <svg class="w-4 h-4 text-gray-600 transition-transform group-open:rotate-180 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                     </summary>
-                    <div class="px-4 pb-4 pt-1 border-t border-white/[0.04]">
-                        <ol class="space-y-1.5 text-sm text-gray-300 list-decimal list-inside marker:text-gray-600">
+                    <div class="px-4 pb-4 pt-3 border-t border-white/[0.08]">
+                        <ol class="space-y-2 text-sm text-gray-400 list-decimal list-outside ml-4 marker:text-gray-600">
                             <li>{{ __('admin.analytics_search_console_html_step_1') }}</li>
                             <li>{{ __('admin.analytics_search_console_html_step_2') }}</li>
                             <li>{{ __('admin.analytics_search_console_html_step_3') }}</li>

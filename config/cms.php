@@ -57,8 +57,6 @@ return [
             'site_name',
             'site_description',
             'site_favicon',
-            'default_meta_title',
-            'default_meta_description',
         ],
     ],
 ];

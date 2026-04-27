@@ -14,7 +14,6 @@ class ContentHelper
         return ($meta['og_title'] ?? null)
             ?: ($meta['title'] ?? null)
             ?: $default
-            ?: (Setting::get('default_meta_title') ?: null)
             ?: $siteName;
     }
 
@@ -23,7 +22,7 @@ class ContentHelper
         return $meta['og_description']
             ?? $meta['description']
             ?? $default
-            ?? Setting::get('default_meta_description')
+            ?? Setting::get('site_description')
             ?? '';
     }
 
