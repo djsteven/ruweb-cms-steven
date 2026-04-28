@@ -21,12 +21,12 @@
     </a>
     <a href="{{ route('admin.pages.index', ['status' => 'published']) }}"
        class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
-        <div class="text-2xl font-semibold text-emerald-400">{{ $publishedPageCount }}</div>
+        <div class="text-2xl font-semibold text-sky-400">{{ $publishedPageCount }}</div>
         <div class="text-sm text-gray-500 mt-1">{{ __('admin.published') }}</div>
     </a>
     <a href="{{ route('admin.posts.index', ['status' => 'published']) }}"
        class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
-        <div class="text-2xl font-semibold text-emerald-400">{{ $publishedPostCount }}</div>
+        <div class="text-2xl font-semibold text-sky-400">{{ $publishedPostCount }}</div>
         <div class="text-sm text-gray-500 mt-1">{{ __('admin.published_blog') }}</div>
     </a>
 </div>
@@ -41,7 +41,7 @@
 <div class="mt-6 bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5">
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-sm font-semibold text-white">{{ __('admin.media_health') }}</h2>
-        <a href="{{ route('admin.media.health') }}" class="text-xs text-emerald-400 hover:text-emerald-300 transition-colors">
+        <a href="{{ route('admin.media.health') }}" class="text-xs text-sky-400 hover:text-sky-300 transition-colors">
             {{ __('admin.view_details') }}
         </a>
     </div>

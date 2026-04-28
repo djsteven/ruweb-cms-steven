@@ -9,7 +9,7 @@
         <p class="text-sm text-gray-500 mt-0.5">{{ __('admin.users_subtitle') }}</p>
     </div>
 
-    <a href="{{ route('admin.users.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+    <a href="{{ route('admin.users.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
@@ -24,7 +24,7 @@
             name="search"
             value="{{ request('search') }}"
             placeholder="{{ __('admin.search_user_placeholder') }}"
-            class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+            class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
         >
         <button type="submit" class="px-3 py-2 bg-gray-800 border border-white/10 text-gray-400 text-sm rounded-md hover:bg-gray-700 transition-colors">
             {{ __('admin.search') }}
@@ -39,7 +39,7 @@
         </svg>
         <p class="text-sm font-medium text-gray-500">{{ __('admin.no_users_yet') }}</p>
         <p class="text-sm text-gray-600 mt-1">{{ __('admin.no_users_hint') }}</p>
-        <a href="{{ route('admin.users.create') }}" class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+        <a href="{{ route('admin.users.create') }}" class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.new_user') }}
         </a>
     </div>
@@ -58,7 +58,7 @@
                 @foreach ($users as $user)
                     <tr class="hover:bg-white/[0.02] transition-colors">
                         <td class="px-4 py-3">
-                            <a href="{{ route('admin.users.edit', $user) }}" class="text-sm text-white hover:text-emerald-400 transition-colors">
+                            <a href="{{ route('admin.users.edit', $user) }}" class="text-sm text-white hover:text-sky-400 transition-colors">
                                 {{ $user->name }}
                             </a>
                         </td>
@@ -70,7 +70,7 @@
                                 $roleKey = 'admin.role_' . $user->role;
                                 $roleLabel = __($roleKey) !== $roleKey ? __($roleKey) : ucfirst($user->role);
                             @endphp
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize {{ $user->isAdmin() ? 'bg-emerald-500/10 text-emerald-400' : 'bg-sky-500/10 text-sky-400' }}">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium capitalize {{ $user->isAdmin() ? 'bg-sky-500/10 text-sky-400' : 'bg-gray-500/10 text-gray-400' }}">
                                 {{ $roleLabel }}
                             </span>
                         </td>

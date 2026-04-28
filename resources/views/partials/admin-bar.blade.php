@@ -7,7 +7,7 @@
 
         {{-- Dashboard --}}
         <a href="{{ route('admin.dashboard') }}"
-           class="flex items-center gap-1.5 px-2 py-1 rounded text-emerald-400 hover:text-emerald-300 hover:bg-white/5 transition-colors text-[11px] font-semibold tracking-wide flex-none"
+           class="flex items-center gap-1.5 px-2 py-1 rounded text-sky-400 hover:text-sky-300 hover:bg-white/5 transition-colors text-[11px] font-semibold tracking-wide flex-none"
            title="Ir al Dashboard">
             <svg class="w-3.5 h-3.5 flex-none" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 11h1v6a1 1 0 001 1h4v-4h2v4h4a1 1 0 001-1v-6h1a1 1 0 00.707-1.707l-7-7z"/>

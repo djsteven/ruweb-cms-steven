@@ -47,13 +47,13 @@
 @endif
 
 @if(($cta['is_visible'] ?? 1) && ($cta['heading'] ?? $cta['body'] ?? null))
-<section class="py-16 sm:py-20 bg-emerald-600">
+<section class="py-16 sm:py-20 bg-sky-600">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         @if($cta['heading'] ?? null)
             <h2 class="text-3xl font-bold text-white mb-4">{{ $cta['heading'] }}</h2>
         @endif
         @if($cta['body'] ?? null)
-            <p class="text-lg text-emerald-100 max-w-3xl">{{ $cta['body'] }}</p>
+            <p class="text-lg text-sky-100 max-w-3xl">{{ $cta['body'] }}</p>
         @endif
     </div>
 </section>

@@ -77,7 +77,7 @@
         <div class="flex items-center gap-3">
             @yield('editor-actions')
             <button type="button" id="save-btn" disabled
-                    class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-medium rounded-md transition-colors">
+                    class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-medium rounded-md transition-colors">
                 {{ __('admin.btn_save_changes') }}
             </button>
         </div>
@@ -87,7 +87,7 @@
     @if($showPreview ?? true)
     <div class="lg:hidden flex-none flex bg-[#111111] border-b border-white/[0.06]">
         <button id="tab-edit"
-                class="flex-1 py-2 text-xs font-medium text-emerald-400 border-b-2 border-emerald-500"
+                class="flex-1 py-2 text-xs font-medium text-sky-400 border-b-2 border-sky-500"
                 onclick="editorSwitchTab('edit')">{{ __('admin.tab_edit') }}</button>
         <button id="tab-preview"
                 class="flex-1 py-2 text-xs font-medium text-gray-500 border-b-2 border-transparent"
@@ -116,7 +116,7 @@
                 <span class="text-xs text-gray-600">{{ __('admin.live_preview') }}</span>
                 <div class="hidden lg:flex items-center gap-3">
                     <button id="vp-desktop" onclick="editorSetViewport('desktop')"
-                            class="text-xs text-emerald-400 transition-colors">{{ __('admin.viewport_desktop') }}</button>
+                            class="text-xs text-sky-400 transition-colors">{{ __('admin.viewport_desktop') }}</button>
                     <button id="vp-tablet" onclick="editorSetViewport('tablet')"
                             class="text-xs text-gray-600 hover:text-gray-400 transition-colors">{{ __('admin.viewport_tablet') }}</button>
                     <button id="vp-mobile" onclick="editorSetViewport('mobile')"
@@ -150,7 +150,7 @@
             const el = document.getElementById('editor-toast');
             el.textContent = msg;
             el.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-lg text-sm font-medium shadow-lg pointer-events-none transition-opacity duration-300 '
-                + (type === 'error' ? 'bg-red-500/90 text-white' : 'bg-emerald-600 text-white');
+                + (type === 'error' ? 'bg-red-500/90 text-white' : 'bg-sky-600 text-white');
             el.style.opacity = '1';
             clearTimeout(el._timer);
             el._timer = setTimeout(() => { el.style.opacity = '0'; }, 2500);
@@ -162,7 +162,7 @@
             const tabEdit = document.getElementById('tab-edit');
             const tabPreview = document.getElementById('tab-preview');
 
-            const activeClass = 'flex-1 py-2 text-xs font-medium text-emerald-400 border-b-2 border-emerald-500';
+            const activeClass = 'flex-1 py-2 text-xs font-medium text-sky-400 border-b-2 border-sky-500';
             const inactiveClass = 'flex-1 py-2 text-xs font-medium text-gray-500 border-b-2 border-transparent';
 
             if (tab === 'edit') {
@@ -192,7 +192,7 @@
                 iframe.style.width = '390px';
                 iframe.style.height = '844px';
                 wrap.classList.add('p-6');
-                mobileBtn.className = 'text-xs text-emerald-400 transition-colors';
+                mobileBtn.className = 'text-xs text-sky-400 transition-colors';
                 desktopBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
                 tabletBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
             } else if (vp === 'tablet') {
@@ -200,7 +200,7 @@
                 iframe.style.width = '834px';
                 iframe.style.height = '1112px';
                 wrap.classList.add('p-6');
-                tabletBtn.className = 'text-xs text-emerald-400 transition-colors';
+                tabletBtn.className = 'text-xs text-sky-400 transition-colors';
                 desktopBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
                 mobileBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
             } else {
@@ -208,7 +208,7 @@
                 iframe.style.width = '';
                 iframe.style.height = '';
                 wrap.classList.remove('p-6');
-                desktopBtn.className = 'text-xs text-emerald-400 transition-colors';
+                desktopBtn.className = 'text-xs text-sky-400 transition-colors';
                 tabletBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
                 mobileBtn.className = 'text-xs text-gray-600 hover:text-gray-400 transition-colors';
             }

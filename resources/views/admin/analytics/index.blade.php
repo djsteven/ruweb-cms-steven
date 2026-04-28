@@ -15,7 +15,7 @@
         <p class="text-sm text-gray-500 mt-0.5">{{ __('admin.analytics_subtitle') }}</p>
     </div>
     <button type="submit" form="analytics-form"
-            class="shrink-0 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+            class="shrink-0 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
         {{ __('admin.btn_save_changes') }}
     </button>
 </div>
@@ -35,7 +35,7 @@
                     class="analytics-tab inline-flex items-center gap-2 px-3 py-2 text-sm font-medium border-b-2 transition-colors"
                     data-tab="{{ $tab['key'] }}"
                     onclick="switchAnalyticsTab('{{ $tab['key'] }}')">
-                <span class="w-1.5 h-1.5 rounded-full {{ $tab['configured'] ? 'bg-emerald-400' : 'bg-gray-600' }}"></span>
+                <span class="w-1.5 h-1.5 rounded-full {{ $tab['configured'] ? 'bg-sky-400' : 'bg-gray-600' }}"></span>
                 {{ $tab['label'] }}
             </button>
         @endforeach
@@ -50,15 +50,15 @@
                     <p class="text-sm text-gray-500 mt-1">{{ __('admin.analytics_google_help') }}</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_google_analytics_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
-                    <a href="https://tagmanager.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_google_tag_manager_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
+                    <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors">{{ __('admin.analytics_google_analytics_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
+                    <a href="https://tagmanager.google.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors">{{ __('admin.analytics_google_tag_manager_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
                 </div>
             </div>
 
             <label for="google_tag_id" class="block text-sm font-medium text-gray-300 mb-1">{{ __('admin.analytics_google_field') }}</label>
             <p class="text-xs text-gray-500 mb-2">{{ __('admin.analytics_google_field_help') }}</p>
             <input id="google_tag_id" name="google_tag_id" type="text" value="{{ old('google_tag_id', $googleTagId) }}"
-                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                    placeholder="G-XXXXXXXXXX">
             @error('google_tag_id')
                 <p class="mt-2 text-sm text-rose-400">{{ $message }}</p>
@@ -92,13 +92,13 @@
                     <h2 class="text-base font-semibold text-white">{{ __('admin.analytics_meta_title') }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ __('admin.analytics_meta_help') }}</p>
                 </div>
-                <a href="https://business.facebook.com/events_manager2/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_meta_events_manager_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
+                <a href="https://business.facebook.com/events_manager2/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors">{{ __('admin.analytics_meta_events_manager_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
             </div>
 
             <label for="meta_pixel_id" class="block text-sm font-medium text-gray-300 mb-1">{{ __('admin.analytics_meta_field') }}</label>
             <p class="text-xs text-gray-500 mb-2">{{ __('admin.analytics_meta_field_help') }}</p>
             <input id="meta_pixel_id" name="meta_pixel_id" type="text" inputmode="numeric" value="{{ old('meta_pixel_id', $metaPixelId) }}"
-                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                    placeholder="123456789012345">
             @error('meta_pixel_id')
                 <p class="mt-2 text-sm text-rose-400">{{ $message }}</p>
@@ -139,13 +139,13 @@
                     <h2 class="text-base font-semibold text-white">{{ __('admin.analytics_search_console_title') }}</h2>
                     <p class="text-sm text-gray-500 mt-1">{{ __('admin.analytics_search_console_help') }}</p>
                 </div>
-                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">{{ __('admin.analytics_search_console_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
+                <a href="https://search.google.com/search-console" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors">{{ __('admin.analytics_search_console_link') }}<svg class="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg></a>
             </div>
 
             <label for="search_console_verification_token" class="block text-sm font-medium text-gray-300 mb-1">{{ __('admin.analytics_search_console_field') }}</label>
             <p class="text-xs text-gray-500 mb-2">{{ __('admin.analytics_search_console_field_help') }}</p>
             <input id="search_console_verification_token" name="search_console_verification_token" type="text" value="{{ old('search_console_verification_token', $searchConsoleVerificationToken) }}"
-                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                    placeholder="abc123DEF456ghi789">
             @error('search_console_verification_token')
                 <p class="mt-2 text-sm text-rose-400">{{ $message }}</p>
@@ -180,7 +180,7 @@
     function switchAnalyticsTab(key) {
         analyticsTabs.forEach(tab => {
             const active = tab.dataset.tab === key;
-            tab.classList.toggle('border-emerald-500', active);
+            tab.classList.toggle('border-sky-500', active);
             tab.classList.toggle('text-white', active);
             tab.classList.toggle('border-transparent', !active);
             tab.classList.toggle('text-gray-500', !active);

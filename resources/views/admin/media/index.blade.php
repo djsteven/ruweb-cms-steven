@@ -6,7 +6,7 @@
 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
     <h1 class="text-lg font-semibold text-white">{{ __('admin.media') }}</h1>
 
-    <button id="upload-btn" class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+    <button id="upload-btn" class="inline-flex items-center gap-2 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
@@ -17,7 +17,7 @@
 <!-- Filters -->
 <div class="flex flex-col sm:flex-row gap-3 mb-6">
     <form id="filter-form" method="GET" class="flex flex-1 gap-2">
-        <select id="filter-type" name="type" class="bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+        <select id="filter-type" name="type" class="bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
             <option value="">{{ __('admin.all_types') }}</option>
             <option value="image" {{ request('type') === 'image' ? 'selected' : '' }}>{{ __('admin.images') }}</option>
             <option value="application" {{ request('type') === 'application' ? 'selected' : '' }}>{{ __('admin.documents') }}</option>
@@ -28,7 +28,7 @@
             name="search"
             value="{{ request('search') }}"
             placeholder="{{ __('admin.search_media_ph') }}"
-            class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+            class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
         >
     </form>
 </div>
@@ -41,7 +41,7 @@
         </svg>
         <p class="text-sm font-medium text-gray-500">{{ __('admin.no_media_yet') }}</p>
         <p class="text-sm text-gray-600 mt-1">{{ __('admin.no_media_hint') }}</p>
-        <button id="upload-btn-empty" class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+        <button id="upload-btn-empty" class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.upload_file') }}
         </button>
     </div>
@@ -166,9 +166,9 @@
 
     document.querySelectorAll('.media-item').forEach(item => {
         item.addEventListener('click', () => {
-            if (activeItem) activeItem.classList.remove('ring-2', 'ring-emerald-500/60');
+            if (activeItem) activeItem.classList.remove('ring-2', 'ring-sky-500/60');
             activeItem = item;
-            item.classList.add('ring-2', 'ring-emerald-500/60');
+            item.classList.add('ring-2', 'ring-sky-500/60');
 
             document.getElementById('detail-preview').innerHTML = item.dataset.mime.startsWith('image/')
                 ? `<img src="${item.dataset.url}" alt="${item.dataset.alt}" class="max-w-full max-h-56 rounded object-contain">`
@@ -240,7 +240,7 @@
     });
 
     detailClose?.addEventListener('click', () => {
-        if (activeItem) activeItem.classList.remove('ring-2', 'ring-emerald-500/60');
+        if (activeItem) activeItem.classList.remove('ring-2', 'ring-sky-500/60');
         activeItem = null;
         detailPanel.classList.add('hidden');
     });

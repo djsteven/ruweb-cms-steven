@@ -66,7 +66,7 @@ function flattenMenuTree($items, $parentId = null) {
 
         <div class="mt-5 pt-4 border-t border-white/[0.06]">
             <button id="settings-save-btn" type="submit" disabled
-                    class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-md transition-colors">
+                    class="px-4 py-2 bg-sky-600 hover:bg-sky-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-md transition-colors">
                 {{ __('admin.btn_save_changes') }}
             </button>
         </div>
@@ -98,11 +98,11 @@ function flattenMenuTree($items, $parentId = null) {
                     </button>
                     <div id="panel-custom" class="border-t border-white/[0.06] px-3 py-3 space-y-2">
                         <input type="text" id="custom-url" placeholder="{{ __('admin.menu_custom_url_placeholder') }}"
-                               class="w-full bg-[#111111] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+                               class="w-full bg-[#111111] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50">
                         <input type="text" id="custom-label" placeholder="{{ __('admin.menu_custom_label_placeholder') }}"
-                               class="w-full bg-[#111111] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50">
+                               class="w-full bg-[#111111] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50">
                         <button type="button" onclick="addCustomLink()"
-                                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md transition-colors">
+                                class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium rounded-md transition-colors">
                             {{ __('admin.menu_add_to_menu') }}
                         </button>
                     </div>
@@ -127,7 +127,7 @@ function flattenMenuTree($items, $parentId = null) {
                             @endforeach
                         </div>
                         <button type="button" onclick="addChecked('page', '.page-check')"
-                                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md transition-colors">
+                                class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium rounded-md transition-colors">
                             {{ __('admin.menu_add_to_menu') }}
                         </button>
                     </div>
@@ -153,7 +153,7 @@ function flattenMenuTree($items, $parentId = null) {
                             @endforeach
                         </div>
                         <button type="button" onclick="addChecked('post', '.post-check')"
-                                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md transition-colors">
+                                class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium rounded-md transition-colors">
                             {{ __('admin.menu_add_to_menu') }}
                         </button>
                     </div>
@@ -183,7 +183,7 @@ function flattenMenuTree($items, $parentId = null) {
                             @endforeach
                         </div>
                         <button type="button" onclick="addChecked('taxonomy', '.taxonomy-check')"
-                                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md transition-colors">
+                                class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium rounded-md transition-colors">
                             {{ __('admin.menu_add_to_menu') }}
                         </button>
                     </div>
@@ -206,7 +206,7 @@ function flattenMenuTree($items, $parentId = null) {
 
                     <div class="mt-4 pt-4 border-t border-white/[0.06]">
                         <button id="items-save-btn" type="submit" disabled
-                                class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-md transition-colors">
+                                class="px-4 py-2 bg-sky-600 hover:bg-sky-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium rounded-md transition-colors">
                             {{ __('admin.menu_save_items') }}
                         </button>
                     </div>
@@ -326,18 +326,18 @@ function flattenMenuTree($items, $parentId = null) {
             <div class="item-settings hidden border-t border-white/[0.06] px-3 py-3 space-y-2.5">
                 <div>
                     <label class="block text-xs text-gray-500 mb-1">{{ __('admin.menu_item_label') }}</label>
-                    <input type="text" class="label-input w-full bg-[#111111] border border-white/10 text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                    <input type="text" class="label-input w-full bg-[#111111] border border-white/10 text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sky-500/50"
                            value="${esc(item.label)}">
                 </div>
                 ${item.type === 'custom_link' ? `
                 <div>
                     <label class="block text-xs text-gray-500 mb-1">{{ __('admin.menu_item_url') }}</label>
-                    <input type="text" class="url-input w-full bg-[#111111] border border-white/10 text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                    <input type="text" class="url-input w-full bg-[#111111] border border-white/10 text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sky-500/50"
                            value="${esc(item.url || '')}">
                 </div>` : ''}
                 <div>
                     <label class="block text-xs text-gray-500 mb-1">{{ __('admin.menu_item_target') }}</label>
-                    <select class="target-select bg-[#111111] border border-white/10 text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-emerald-500/50">
+                    <select class="target-select bg-[#111111] border border-white/10 text-white text-xs rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-sky-500/50">
                         <option value="_self" ${item.target !== '_blank' ? 'selected' : ''}>{{ __('admin.menu_item_target_self') }}</option>
                         <option value="_blank" ${item.target === '_blank' ? 'selected' : ''}>{{ __('admin.menu_item_target_blank') }}</option>
                     </select>

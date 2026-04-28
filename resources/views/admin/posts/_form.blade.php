@@ -36,7 +36,7 @@
             <label for="title" class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_title') }}</label>
             <input type="text" name="title" id="title"
                    value="{{ old('title', $post?->title) }}"
-                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                    placeholder="{{ __('admin.field_title_placeholder') }}" required>
             @error('title')
                 <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
@@ -49,7 +49,7 @@
                 <span class="text-gray-600 text-sm">/blog/</span>
                 <input type="text" name="slug" id="slug"
                        value="{{ old('slug', $post?->slug) }}"
-                       class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                       class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                        placeholder="{{ __('admin.field_slug_placeholder') }}" required>
             </div>
             @error('slug')
@@ -60,7 +60,7 @@
         <div>
             <label for="excerpt" class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_excerpt') }}</label>
             <textarea name="excerpt" id="excerpt" rows="3"
-                      class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                      class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                       placeholder="{{ __('admin.field_excerpt_placeholder') }}">{{ old('excerpt', $post?->excerpt) }}</textarea>
             @error('excerpt')
                 <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
@@ -82,7 +82,7 @@
                     <label class="flex items-center gap-2.5 cursor-pointer group">
                         <input type="checkbox" name="categories[]" value="{{ $category->id }}"
                                {{ in_array($category->id, $selectedCategories) ? 'checked' : '' }}
-                               class="w-4 h-4 rounded bg-[#1a1a1a] border border-white/20 text-emerald-500 focus:ring-emerald-500/50 focus:ring-offset-0">
+                               class="w-4 h-4 rounded bg-[#1a1a1a] border border-white/20 text-sky-500 focus:ring-sky-500/50 focus:ring-offset-0">
                         <span class="text-sm text-gray-400 group-hover:text-gray-200 transition-colors">{{ $category->name }}</span>
                     </label>
                 @empty
@@ -93,7 +93,7 @@
             <div class="flex items-center gap-1.5">
                 <input type="text" id="new-category-name"
                        placeholder="{{ __('admin.category_inline_placeholder') }}"
-                       class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-xs rounded px-2 py-1.5 placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                       class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-xs rounded px-2 py-1.5 placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-sky-500/50 focus:border-sky-500/50">
                 <button type="button" id="new-category-btn"
                         class="px-2 py-1.5 bg-white/5 hover:bg-white/10 text-gray-400 hover:text-gray-200 text-xs rounded transition-colors whitespace-nowrap">
                     + {{ __('admin.category_inline_add') }}
@@ -113,7 +113,7 @@
         <div>
             <label for="content" class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_content') }}</label>
             <textarea name="content" id="content" rows="20"
-                      class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                      class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                       placeholder="{{ __('admin.field_content_placeholder') }}">{{ old('content', $post?->content) }}</textarea>
             @error('content')
                 <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
@@ -130,7 +130,7 @@
             <div>
                 <label for="status" class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_status') }}</label>
                 <select name="status" id="status"
-                        class="w-full bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                        class="w-full bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
                     @foreach (config('cms.statuses') as $s)
                         <option value="{{ $s }}" {{ old('status', $post?->status ?? 'draft') === $s ? 'selected' : '' }}>
                             {{ ucfirst($s) }}
@@ -151,7 +151,7 @@
             <div>
                 <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_meta_description') }}</label>
                 <textarea name="meta_json[description]" rows="2"
-                          class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                          class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                           placeholder="{{ __('admin.field_meta_description_ph') }}">{{ $meta['description'] ?? '' }}</textarea>
             </div>
 
@@ -161,7 +161,7 @@
                 </label>
                 <input type="text" name="meta_json[og_title]"
                        value="{{ $meta['og_title'] ?? '' }}"
-                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                        placeholder="{{ __('admin.field_og_title_ph') }}">
             </div>
 
@@ -171,7 +171,7 @@
                 </label>
                 <input type="text" name="meta_json[og_description]"
                        value="{{ $meta['og_description'] ?? '' }}"
-                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
                        placeholder="{{ __('admin.field_og_description_ph') }}">
             </div>
         </div>
@@ -216,10 +216,10 @@
     function updateTabStyles() {
         formTabs.forEach(t => {
             if (t.classList.contains('active')) {
-                t.classList.add('text-emerald-400', 'border-b-2', 'border-emerald-500');
+                t.classList.add('text-sky-400', 'border-b-2', 'border-sky-500');
                 t.classList.remove('text-gray-500', 'border-transparent');
             } else {
-                t.classList.remove('text-emerald-400', 'border-b-2', 'border-emerald-500');
+                t.classList.remove('text-sky-400', 'border-b-2', 'border-sky-500');
                 t.classList.add('text-gray-500', 'border-transparent');
             }
         });
@@ -306,7 +306,7 @@
                 label.className = 'flex items-center gap-2.5 cursor-pointer group';
                 label.innerHTML = `
                     <input type="checkbox" name="categories[]" value="${id}" checked
-                           class="w-4 h-4 rounded bg-[#1a1a1a] border border-white/20 text-emerald-500 focus:ring-emerald-500/50 focus:ring-offset-0">
+                           class="w-4 h-4 rounded bg-[#1a1a1a] border border-white/20 text-sky-500 focus:ring-sky-500/50 focus:ring-offset-0">
                     <span class="text-sm text-gray-400 group-hover:text-gray-200 transition-colors">${createdName}</span>
                 `;
                 categoryList.appendChild(label);

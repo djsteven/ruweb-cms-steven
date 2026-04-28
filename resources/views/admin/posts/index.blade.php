@@ -6,7 +6,7 @@
 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
     <h1 class="text-lg font-semibold text-white">{{ __('admin.posts') }}</h1>
 
-    <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+    <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center gap-2 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
         </svg>
@@ -16,15 +16,15 @@
 
 <div class="flex gap-1 mb-6 border-b border-white/[0.06]">
     <a href="{{ route('admin.posts.index') }}"
-       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {{ !$currentStatus ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-500 hover:text-gray-300' }}">
+       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {{ !$currentStatus ? 'border-sky-500 text-sky-400' : 'border-transparent text-gray-500 hover:text-gray-300' }}">
         {{ __('admin.all') }} <span class="text-xs text-gray-600 ml-1">{{ $totalCount }}</span>
     </a>
     <a href="{{ route('admin.posts.index', ['status' => 'published']) }}"
-       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {{ $currentStatus === 'published' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-500 hover:text-gray-300' }}">
+       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {{ $currentStatus === 'published' ? 'border-sky-500 text-sky-400' : 'border-transparent text-gray-500 hover:text-gray-300' }}">
         {{ __('admin.published') }} <span class="text-xs text-gray-600 ml-1">{{ $publishedCount }}</span>
     </a>
     <a href="{{ route('admin.posts.index', ['status' => 'draft']) }}"
-       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {{ $currentStatus === 'draft' ? 'border-emerald-500 text-emerald-400' : 'border-transparent text-gray-500 hover:text-gray-300' }}">
+       class="px-3 py-2 text-sm font-medium border-b-2 transition-colors {{ $currentStatus === 'draft' ? 'border-sky-500 text-sky-400' : 'border-transparent text-gray-500 hover:text-gray-300' }}">
         {{ __('admin.draft') }} <span class="text-xs text-gray-600 ml-1">{{ $draftCount }}</span>
     </a>
 </div>
@@ -39,7 +39,7 @@
             name="search"
             value="{{ request('search') }}"
             placeholder="{{ __('admin.search_placeholder') }}"
-            class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50"
+            class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
         >
         <button type="submit" class="px-3 py-2 bg-gray-800 border border-white/10 text-gray-400 text-sm rounded-md hover:bg-gray-700 transition-colors">
             {{ __('admin.search') }}
@@ -54,7 +54,7 @@
         </svg>
         <p class="text-sm font-medium text-gray-500">{{ __('admin.no_posts_yet') }}</p>
         <p class="text-sm text-gray-600 mt-1">{{ __('admin.no_posts_hint') }}</p>
-        <a href="{{ route('admin.posts.create') }}" class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+        <a href="{{ route('admin.posts.create') }}" class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.new_post') }}
         </a>
     </div>
@@ -73,7 +73,7 @@
                 @foreach ($posts as $post)
                     <tr class="hover:bg-white/[0.02] transition-colors">
                         <td class="px-4 py-3">
-                            <a href="{{ route('admin.posts.edit', $post) }}" class="text-sm text-white hover:text-emerald-400 transition-colors">
+                            <a href="{{ route('admin.posts.edit', $post) }}" class="text-sm text-white hover:text-sky-400 transition-colors">
                                 {{ $post->title }}
                             </a>
                         </td>
@@ -82,7 +82,7 @@
                         </td>
                         <td class="px-4 py-3">
                             @if ($post->status === 'published')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400">{{ __('admin.badge_published') }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400">{{ __('admin.badge_published') }}</span>
                             @else
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-400">{{ __('admin.badge_draft') }}</span>
                             @endif

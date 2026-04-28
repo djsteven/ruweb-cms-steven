@@ -32,14 +32,14 @@
                                 {{ optional($post->published_at)->format('M d, Y') }}
                             </p>
                             <h2 class="text-lg font-semibold text-gray-900 leading-snug">
-                                <a href="{{ route('blog.show', $post->slug) }}" class="hover:text-emerald-700 transition-colors">
+                                <a href="{{ route('blog.show', $post->slug) }}" class="hover:text-sky-700 transition-colors">
                                     {{ $post->title }}
                                 </a>
                             </h2>
                             @if($post->excerpt)
                                 <p class="mt-2 text-sm text-gray-600 line-clamp-3">{{ $post->excerpt }}</p>
                             @endif
-                            <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex mt-4 text-sm font-medium text-emerald-700 hover:text-emerald-800">
+                            <a href="{{ route('blog.show', $post->slug) }}" class="inline-flex mt-4 text-sm font-medium text-sky-700 hover:text-sky-800">
                                 Read article →
                             </a>
                         </div>

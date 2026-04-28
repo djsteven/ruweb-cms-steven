@@ -18,7 +18,7 @@
             {{ __('admin.btn_save_draft') }}
         </button>
         <button type="button" id="publish-btn"
-                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+                class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.btn_publish') }}
         </button>
     </div>
@@ -28,7 +28,7 @@
 
 <div class="sm:hidden mt-6 flex flex-col gap-3">
     <button type="button" id="publish-btn-mobile"
-            class="w-full px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+            class="w-full px-4 py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
         {{ __('admin.btn_publish') }}
     </button>
     <button type="button" id="save-draft-btn-mobile"

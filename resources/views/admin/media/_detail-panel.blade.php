@@ -19,13 +19,13 @@
         <div class="mb-3">
             <label for="detail-alt" class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_alt_text') }}</label>
             <input type="text" id="detail-alt"
-                class="w-full px-3 py-2 bg-[#1a1a1a] border border-white/10 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                class="w-full px-3 py-2 bg-[#1a1a1a] border border-white/10 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
         </div>
 
         <div class="mb-5">
             <label for="detail-title" class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_media_title') }}</label>
             <input type="text" id="detail-title"
-                class="w-full px-3 py-2 bg-[#1a1a1a] border border-white/10 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                class="w-full px-3 py-2 bg-[#1a1a1a] border border-white/10 rounded-md text-white text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
         </div>
 
         <div class="mb-5 border-t border-white/[0.06] pt-4">
@@ -58,11 +58,11 @@
                     </div>
                     <div class="flex items-center justify-between gap-3 text-xs">
                         <span class="text-gray-500">{{ __('admin.optimization_bytes_saved') }}</span>
-                        <span id="detail-bytes-saved" class="text-emerald-400"></span>
+                        <span id="detail-bytes-saved" class="text-sky-400"></span>
                     </div>
                     <div class="flex items-center justify-between gap-3 text-xs">
                         <span class="text-gray-500">{{ __('admin.optimization_ratio') }}</span>
-                        <span id="detail-optimization-ratio" class="text-emerald-400"></span>
+                        <span id="detail-optimization-ratio" class="text-sky-400"></span>
                     </div>
                 </div>
 
@@ -80,7 +80,7 @@
         </div>
 
         <div class="flex gap-2">
-            <button id="detail-save" class="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+            <button id="detail-save" class="flex-1 py-2 px-4 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
                 {{ __('admin.btn_media_save') }}
             </button>
             <button id="detail-delete" class="py-2 px-3 bg-transparent hover:bg-red-500/10 text-red-500/70 hover:text-red-400 text-sm rounded-md border border-red-500/20 transition-colors">

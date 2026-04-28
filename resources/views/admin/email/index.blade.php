@@ -9,7 +9,7 @@
         <p class="text-sm text-gray-500 mt-0.5">{{ __('admin.email_subtitle') }}</p>
     </div>
     <button type="submit" form="email-form"
-            class="shrink-0 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+            class="shrink-0 px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
         {{ __('admin.btn_save_changes') }}
     </button>
 </div>
@@ -39,7 +39,7 @@
                     <input type="checkbox" name="settings[{{ $setting->key }}]" value="1"
                            {{ $setting->value ? 'checked' : '' }}
                            class="sr-only peer">
-                    <div class="w-9 h-5 bg-gray-700 peer-focus:ring-2 peer-focus:ring-emerald-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                    <div class="w-9 h-5 bg-gray-700 peer-focus:ring-2 peer-focus:ring-sky-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-600"></div>
                 </label>
 
             @elseif ($setting->type === 'password')
@@ -47,7 +47,7 @@
                 <input type="password" name="settings[{{ $setting->key }}]"
                        autocomplete="new-password"
                        placeholder="{{ $hasValue ? __('admin.password_stored_placeholder') : '' }}"
-                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
                 @if ($hasValue)
                     <p class="mt-1.5 text-xs text-gray-500">{{ __('admin.password_stored_hint') }}</p>
                 @endif
@@ -55,7 +55,7 @@
             @else
                 <input type="text" name="settings[{{ $setting->key }}]"
                        value="{{ $setting->value }}"
-                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
             @endif
         </div>
     @endforeach
@@ -71,7 +71,7 @@
             <input type="email" name="test_email" required
                    value="{{ auth()->user()->email }}"
                    placeholder="you@example.com"
-                   class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                   class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
             <button type="submit" class="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium rounded-md transition-colors whitespace-nowrap">
                 {{ __('admin.email_test_send') }}
             </button>

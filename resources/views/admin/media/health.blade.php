@@ -28,7 +28,7 @@
     </div>
     <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-4">
         <div class="text-xs text-gray-500 uppercase tracking-wide">{{ __('admin.total_saved_mb') }}</div>
-        <div class="text-2xl font-semibold text-emerald-400 mt-2">{{ $detail['total_saved_mb'] }}</div>
+        <div class="text-2xl font-semibold text-sky-400 mt-2">{{ $detail['total_saved_mb'] }}</div>
     </div>
     <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-4">
         <div class="text-xs text-gray-500 uppercase tracking-wide">{{ __('admin.average_reduction_ratio') }}</div>

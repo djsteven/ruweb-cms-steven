@@ -147,14 +147,14 @@ uploadClose?.addEventListener('click', closeUpload);
 dropZone?.addEventListener('click', () => fileInput?.click());
 dropZone?.addEventListener('dragover', (e) => {
     e.preventDefault();
-    dropZone.classList.add('border-emerald-500/50');
+    dropZone.classList.add('border-sky-500/50');
 });
 dropZone?.addEventListener('dragleave', () => {
-    dropZone.classList.remove('border-emerald-500/50');
+    dropZone.classList.remove('border-sky-500/50');
 });
 dropZone?.addEventListener('drop', (e) => {
     e.preventDefault();
-    dropZone.classList.remove('border-emerald-500/50');
+    dropZone.classList.remove('border-sky-500/50');
     if (e.dataTransfer.files.length) {
         setSelectedUploadFiles(e.dataTransfer.files);
     }
@@ -346,7 +346,7 @@ function renderLibraryItems(items) {
         const isImage = String(item.mime_type || '').startsWith('image/');
 
         return `
-            <button type="button" class="media-library-item text-left bg-[#111111] border border-white/10 rounded-lg overflow-hidden hover:border-emerald-500/50 transition-colors" data-id="${item.id}">
+            <button type="button" class="media-library-item text-left bg-[#111111] border border-white/10 rounded-lg overflow-hidden hover:border-sky-500/50 transition-colors" data-id="${item.id}">
                 <div class="aspect-square bg-[#1a1a1a] flex items-center justify-center overflow-hidden">
                     ${isImage
                         ? `<img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt || item.title || item.original_filename)}" class="w-full h-full object-contain">`
@@ -375,7 +375,7 @@ function renderLibraryPagination(currentPage, lastPage) {
     libraryPagination.classList.remove('hidden');
 
     const btnBase = 'px-3 py-1.5 text-xs rounded-md transition-colors border font-medium';
-    const btnActive = `${btnBase} bg-emerald-600 border-emerald-600 text-white`;
+    const btnActive = `${btnBase} bg-sky-600 border-sky-600 text-white`;
     const btnInactive = `${btnBase} bg-transparent border-white/10 text-gray-400 hover:bg-gray-800`;
     const btnDisabled = `${btnBase} bg-transparent border-white/[0.05] text-gray-700 cursor-not-allowed`;
 

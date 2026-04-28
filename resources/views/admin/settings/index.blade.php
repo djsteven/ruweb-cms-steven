@@ -51,7 +51,7 @@
 
                     @if ($setting->type === 'select')
                         <select name="settings[{{ $setting->key }}]"
-                                class="w-full bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                                class="w-full bg-[#1a1a1a] border border-white/10 text-gray-400 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
                             @foreach ($setting->options ?? [] as $optValue => $optLabel)
                                 @php
                                     $optKey = 'admin.settings_options.' . $setting->key . '.' . $optValue;
@@ -65,7 +65,7 @@
 
                     @elseif ($setting->type === 'text')
                         <textarea name="settings[{{ $setting->key }}]" rows="3"
-                                  class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">{{ $setting->value }}</textarea>
+                                  class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">{{ $setting->value }}</textarea>
 
                     @elseif ($setting->type === 'boolean')
                         <label class="relative inline-flex items-center cursor-pointer">
@@ -73,13 +73,13 @@
                             <input type="checkbox" name="settings[{{ $setting->key }}]" value="1"
                                    {{ $setting->value ? 'checked' : '' }}
                                    class="sr-only peer">
-                            <div class="w-9 h-5 bg-gray-700 peer-focus:ring-2 peer-focus:ring-emerald-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:ring-2 peer-focus:ring-sky-500/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-600"></div>
                         </label>
 
                     @elseif ($setting->type === 'integer')
                         <input type="number" name="settings[{{ $setting->key }}]"
                                value="{{ $setting->value }}"
-                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
 
                     @elseif ($setting->type === 'media')
                         @include('admin.media._selector', [
@@ -94,9 +94,9 @@
                             <input type="password" name="settings[{{ $setting->key }}]"
                                    autocomplete="new-password"
                                    placeholder="{{ $hasValue ? __('admin.password_stored_placeholder') : '' }}"
-                                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 pr-20 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                                   class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 pr-20 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
                             <button type="button"
-                                    class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-emerald-400 px-2 py-1"
+                                    class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-sky-400 px-2 py-1"
                                     onclick="togglePasswordVisibility(this)">
                                 {{ __('admin.show') }}
                             </button>
@@ -108,7 +108,7 @@
                     @else
                         <input type="text" name="settings[{{ $setting->key }}]"
                                value="{{ $setting->value }}"
-                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+                               class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
                     @endif
                 </div>
             @endforeach
@@ -116,7 +116,7 @@
     @endforeach
 
     <div class="mt-6">
-        <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+        <button type="submit" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.btn_save_changes') }}
         </button>
     </div>
@@ -132,10 +132,10 @@
     function switchTab(group, persist = true) {
         tabs.forEach(tab => {
             if (tab.dataset.group === group) {
-                tab.classList.add('border-emerald-500', 'text-emerald-400');
+                tab.classList.add('border-sky-500', 'text-sky-400');
                 tab.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-300');
             } else {
-                tab.classList.remove('border-emerald-500', 'text-emerald-400');
+                tab.classList.remove('border-sky-500', 'text-sky-400');
                 tab.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-300');
             }
         });

@@ -6,7 +6,7 @@
                 <p class="text-xs text-gray-500 mt-1">{{ __('admin.choose_file') }}</p>
             </div>
             <button type="button" id="media-library-upload"
-                class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-md transition-colors">
+                class="px-3 py-1.5 bg-sky-600 hover:bg-sky-700 text-white text-xs font-medium rounded-md transition-colors">
                 {{ __('admin.upload_file') }}
             </button>
             <button type="button" id="media-library-close" class="text-gray-600 hover:text-gray-400 transition-colors">
@@ -17,7 +17,7 @@
         </div>
 
         <div class="px-5 py-4 border-b border-white/[0.06] flex flex-col sm:flex-row gap-3">
-            <input type="text" id="media-library-search" placeholder="{{ __('admin.search_media_ph') }}" class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500/50">
+            <input type="text" id="media-library-search" placeholder="{{ __('admin.search_media_ph') }}" class="flex-1 bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50">
             <button type="button" id="media-library-refresh" class="px-3 py-2 bg-gray-800 border border-white/10 text-gray-400 text-sm rounded-md hover:bg-gray-700 transition-colors">
                 {{ __('admin.search') }}
             </button>

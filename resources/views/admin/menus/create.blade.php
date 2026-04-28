@@ -18,7 +18,7 @@
     @include('admin.menus._form', ['menu' => null])
 
     <div class="mt-5 flex items-center gap-3">
-        <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-md transition-colors">
+        <button type="submit" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
             {{ __('admin.btn_save_changes') }}
         </button>
         <a href="{{ route('admin.menus.index') }}" class="px-4 py-2 bg-white/5 hover:bg-white/10 text-gray-300 text-sm font-medium rounded-md transition-colors">
