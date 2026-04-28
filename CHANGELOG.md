@@ -8,7 +8,11 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.19.1 - 2026-04-28
+## 0.19.2 - 2026-04-28
+
+- Completado el seguimiento por commit del changelog resolviendo el SHA pendiente de la entrada anterior.
+
+## 0.19.1 - 2026-04-28 (c2a9737)
 
 - Protegida la suite de tests contra config cache local, limpiando `bootstrap/cache` antes de bootear PHPUnit.
 - Evitado que `RefreshDatabase` pueda correr contra la base MySQL local cuando existe `config.php` generado por `php artisan optimize`.
