@@ -8,7 +8,24 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.16.2 - 2026-04-28
+## 0.18.0 - 2026-04-28
+
+- Agregadas acciones de borrado directo en las tablas de Pages y Posts del admin.
+- Cada fila ahora expone la convención completa de acciones: abrir si existe detail público, editar y borrar con confirmación.
+- Skill y documentación de colecciones actualizadas para exigir esta convención en nuevos listados admin.
+
+## 0.17.0 - 2026-04-28 (dd27976)
+
+- Tema de acento del sistema cambiado de verde esmeralda a azul `sky-600`.
+- Botones, tabs activas, focus states, badges y enlaces del admin fueron alineados al nuevo color de acento.
+- Ajustado el glow del login y otros acentos derivados para mantener coherencia visual con el nuevo tema.
+
+## 0.16.3 - 2026-04-28 (63266b4)
+
+- Documentación de arquitectura y guías alineada con las capacidades reales del sitio actual.
+- Referencias a comportamientos no implementados fueron ajustadas para evitar desfasajes entre docs y producto.
+
+## 0.16.2 - 2026-04-28 (9a9ef3f)
 
 - Rebrand del starter desde Flaxt a Rüweb en configuración, textos visibles, seeders y documentación.
 - Defaults de instalación actualizados para usar `ruweb-cms` y `admin@ruweb.local` en lugar de los valores anteriores.

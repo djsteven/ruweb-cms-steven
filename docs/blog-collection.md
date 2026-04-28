@@ -41,6 +41,14 @@ Example fields:
 - public views under `resources/views/blog/`
 - category terms through `App\Models\Taxonomy` with type `category`
 
+## Admin List Convention
+
+Because blog posts have a public detail page, the admin index row actions should include:
+
+- open public post
+- edit post
+- delete post with confirmation
+
 ## Typical Routes
 
 Admin:

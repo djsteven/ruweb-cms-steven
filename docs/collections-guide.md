@@ -69,6 +69,16 @@ Every collection should document who can:
 - publish
 - delete
 
+### 7. Admin index tables must expose standard row actions
+
+When a collection has an admin list table, each row should include an actions column with:
+
+- an open/view link when the entry has a public detail page
+- an edit button
+- a delete button with confirmation
+
+These actions should follow the existing admin icon treatment and remain vertically aligned within the row.
+
 ## Recommended Structure
 
 Typical pieces of a collection:
@@ -93,8 +103,9 @@ Typical pieces of a collection:
 6. Add admin CRUD routes, controller actions, and views.
 7. Add public routes before any page catch-all route.
 8. Add authorization rules or a policy.
-9. Add tests for publishing, visibility, and authorization boundaries.
-10. Add a collection-specific example document only if the collection introduces behavior not already covered elsewhere.
+9. Ensure the admin index table exposes the standard row actions: open if detail exists, edit, and delete with confirmation.
+10. Add tests for publishing, visibility, and authorization boundaries.
+11. Add a collection-specific example document only if the collection introduces behavior not already covered elsewhere.
 
 ## What Should Not Live Here
 

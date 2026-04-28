@@ -42,6 +42,11 @@ If this file was referenced in the prompt:
 8. Validate taxonomy IDs against the intended taxonomy type before syncing them.
 9. Keep the solution aligned with the starter architecture and avoid moving project-specific business logic into the reusable core.
 10. If the request leaves gaps, fill only the minimum necessary using consistent conventions.
+11. For admin index tables, require an actions column that includes:
+   - open link if the entry has a public detail page
+   - edit button
+   - delete button with confirmation
+12. Keep those row actions visually aligned and consistent with the existing admin icon pattern.
 
 ## What The User Should Describe After Referencing This File
 
