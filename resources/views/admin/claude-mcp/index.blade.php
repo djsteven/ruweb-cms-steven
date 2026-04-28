@@ -13,7 +13,7 @@
 
         {{-- Step 1 --}}
         <div class="flex gap-3 mb-5">
-            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-sky-500/10 text-sky-400 text-xs font-semibold flex items-center justify-center mt-0.5">1</span>
             <div>
                 <p class="text-sm text-gray-300">{{ __('admin.claude_mcp_step1') }}</p>
                 <p class="text-xs text-gray-500 mt-0.5">{{ __('admin.claude_mcp_step1_path') }}</p>
@@ -22,7 +22,7 @@
 
         {{-- Step 2 --}}
         <div class="flex gap-3 mb-5">
-            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-sky-500/10 text-sky-400 text-xs font-semibold flex items-center justify-center mt-0.5">2</span>
             <div class="w-full">
                 <p class="text-sm text-gray-300 mb-3">{{ __('admin.claude_mcp_step2') }}</p>
 
@@ -83,7 +83,7 @@
 
         {{-- Step 3 --}}
         <div class="flex gap-3">
-            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
+            <span class="flex-shrink-0 w-5 h-5 rounded-full bg-sky-500/10 text-sky-400 text-xs font-semibold flex items-center justify-center mt-0.5">3</span>
             <div>
                 <p class="text-sm text-gray-300">{{ __('admin.claude_mcp_step3') }}</p>
                 <p class="text-xs text-gray-500 mt-0.5">{{ __('admin.claude_mcp_step3_hint') }}</p>

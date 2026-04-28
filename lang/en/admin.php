@@ -381,9 +381,9 @@ return [
     // Brevo instructions (accordion)
     'brevo_instructions_title'    => 'How to get your Brevo API key',
     'brevo_instructions_subtitle' => 'Step-by-step guide · free plan 300 emails/day',
-    'brevo_step_1'                => 'Create a free account at <a href="https://app.brevo.com/signup" target="_blank" rel="noopener" class="text-emerald-400 hover:text-emerald-300 underline">app.brevo.com/signup</a> (no credit card required).',
+    'brevo_step_1'                => 'Create a free account at <a href="https://app.brevo.com/signup" target="_blank" rel="noopener" class="text-sky-400 hover:text-sky-300 underline">app.brevo.com/signup</a> (no credit card required).',
     'brevo_step_2'                => 'From the top-right menu (your avatar), open <strong>Settings → SMTP & API</strong> and go to the <strong>API Keys</strong> tab.',
-    'brevo_step_3'                => 'Click <strong>Generate a new API key</strong>, give it a name (e.g. "Rüweb CMS") and generate. It starts with <code class="text-emerald-400">xkeysib-</code>.',
+    'brevo_step_3'                => 'Click <strong>Generate a new API key</strong>, give it a name (e.g. "Rüweb CMS") and generate. It starts with <code class="text-sky-400">xkeysib-</code>.',
     'brevo_step_4'                => '<strong>Copy the key immediately</strong>: Brevo only shows it once. Paste it into the "Brevo API Key" field above.',
     'brevo_step_5'                => 'Under <strong>Senders & IP → Senders</strong> verify the sender email you\'ll use (you\'ll receive a 6-digit code). Use that same email as "From email".',
     'brevo_sender_warning_title'  => 'About the sender',

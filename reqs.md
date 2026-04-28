@@ -1,83 +1,124 @@
-# Requerimientos pendientes de lanzamiento
+# Capacidades reales del sitio
 
-## Críticos ❌
+Documento actualizado contra el código del repositorio. La fuente de verdad es la implementación actual, no una lista ideal de lanzamiento.
 
-- [ ] Generar sitemap.xml dinámico y enviarlo a Google Search Console
-- [ ] Integrar Google Analytics (GA4 tracking code en el layout)
-- [ ] Configurar SMTP con Brevo en `.env` (actualmente usa driver `log`)
-- [ ] Forzar HTTPS en Laravel (middleware + `SESSION_SECURE_COOKIE=true`)
-- [ ] Agregar security headers (HSTS, X-Frame-Options, X-Content-Type-Options, CSP)
-- [ ] Configurar sistema de backups automáticos
+## Sí existe en el código
 
-## Pendientes ❌
+### Frontend público
 
-- [ ] Implementar CAPTCHA en formularios públicos
-- [ ] Implementar CloudFlare (a nivel DNS)
-- [ ] Agregar texto "Desarrollado por Rugertek" en el footer
-- [ ] Crear páginas de Política de Privacidad y Términos y Condiciones
-- [ ] Ocultar URL de login (actualmente `/admin/login`)
-- [ ] Realizar pruebas de rendimiento (PageSpeed Insights / GTmetrix)
+- Sitemap dinámico en `/sitemap.xml` con páginas publicadas y posts publicados.
+- `robots.txt` público con bloqueo de `/admin/` y referencia al sitemap.
+- Home configurable por setting `homepage_slug`.
+- Páginas públicas por slug.
+- Blog público en `/blog` con detalle por slug.
+- Filtro de blog por categoría vía query string `?category=...`.
+- Templates de páginas `default`, `home` y `home-alt`.
+- Menús renderizables desde el CMS para ubicaciones `header` y `footer`.
 
-## Parcialmente cubiertos ⚠️
+### SEO y analítica
 
-- [ ] Ajustar zona horaria, idioma y formato de fecha al proyecto del cliente (actualmente UTC/en)
-- [ ] Verificar y ajustar email/username del usuario administrador (no usar "admin")
-- [ ] Personalizar robots.txt según necesidades del proyecto
+- Meta title y meta description dinámicos.
+- Canonical URL.
+- Open Graph tags.
+- Twitter Card tags.
+- Favicon configurable desde settings.
+- Imagen social por contenido y fallback global `default_social_image`.
+- Verificación de Google Search Console por meta tag.
+- Inserción condicional de Google Tag / GA4 en el layout público.
+- Inserción condicional de Meta Pixel, incluyendo fallback `noscript`.
 
-## Tareas manuales / de proceso
+### CMS / panel admin
 
-- [ ] Decidir con el cliente el plan de actualizaciones automáticas y documentarlo
-- [ ] Enviar accesos al cliente por correo
-- [ ] Desactivar modo mantenimiento (si está activo)
-- [ ] Comprobar ortografía y reemplazar textos genéricos (lorem ipsums, etc.)
-- [ ] Revisar que todas las páginas y enlaces funcionen correctamente
-- [ ] Crear el sitio con el correo de administración de Rugertek
-- [ ] Probar formularios de contacto y verificar recepción de correos
-- [ ] Probar proceso de compra (si aplica)
-- [ ] Verificar que el sitio esté indexado por Google
-- [ ] Verificar diseño responsivo en desktop, tablet y mobile
-- [ ] Comprobar menús, botones y enlaces internos
+- Login de admin en `/admin/login`.
+- Recuperación y reseteo de contraseña.
+- Roles `admin` y `editor`.
+- Dashboard admin.
+- Perfil de usuario con cambio de nombre, email y contraseña.
+- Gestión de usuarios desde admin.
+- Creación, edición, publicación y borrado de páginas.
+- Creación, edición, publicación y borrado de posts.
+- Preview renderizado para páginas y posts.
+- Estado editorial `draft` / `published`.
+- Taxonomías jerárquicas desde admin.
+- Asociación de categorías a posts.
+- Gestión de menús con items anidados.
+- Settings generales desde panel.
+- Configuración de analítica desde panel.
+- Configuración de email desde panel.
+- Pantalla admin para integración Claude/MCP.
 
-## Equivalencias Laravel de plugins WordPress
+### Media
 
----
+- Librería de medios con búsqueda, filtros y paginación.
+- Upload simple y múltiple.
+- Validación de extensiones permitidas.
+- Bloqueo básico de SVG malicioso (`<script>` y handlers inline).
+- Conversión automática de JPG/JPEG/PNG a WebP cuando la optimización está habilitada.
+- Preservación opcional del original al optimizar.
+- Lectura y guardado de dimensiones de imágenes raster.
+- Generación de variantes responsivas.
+- Componente público con `srcset`, `sizes`, `loading="lazy"` y `decoding="async"`.
+- Auditoría de salud de media y comandos artisan relacionados.
 
-**Rank Math** (SEO):
-- Cubierto: meta titles/descriptions dinámicos, OG tags, Twitter cards, canonical URLs, favicon, viewport, lang tag (`seo-meta.blade.php` + `ContentHelper.php`)
-- Pendiente: generación de sitemap.xml, datos estructurados JSON-LD (Schema.org), gestión de redirecciones 301, control de noindex/nofollow por página desde el admin, editor de robots.txt en el panel
+### Integraciones API / automatización
 
----
+- API MCP autenticada por API key de usuario.
+- Generación y revocación de API key MCP desde perfil.
+- Endpoints MCP para páginas, posts, media, settings y menús.
+- Endpoint MCP JSON-RPC en `/mcp/rpc`.
+- OAuth authorization code + PKCE para clientes configurados.
 
-**Site Kit** (Google Analytics / Search Console):
-- Cubierto: nada
-- Pendiente: insertar GA4 tracking snippet en el layout, mostrar métricas de Search Console y PageSpeed dentro del admin, integración con Google Tag Manager
+### Seguridad y controles ya presentes
 
----
+- CSRF en formularios web estándar.
+- Hashing de contraseñas vía Laravel.
+- Rate limiting de login: 5 intentos por email + IP.
+- Middleware de roles para separar `admin` y `editor`.
+- Autorización por policies en posts, menús y taxonomías.
 
-**WP Activity Log** (registro de actividad):
-- Cubierto: logs de sistema vía Laravel (`storage/logs/`), pero solo errores y excepciones
-- Pendiente: registrar acciones de usuarios en el admin (login, logout, creación/edición/borrado de contenido, cambios de configuración), rastrear IP y user agent por acción, alertas por actividad sospechosa, tabla `activity_logs` en base de datos consultable desde el panel
+## No existe o no está implementado en el repo
 
----
+### SEO / marketing
 
-**ShortPixel** (optimización de imágenes):
-- Cubierto: validación de mime-type, límite de tamaño en uploads, escaneo de SVG maliciosos
-- Pendiente: compresión automática de imágenes al subir (lossy/lossless), conversión a WebP/AVIF, generación de múltiples tamaños/srcset, lazy loading en el frontend, integración con CDN
+- Datos estructurados JSON-LD / Schema.org.
+- Control `noindex` / `nofollow` por página desde admin.
+- Gestión de redirecciones 301.
+- Integración con Search Console o Analytics para leer métricas dentro del admin.
+- Integración con Google Tag Manager como feature explícita del CMS.
 
----
+### Seguridad
 
-**Wordfence** (seguridad):
-- Cubierto: rate limiting en login (5 intentos / 60s), CSRF en formularios, protección SQL injection via Eloquent, validación de uploads, hashing bcrypt (12 rounds), autenticación OAuth2
-- Pendiente: security headers HTTP (HSTS, X-Frame-Options, X-Content-Type-Options, CSP), 2FA para el admin, bloqueo de IPs por intentos fallidos, CAPTCHA en formularios públicos, monitoreo de integridad de archivos, WAF a nivel aplicación, rate limiting en rutas API
+- Forzado de HTTPS a nivel aplicación.
+- Security headers explícitos: HSTS, CSP, `X-Frame-Options`, `X-Content-Type-Options`.
+- 2FA para el admin.
+- CAPTCHA en formularios públicos.
+- URL de login configurable u oculta.
+- Bloqueo/lista negra de IPs por intentos fallidos.
+- WAF o monitoreo de integridad de archivos.
+- Log de actividad editorial en base de datos.
 
----
+### Performance / entrega
 
-**WPS Hide Login** (ocultar URL de login):
-- Cubierto: la ruta de login es `/admin/login` (no es el estándar `/wp-login.php`, ya hay diferenciación)
-- Pendiente: hacer la URL de login configurable desde `.env` (ej. `LOGIN_PATH=/acceso`), bloquear/redirigir accesos directos a `/admin/login` si se cambia la ruta, middleware que devuelva 404 en la ruta por defecto si se usa una personalizada
+- Full-page cache.
+- CDN integrada desde la aplicación.
+- Headers HTTP de caché explícitos para HTML/assets.
+- Conversión AVIF.
 
----
+## Depende del entorno o no puede afirmarse solo con el repo
 
-**LiteSpeed Cache** (caché y rendimiento):
-- Cubierto: caché de objetos/datos vía Laravel Cache (driver database), assets compilados y versionados con Vite
-- Pendiente: full-page cache (caché de respuestas HTML completas), minificación de CSS/JS en producción (configurar Vite para prod), lazy loading de imágenes en el frontend, integración con CDN para assets estáticos, caché de consultas frecuentes a base de datos, headers de caché HTTP (`Cache-Control`, `ETag`) en respuestas
+- Uso real de Brevo en producción.
+  El código soporta mailer Brevo por API y test de envío desde admin, pero si se usa `log`, `smtp` u otro mailer depende de configuración.
+- HTTPS real, cookies seguras y certificados.
+  Hay soporte vía `SESSION_SECURE_COOKIE` en config, pero no hay enforcement en aplicación y el resultado final depende del deploy.
+- Cloudflare, DNS, backups automáticos, monitoreo externo y Search Console.
+  Son decisiones de infraestructura, no capacidades implementadas en este repo.
+- Política de Privacidad, Términos, textos legales y contenido editorial.
+  Pueden cargarse como páginas del CMS, pero no vienen como feature preconstruida ni contenido garantizado.
+- Revisión responsiva final, performance real y ortografía.
+  El repo tiene layouts públicos y assets compilados, pero esos checks siguen siendo QA, no una capacidad certificable por lectura de código.
+
+## Resumen práctico
+
+`reqs.md` antes marcaba como pendientes varias capacidades que ya están implementadas: sitemap, `robots.txt`, GA4/Google Tag, Meta Pixel, verificación de Search Console, optimización de imágenes a WebP, variantes responsivas y lazy loading.
+
+Lo que sí sigue faltando en código es, sobre todo, endurecimiento de seguridad, features SEO avanzadas, activity logging, ocultación/configuración de la URL de login y piezas de infraestructura que viven fuera del repo.
