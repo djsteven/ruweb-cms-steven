@@ -59,6 +59,21 @@ Public detail entries should implement the shared `Seoable` contract while keepi
 
 If editors benefit from live preview, the collection edit screen should use the shared editor shell and preview contract rather than inventing a separate editing model.
 
+When a collection entry can be opened in the live editor from more than one origin, preserve that origin explicitly:
+
+- if the editor was opened from the admin index, the back action should return to that collection index
+- if the editor was opened from the public admin bar, the back action should return to the exact public URL that launched the editor
+
+Do not hardcode the editor back link to the admin collection index in every case.
+
+The public admin bar must expose a single contextual edit action for the current entity. Resolve its label and destination from the current content type, for example:
+
+- `Editar post`
+- `Editar servicio`
+- `Editar caso de estudio`
+
+Do not render a generic page edit action on collection detail routes unless the current entity is actually a page.
+
 ### 6. Authorization rules should be explicit
 
 Every collection should document who can:

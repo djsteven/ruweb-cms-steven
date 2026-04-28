@@ -8,7 +8,14 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.18.0 - 2026-04-28
+## 0.19.0 - 2026-04-28
+
+- Agregado botón de refresco de caché de Laravel en la admin bar pública, visible solo para admins.
+- Corregido el idioma de la admin bar pública para que use `admin_locale` también fuera de rutas `/admin`.
+- Actualizado `.env.example` para alinearlo con las variables reales de OAuth, mail e imágenes del proyecto.
+- Actualizado `reqs.md` para reflejar la nueva capacidad de refresco de caché y el comportamiento de localización del admin bar.
+
+## 0.18.0 - 2026-04-28 (448cb32)
 
 - Agregadas acciones de borrado directo en las tablas de Pages y Posts del admin.
 - Cada fila ahora expone la convención completa de acciones: abrir si existe detail público, editar y borrar con confirmación.

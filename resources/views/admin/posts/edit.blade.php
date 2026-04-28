@@ -1,9 +1,3 @@
-@php
-    $editorBackHref  = route('admin.posts.index');
-    $editorBackTitle = __('admin.back_to_posts');
-    $showPreview     = true;
-@endphp
-
 @extends('admin.layouts.editor')
 
 @section('editor-title', $post->title)

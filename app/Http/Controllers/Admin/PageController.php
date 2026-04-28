@@ -67,12 +67,12 @@ class PageController extends Controller
             ->with('success', __('admin.page_created'));
     }
 
-    public function edit(Page $page): View
+    public function edit(Request $request, Page $page): View
     {
         return view('admin.pages.edit', [
             'page' => $page,
             'templates' => config('cms.templates'),
-        ]);
+        ] + $this->resolveEditorBackLink($request, 'admin.pages.index', __('admin.back_to_pages')));
     }
 
     public function update(UpdatePageRequest $request, Page $page): RedirectResponse|JsonResponse
@@ -122,5 +122,49 @@ class PageController extends Controller
         return redirect()
             ->route('admin.pages.index')
             ->with('success', __('admin.page_deleted'));
+    }
+
+    /**
+     * @return array{editorBackHref:string,editorBackTitle:string}
+     */
+    private function resolveEditorBackLink(Request $request, string $defaultRoute, string $defaultTitle): array
+    {
+        $returnUrl = $this->normalizeReturnUrl($request->query('return'));
+
+        if ($returnUrl !== null) {
+            return [
+                'editorBackHref' => $returnUrl,
+                'editorBackTitle' => __('admin.back_to_previous_page'),
+            ];
+        }
+
+        return [
+            'editorBackHref' => route($defaultRoute),
+            'editorBackTitle' => $defaultTitle,
+        ];
+    }
+
+    private function normalizeReturnUrl(mixed $returnUrl): ?string
+    {
+        if (! is_string($returnUrl) || $returnUrl === '') {
+            return null;
+        }
+
+        if (str_starts_with($returnUrl, '/') && ! str_starts_with($returnUrl, '//')) {
+            return url($returnUrl);
+        }
+
+        $appUrl = parse_url(url('/'));
+        $candidateUrl = parse_url($returnUrl);
+
+        if (! is_array($appUrl) || ! is_array($candidateUrl)) {
+            return null;
+        }
+
+        $sameScheme = ($candidateUrl['scheme'] ?? null) === ($appUrl['scheme'] ?? null);
+        $sameHost = ($candidateUrl['host'] ?? null) === ($appUrl['host'] ?? null);
+        $samePort = ($candidateUrl['port'] ?? null) === ($appUrl['port'] ?? null);
+
+        return $sameScheme && $sameHost && $samePort ? $returnUrl : null;
     }
 }

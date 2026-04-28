@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\ClaudeMcpController;
 use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -72,6 +73,7 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
 
         Route::get('analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
         Route::put('analytics', [AnalyticsController::class, 'update'])->name('analytics.update');
+        Route::post('cache/refresh', [CacheController::class, 'refresh'])->name('cache.refresh');
         Route::get('email', [EmailController::class, 'index'])->name('email.index');
         Route::put('email', [EmailController::class, 'update'])->name('email.update');
         Route::post('email/test', [EmailController::class, 'sendTestEmail'])->name('email.test');

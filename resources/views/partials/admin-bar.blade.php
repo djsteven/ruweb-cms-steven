@@ -1,4 +1,42 @@
 @auth
+@php
+    $currentUrl = url()->full();
+    $isAdmin = auth()->user()?->isAdmin();
+    $adminLocale = \App\Models\Setting::get('admin_locale', 'es');
+    $editHref = null;
+    $editLabel = null;
+    $editTitle = null;
+
+    if (request()->routeIs('blog.show') && isset($post)) {
+        $editHref = route('admin.posts.edit', ['post' => $post->id, 'return' => $currentUrl]);
+        $editLabel = trans('admin.action_edit', [], $adminLocale) . ' post';
+        $editTitle = trans('admin.action_edit', [], $adminLocale) . ' este post';
+    } elseif (request()->routeIs('page.show', 'home') && isset($page)) {
+        $editHref = route('admin.pages.edit', ['page' => $page->id, 'return' => $currentUrl]);
+        $editLabel = trans('admin.action_edit', [], $adminLocale) . ' p' . "\u{00E1}" . 'gina';
+        $editTitle = trans('admin.action_edit', [], $adminLocale) . ' esta p' . "\u{00E1}" . 'gina';
+    } else {
+        $segments = request()->segments();
+        $resourcePlural = $segments[0] ?? null;
+        $resourceSingular = $resourcePlural ? \Illuminate\Support\Str::singular($resourcePlural) : null;
+        $resourceLabel = $resourceSingular ? str_replace('-', ' ', $resourceSingular) : null;
+        $resourceModel = $resourceSingular && array_key_exists($resourceSingular, get_defined_vars())
+            ? get_defined_vars()[$resourceSingular]
+            : null;
+
+        if (
+            $resourcePlural &&
+            $resourceSingular &&
+            is_object($resourceModel) &&
+            isset($resourceModel->id) &&
+            \Illuminate\Support\Facades\Route::has("admin.{$resourcePlural}.edit")
+        ) {
+            $editHref = route("admin.{$resourcePlural}.edit", [$resourceSingular => $resourceModel->id, 'return' => $currentUrl]);
+            $editLabel = trans('admin.action_edit', [], $adminLocale) . ' ' . $resourceLabel;
+            $editTitle = trans('admin.action_edit', [], $adminLocale) . ' este ' . $resourceLabel;
+        }
+    }
+@endphp
 <nav id="ruweb-admin-bar"
      class="fixed top-0 inset-x-0 z-[9999] h-9 bg-gray-900 flex items-center px-2 sm:px-4 shadow-sm">
 
@@ -8,7 +46,7 @@
         {{-- Dashboard --}}
         <a href="{{ route('admin.dashboard') }}"
            class="flex items-center gap-1.5 px-2 py-1 rounded text-sky-400 hover:text-sky-300 hover:bg-white/5 transition-colors text-[11px] font-semibold tracking-wide flex-none"
-           title="Ir al Dashboard">
+           title="{{ trans('admin.dashboard', [], $adminLocale) }}">
             <svg class="w-3.5 h-3.5 flex-none" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 11h1v6a1 1 0 001 1h4v-4h2v4h4a1 1 0 001-1v-6h1a1 1 0 00.707-1.707l-7-7z"/>
             </svg>
@@ -17,41 +55,47 @@
 
         <span class="text-gray-700 mx-1 flex-none select-none">|</span>
 
-        {{-- Edit current page --}}
-        @isset($page)
-        <a href="{{ route('admin.pages.edit', $page->id) }}"
+        @if($editHref && $editLabel && $editTitle)
+        <a href="{{ $editHref }}"
            class="flex items-center gap-1.5 px-2 py-1 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-colors text-[11px] flex-none"
-           title="Editar esta página">
+           title="{{ $editTitle }}">
             <svg class="w-3.5 h-3.5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
             </svg>
-            <span class="hidden sm:inline">Editar página</span>
+            <span class="hidden sm:inline">{{ $editLabel }}</span>
         </a>
-        @endisset
-
-        {{-- Edit current post --}}
-        @isset($post)
-        <a href="{{ route('admin.posts.edit', $post->id) }}"
-           class="flex items-center gap-1.5 px-2 py-1 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-colors text-[11px] flex-none"
-           title="Editar este post">
-            <svg class="w-3.5 h-3.5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-            </svg>
-            <span class="hidden sm:inline">Editar post</span>
-        </a>
-        @endisset
+        @endif
 
         <span class="text-gray-700 mx-1 flex-none select-none">|</span>
 
         {{-- Menus --}}
         <a href="{{ route('admin.menus.index') }}"
            class="flex items-center gap-1.5 px-2 py-1 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-colors text-[11px] flex-none"
-           title="Editar menús">
+           title="{{ trans('admin.action_edit', [], $adminLocale) . ' ' . trans('admin.menus', [], $adminLocale) }}">
             <svg class="w-3.5 h-3.5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h7"/>
             </svg>
-            <span class="hidden sm:inline">Menús</span>
+            <span class="hidden sm:inline">{{ trans('admin.menus', [], $adminLocale) }}</span>
         </a>
+
+        @if($isAdmin)
+        <span class="text-gray-700 mx-1 flex-none select-none">|</span>
+
+        <form method="POST"
+              action="{{ route('admin.cache.refresh') }}"
+              class="flex-none"
+              onsubmit="return confirm('{{ trans('admin.cache_refresh_confirm', [], $adminLocale) }}')">
+            @csrf
+            <button type="submit"
+                    class="flex items-center gap-1.5 px-2 py-1 rounded text-gray-400 hover:text-white hover:bg-white/10 transition-colors text-[11px] flex-none cursor-pointer"
+                    title="{{ trans('admin.cache_refresh_title', [], $adminLocale) }}">
+                <svg class="w-3.5 h-3.5 flex-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m14.356-2A8 8 0 005.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-13.357-2m13.357 2H15"/>
+                </svg>
+                <span class="hidden sm:inline">{{ trans('admin.cache_refresh', [], $adminLocale) }}</span>
+            </button>
+        </form>
+        @endif
     </div>
 
     {{-- Right: user info --}}

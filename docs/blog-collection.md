@@ -49,6 +49,16 @@ Because blog posts have a public detail page, the admin index row actions should
 - edit post
 - delete post with confirmation
 
+## Public Admin Bar Convention
+
+On `blog.show`, the public admin bar should expose one contextual action only:
+
+- `Editar post`
+
+That action should point to the shared post editor and include the current public URL as the return target, so leaving the editor returns to the same post page.
+
+Do not render `Editar página` on blog post routes. Even if the public layout also receives a `$page`-compatible object for SEO or template reuse, the admin bar action must follow the actual route content type.
+
 ## Typical Routes
 
 Admin:

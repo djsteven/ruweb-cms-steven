@@ -46,6 +46,7 @@ Documento actualizado contra el código del repositorio. La fuente de verdad es 
 - Configuración de analítica desde panel.
 - Configuración de email desde panel.
 - Pantalla admin para integración Claude/MCP.
+- Acción de refresco de caché de Laravel desde la admin bar pública para admins.
 
 ### Media
 
@@ -75,6 +76,7 @@ Documento actualizado contra el código del repositorio. La fuente de verdad es 
 - Rate limiting de login: 5 intentos por email + IP.
 - Middleware de roles para separar `admin` y `editor`.
 - Autorización por policies en posts, menús y taxonomías.
+- La admin bar pública respeta el `admin_locale` configurado aunque se renderice fuera de rutas `/admin`.
 
 ## No existe o no está implementado en el repo
 
