@@ -8,7 +8,12 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.19.0 - 2026-04-28
+## 0.19.1 - 2026-04-28
+
+- Protegida la suite de tests contra config cache local, limpiando `bootstrap/cache` antes de bootear PHPUnit.
+- Evitado que `RefreshDatabase` pueda correr contra la base MySQL local cuando existe `config.php` generado por `php artisan optimize`.
+
+## 0.19.0 - 2026-04-28 (ac38c2b)
 
 - Agregado botón de refresco de caché de Laravel en la admin bar pública, visible solo para admins.
 - Corregido el idioma de la admin bar pública para que use `admin_locale` también fuera de rutas `/admin`.
