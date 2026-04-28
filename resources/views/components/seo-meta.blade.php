@@ -15,6 +15,16 @@
         ? $faviconSetting
         : $faviconSetting?->url();
     $favicon = $favicon ?: '/favicon.ico';
+    $faviconType = is_string($faviconSetting)
+        ? match (strtolower(pathinfo(parse_url($favicon, PHP_URL_PATH) ?? '', PATHINFO_EXTENSION))) {
+            'png' => 'image/png',
+            'svg' => 'image/svg+xml',
+            'webp' => 'image/webp',
+            'gif' => 'image/gif',
+            'ico' => 'image/x-icon',
+            default => 'image/x-icon',
+        }
+        : ($faviconSetting?->mime_type ?: 'image/x-icon');
 
     $title = ContentHelper::metaTitle($meta, $entity?->seoTitleFallback());
     $description = ContentHelper::metaDescription($meta);
@@ -25,10 +35,8 @@
 <title>{{ $title }}{{ $title !== $siteName ? ' — ' . $siteName : '' }}</title>
 
 @if($favicon)
-<link rel="icon" type="image/x-icon" href="{{ $favicon }}">
+<link rel="icon" type="{{ $faviconType }}" href="{{ $favicon }}">
 @endif
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
 
 @if($description)
 <meta name="description" content="{{ $description }}">

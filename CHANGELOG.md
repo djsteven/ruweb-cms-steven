@@ -8,7 +8,14 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.16.0 - 2026-04-27
+## 0.16.1 - 2026-04-28
+
+- Starter público simplificado para usar únicamente `favicon.ico` por defecto.
+- Eliminadas referencias rotas a variantes de favicon que ya no existen en `public`.
+- El favicon configurado desde Settings ahora publica el MIME correcto según el archivo real subido por el admin.
+- Limpieza de assets públicos sobrantes del starter, incluyendo el logo no utilizado.
+
+## 0.16.0 - 2026-04-27 (5370c6c)
 
 - Contrato editorial común para Pages y Posts mediante interfaces `Publishable`, `Seoable`, `Mediable` y `Previewable`.
 - Trait compartido para la regla de publicación estándar (`status = published` y `published_at <= now()`).
