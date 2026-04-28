@@ -31,7 +31,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function generateMcpApiKey(): string
     {
-        $plainApiKey = 'flaxt_mcp_' . Str::random(48);
+        $plainApiKey = 'ruweb_mcp_' . Str::random(48);
 
         $this->forceFill([
             'mcp_api_key_hash' => hash('sha256', $plainApiKey),

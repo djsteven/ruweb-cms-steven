@@ -1,5 +1,5 @@
 @auth
-<nav id="flaxt-admin-bar"
+<nav id="ruweb-admin-bar"
      class="fixed top-0 inset-x-0 z-[9999] h-9 bg-gray-900 flex items-center px-2 sm:px-4 shadow-sm">
 
     {{-- Left: actions --}}
@@ -12,7 +12,7 @@
             <svg class="w-3.5 h-3.5 flex-none" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7A1 1 0 003 11h1v6a1 1 0 001 1h4v-4h2v4h4a1 1 0 001-1v-6h1a1 1 0 00.707-1.707l-7-7z"/>
             </svg>
-            <span class="hidden sm:inline">Flaxt CMS</span>
+            <span class="hidden sm:inline">Rüweb</span>
         </a>
 
         <span class="text-gray-700 mx-1 flex-none select-none">|</span>

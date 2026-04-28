@@ -383,7 +383,7 @@ return [
     'brevo_instructions_subtitle' => 'Guía paso a paso · plan gratis 300 emails/día',
     'brevo_step_1'                => 'Crea una cuenta gratuita en <a href="https://app.brevo.com/signup" target="_blank" rel="noopener" class="text-emerald-400 hover:text-emerald-300 underline">app.brevo.com/signup</a> (no requiere tarjeta).',
     'brevo_step_2'                => 'Desde el menú superior derecho (tu avatar), abre <strong>Settings → SMTP & API</strong> y entra a la pestaña <strong>API Keys</strong>.',
-    'brevo_step_3'                => 'Haz clic en <strong>Generate a new API key</strong>, ponle un nombre (ej. "Flaxt CMS") y genera la clave. Empieza por <code class="text-emerald-400">xkeysib-</code>.',
+    'brevo_step_3'                => 'Haz clic en <strong>Generate a new API key</strong>, ponle un nombre (ej. "Rüweb CMS") y genera la clave. Empieza por <code class="text-emerald-400">xkeysib-</code>.',
     'brevo_step_4'                => '<strong>Copia la clave inmediatamente</strong>: Brevo solo te la muestra una vez. Pégala arriba en el campo "API Key de Brevo".',
     'brevo_step_5'                => 'En <strong>Senders & IP → Senders</strong> verifica el email remitente que usarás (te llegará un código de 6 dígitos). Úsalo también aquí en "Email remitente".',
     'brevo_sender_warning_title'  => 'Importante sobre el remitente',

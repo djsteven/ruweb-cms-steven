@@ -10,7 +10,7 @@ class SettingsSeeder extends Seeder
     public function run(): void
     {
         $settings = [
-            ['key' => 'site_name',              'value' => 'Flaxt', 'type' => 'string', 'group' => 'general', 'options' => null],
+            ['key' => 'site_name',              'value' => 'Rüweb', 'type' => 'string', 'group' => 'general', 'options' => null],
             ['key' => 'site_description',       'value' => 'Un CMS ligero y extensible para comenzar rápido.', 'type' => 'text',   'group' => 'general', 'options' => null],
             ['key' => 'site_logo',              'value' => null,               'type' => 'media',  'group' => 'general', 'options' => null],
             ['key' => 'site_favicon',           'value' => null,               'type' => 'media',  'group' => 'general', 'options' => null],

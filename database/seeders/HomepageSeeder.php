@@ -18,7 +18,7 @@ class HomepageSeeder extends Seeder
                     'sections' => [
                         'hero' => [
                             'is_visible' => true,
-                            'heading' => 'Bienvenido a FlaxtCMS',
+                            'heading' => 'Bienvenido a Rüweb',
                             'body' => 'Este es un starter CMS rápido, flexible y extensible.',
                         ],
                         'features' => [

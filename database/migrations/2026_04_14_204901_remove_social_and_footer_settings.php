@@ -24,7 +24,7 @@ return new class extends Migration
         DB::table('settings')->upsert([
             [
                 'key' => 'footer_text',
-                'value' => 'Desarrollado con FlaxtCMS',
+                'value' => 'Desarrollado con Rüweb',
                 'type' => 'text',
                 'group' => 'general',
                 'options' => null,

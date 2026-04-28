@@ -8,7 +8,13 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.16.1 - 2026-04-28
+## 0.16.2 - 2026-04-28
+
+- Rebrand del starter desde Flaxt a Rüweb en configuración, textos visibles, seeders y documentación.
+- Defaults de instalación actualizados para usar `ruweb-cms` y `admin@ruweb.local` en lugar de los valores anteriores.
+- Prefijo de API keys MCP y nombre expuesto por el servidor MCP alineados con la nueva identidad del proyecto.
+
+## 0.16.1 - 2026-04-28 (f43a785)
 
 - Starter público simplificado para usar únicamente `favicon.ico` por defecto.
 - Eliminadas referencias rotas a variantes de favicon que ya no existen en `public`.

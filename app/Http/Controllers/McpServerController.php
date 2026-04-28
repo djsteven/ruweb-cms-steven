@@ -75,7 +75,7 @@ class McpServerController extends Controller
             'protocolVersion' => self::PROTOCOL_VERSION,
             'capabilities'    => ['tools' => new \stdClass()],
             'serverInfo'      => [
-                'name'    => config('app.name', 'flaxt-cms'),
+                'name'    => config('app.name', 'ruweb-cms'),
                 'version' => '1.0.0',
             ],
         ];

@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Hash;
 class CmsInstallCommand extends Command
 {
     protected $signature = 'cms:install';
-    protected $description = 'Install FlaxtCMS: configure database, run migrations, create admin user';
+    protected $description = 'Install Rüweb CMS: configure database, run migrations, create admin user';
 
     public function handle(): int
     {
         $this->info('');
         $this->info('  ╔═══════════════════════════════╗');
-        $this->info('  ║      FlaxtCMS Installer        ║');
+        $this->info('  ║       Rüweb Installer         ║');
         $this->info('  ╚═══════════════════════════════╝');
         $this->info('');
 
@@ -51,13 +51,13 @@ class CmsInstallCommand extends Command
 
         $dbHost = $this->ask('Database host', env('DB_HOST', '127.0.0.1'));
         $dbPort = $this->ask('Database port', env('DB_PORT', '3306'));
-        $dbName = $this->ask('Database name', env('DB_DATABASE', 'flaxt_cms'));
+        $dbName = $this->ask('Database name', env('DB_DATABASE', 'ruweb-cms'));
         $dbUser = $this->ask('Database username', env('DB_USERNAME', 'root'));
         $dbPass = $this->secret('Database password (leave empty for none)') ?? '';
 
         // Update .env
         $this->updateEnv([
-            'APP_NAME' => 'FlaxtCMS',
+            'APP_NAME' => 'Rüweb',
             'APP_URL' => 'http://localhost:8000',
             'DB_CONNECTION' => 'mysql',
             'DB_HOST' => $dbHost,
@@ -151,7 +151,7 @@ class CmsInstallCommand extends Command
 
         $this->info('');
         $this->info('  ════════════════════════════════');
-        $this->info('  FlaxtCMS installed successfully!');
+        $this->info('  Rüweb CMS installed successfully!');
         $this->info('');
         $this->info("  Login at: " . config('app.url') . '/admin/login');
         $this->info("  Email:    {$adminEmail}");

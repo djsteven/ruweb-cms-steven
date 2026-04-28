@@ -1,4 +1,4 @@
-# flaxt-cms
+# ruweb-cms
 Fast, flexible and intuitive LLM-first CMS.
 
 ## Deploy / desarrollo local
@@ -49,7 +49,7 @@ URLs:
 ### Credenciales admin
 Durante `php artisan cms:install` podés elegirlas. Los defaults del repo (si no cambiás nada) también están en `.env.example`:
 ```env
-CMS_ADMIN_EMAIL=admin@flaxt.local
+CMS_ADMIN_EMAIL=admin@ruweb.local
 CMS_ADMIN_PASSWORD=password
 ```
 
