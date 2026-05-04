@@ -157,6 +157,18 @@
                     <span>{{ __('admin.settings') }}</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.developer-tools.index') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
+                          {{ request()->routeIs('admin.developer-tools.*')
+                              ? 'bg-sky-500/10 text-sky-400'
+                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a4 4 0 015-1.1l-3.1 3.1 2.1 2.1 3.1-3.1a4 4 0 01-5.1 5.1L8.4 20.7a2 2 0 01-2.8-2.8l8.3-8.3a4 4 0 01.8-3.3z"/>
+                    </svg>
+                    <span>{{ __('admin.developer_tools') }}</span>
+                </a>
+            </li>
             @endif
             <li>
                 <a href="{{ route('admin.claude-mcp.index') }}"

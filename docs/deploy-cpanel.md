@@ -91,7 +91,21 @@ php artisan optimize
 
 Run only the commands that are appropriate for the environment. For example, skip `db:seed` if production seeding is not desired.
 
-### 7. Fix writable permissions
+### 7. Move database and uploads with snapshots
+
+Move code with Git, Composer, and the build output. Move dynamic data with `.appbackup` snapshots:
+
+```bash
+# On the origin environment
+php artisan snapshot:create --name=origin
+
+# Upload origin.appbackup to the destination account, then:
+php artisan snapshot:restore /home/ACCOUNT_NAME/origin.appbackup --force
+```
+
+Snapshots include only database data, public uploads, `manifest.json`, and `checksums.json`. They intentionally exclude source code, `vendor`, `.env`, keys, cache, sessions, and queue/runtime tables.
+
+### 8. Fix writable permissions
 
 Ensure the web server can write to:
 
@@ -104,3 +118,7 @@ Ensure the web server can write to:
 - Keep deployment commands consistent between environments.
 - Re-deploys should generally use `composer install`, not `composer update`.
 - Avoid embedding account names, real domains, or credentials in this guide.
+- Prefer CLI snapshot restore for production and large backups. cPanel, Nginx, Apache, PHP-FPM, or PHP itself can reject large browser uploads before Laravel sees the request.
+- For HTTP uploads, align limits such as `upload_max_filesize`, `post_max_size`, web server body size, and request timeouts. A `413 Request Entity Too Large` response is usually emitted by the web server before Laravel can show an application error.
+- If maintenance mode remains active after an interrupted restore, run `php artisan up`.
+- Snapshot tests use SQLite in memory, so local test runs require `pdo_sqlite`.

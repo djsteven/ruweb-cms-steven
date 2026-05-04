@@ -106,7 +106,24 @@ php artisan storage:link
 php artisan optimize
 ```
 
-If migrating existing media or data from another environment, copy the uploaded files and import the database before final validation.
+Code should move through Git or deployment artifacts. Dynamic data should move through application snapshots:
+
+```bash
+# On the destination
+git pull
+composer install --no-dev --optimize-autoloader --no-interaction
+npm ci
+npm run build
+php artisan migrate --force
+
+# On the source
+php artisan snapshot:create --name=production-transfer
+
+# Copy storage/app/private/snapshots/production-transfer.appbackup to the destination, then:
+php artisan snapshot:restore /path/to/production-transfer.appbackup --force
+```
+
+Snapshots contain database table data, `storage/app/public` uploads, a manifest, and SHA-256 checksums. They do not contain source code, `vendor`, `.env`, keys, cache, sessions, or queue runtime tables.
 
 ## 5. Set Permissions
 
@@ -159,3 +176,7 @@ Minimum checks:
 - Remove any development-only hot-reload markers before production use.
 - Re-deploys should follow the same sequence: code sync, dependencies, build, optimize, service reload.
 - If the project stores uploads on local disk, document that this deployment is single-node by design.
+- Prefer `php artisan snapshot:create` and `php artisan snapshot:restore` for production or large backups. Browser uploads can fail before Laravel runs when Nginx returns `413 Request Entity Too Large`, or when PHP drops the upload because of `upload_max_filesize` or `post_max_size`.
+- If HTTP restore is unavoidable, raise compatible limits such as Nginx `client_max_body_size`, PHP `upload_max_filesize`, PHP `post_max_size`, and relevant PHP-FPM/Nginx timeouts.
+- If a restore process dies while maintenance mode is active, run `php artisan up` manually after inspecting the failure.
+- Snapshot tests use SQLite in memory, so the test environment requires `pdo_sqlite` even when production uses MySQL.
