@@ -11,18 +11,18 @@ class McpApiKeyAuthTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_user_can_generate_and_revoke_mcp_api_key_from_profile(): void
+    public function test_user_can_generate_and_revoke_mcp_api_key_from_claude_mcp(): void
     {
         $user = User::factory()->create(['role' => 'admin']);
 
-        $generateResponse = $this->actingAs($user)->post(route('admin.profile.mcp-api-key.generate'));
+        $generateResponse = $this->actingAs($user)->post(route('admin.claude-mcp.api-key.generate'));
 
-        $generateResponse->assertRedirect(route('admin.profile.index'));
+        $generateResponse->assertRedirect(route('admin.claude-mcp.index'));
         $this->assertNotNull($user->fresh()->mcp_api_key_hash);
 
-        $revokeResponse = $this->actingAs($user)->delete(route('admin.profile.mcp-api-key.revoke'));
+        $revokeResponse = $this->actingAs($user)->delete(route('admin.claude-mcp.api-key.revoke'));
 
-        $revokeResponse->assertRedirect(route('admin.profile.index'));
+        $revokeResponse->assertRedirect(route('admin.claude-mcp.index'));
         $this->assertNull($user->fresh()->mcp_api_key_hash);
     }
 
@@ -47,7 +47,7 @@ class McpApiKeyAuthTest extends TestCase
             'updated_by' => $user->id,
         ]);
 
-        $response = $this->withHeader('Authorization', 'Bearer ' . $apiKey)
+        $response = $this->withHeader('Authorization', 'Bearer '.$apiKey)
             ->getJson('/mcp/pages');
 
         $response->assertOk();

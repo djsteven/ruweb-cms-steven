@@ -8,7 +8,7 @@
     <p class="text-sm text-gray-500 mt-0.5">{{ __('admin.claude_mcp_subtitle') }}</p>
 </div>
 
-<div class="max-w-2xl space-y-4">
+<div class="max-w-3xl space-y-4">
     <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5">
 
         {{-- Step 1 --}}
@@ -90,6 +90,49 @@
             </div>
         </div>
 
+    </div>
+
+    <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+                <h2 class="text-sm font-semibold text-white">{{ __('admin.mcp_api_key') }}</h2>
+                <p class="text-xs text-gray-500 mt-0.5">{{ __('admin.mcp_api_key_hint') }}</p>
+            </div>
+            <span class="text-xs px-2 py-1 rounded-full {{ $user->hasMcpApiKey() ? 'bg-sky-500/10 text-sky-400' : 'bg-gray-500/10 text-gray-400' }}">
+                {{ $user->hasMcpApiKey() ? __('admin.mcp_api_key_active') : __('admin.mcp_api_key_missing') }}
+            </span>
+        </div>
+
+        @if ($newApiKey)
+            <div class="mb-4 rounded-md border border-sky-500/20 bg-sky-500/5 p-3">
+                <p class="text-xs text-sky-300 mb-2">{{ __('admin.mcp_api_key_generated_once') }}</p>
+                <code class="block w-full overflow-x-auto rounded bg-[#0f0f0f] border border-white/10 px-3 py-2 text-xs text-sky-300">{{ $newApiKey }}</code>
+            </div>
+        @endif
+
+        <div class="space-y-1 text-xs text-gray-500 mb-4">
+            <p>{{ __('admin.mcp_api_key_generated_at') }}: {{ $user->mcp_api_key_generated_at?->format('Y-m-d H:i') ?? '—' }}</p>
+            <p>{{ __('admin.mcp_api_key_last_used_at') }}: {{ $user->mcp_api_key_last_used_at?->format('Y-m-d H:i') ?? '—' }}</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            <form method="POST" action="{{ route('admin.claude-mcp.api-key.generate') }}">
+                @csrf
+                <button type="submit" class="px-3 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">
+                    {{ $user->hasMcpApiKey() ? __('admin.mcp_api_key_regenerate') : __('admin.mcp_api_key_generate') }}
+                </button>
+            </form>
+
+            @if ($user->hasMcpApiKey())
+                <form method="POST" action="{{ route('admin.claude-mcp.api-key.revoke') }}" onsubmit="return confirm('{{ __('admin.mcp_api_key_revoke_confirm') }}')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="px-3 py-2 bg-transparent border border-red-500/30 hover:border-red-500/50 text-red-300 text-sm font-medium rounded-md transition-colors">
+                        {{ __('admin.mcp_api_key_revoke') }}
+                    </button>
+                </form>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

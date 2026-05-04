@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -15,51 +14,41 @@ class ProfileController extends Controller
     {
         return view('admin.profile.index', [
             'user' => $request->user(),
-            'newApiKey' => session('new_mcp_api_key'),
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function updateInformation(Request $request): RedirectResponse
     {
         $user = $request->user();
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'current_password' => ['nullable', 'required_with:password', 'current_password'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ]);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-
-        if (!empty($validated['password'])) {
-            $user->password = $validated['password'];
-        }
-
         $user->save();
 
         return redirect()
-            ->route('admin.profile.index')
-            ->with('success', __('admin.profile_updated'));
+            ->route('admin.profile.index', ['tab' => 'information'])
+            ->with('success', __('admin.profile_information_updated'));
     }
 
-    public function generateMcpApiKey(Request $request): RedirectResponse
+    public function updatePassword(Request $request): RedirectResponse
     {
-        $plainApiKey = $request->user()->generateMcpApiKey();
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user->password = $validated['password'];
+        $user->save();
 
         return redirect()
-            ->route('admin.profile.index')
-            ->with('success', __('admin.mcp_api_key_generated'))
-            ->with('new_mcp_api_key', $plainApiKey);
-    }
-
-    public function revokeMcpApiKey(Request $request): RedirectResponse
-    {
-        $request->user()->revokeMcpApiKey();
-
-        return redirect()
-            ->route('admin.profile.index')
-            ->with('success', __('admin.mcp_api_key_revoked'));
+            ->route('admin.profile.index', ['tab' => 'security'])
+            ->with('success', __('admin.profile_password_updated'));
     }
 }

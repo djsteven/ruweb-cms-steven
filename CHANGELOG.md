@@ -8,7 +8,18 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.19.2 - 2026-04-28
+- Refactor del perfil admin para separar tabs de Información y Seguridad.
+- La gestión de `MCP API Key` se mueve desde `/admin/profile` a `/admin/claude-mcp`.
+
+## 0.20.0 - 2026-05-04
+
+- Nueva sección admin `Developer tools` con tabs de diagnóstico del sistema y migración entre entornos.
+- Exportación portable de snapshots `.appbackup` con `manifest`, `checksums`, dump JSONL por tabla y `uploads` públicos.
+- Restore seguro con validación de ZIP, checksums, tablas compatibles, pre-backup automático, maintenance mode y rollback de uploads.
+- Nuevos comandos Artisan `snapshot:create` y `snapshot:restore` para operar backups grandes por CLI.
+- Documentación de deploy actualizada para separar flujo de código por Git y datos dinámicos por snapshots.
+
+## 0.19.2 - 2026-04-28 (7bcb7ae)
 
 - Completado el seguimiento por commit del changelog resolviendo el SHA pendiente de la entrada anterior.
 

@@ -36,10 +36,11 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('claude-mcp', [ClaudeMcpController::class, 'index'])->name('claude-mcp.index');
+    Route::post('claude-mcp/api-key', [ClaudeMcpController::class, 'generateMcpApiKey'])->name('claude-mcp.api-key.generate');
+    Route::delete('claude-mcp/api-key', [ClaudeMcpController::class, 'revokeMcpApiKey'])->name('claude-mcp.api-key.revoke');
     Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('profile/mcp-api-key', [ProfileController::class, 'generateMcpApiKey'])->name('profile.mcp-api-key.generate');
-    Route::delete('profile/mcp-api-key', [ProfileController::class, 'revokeMcpApiKey'])->name('profile.mcp-api-key.revoke');
+    Route::put('profile/information', [ProfileController::class, 'updateInformation'])->name('profile.information.update');
+    Route::put('profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     Route::resource('media', MediaController::class)
         ->only(['index', 'store', 'show', 'update', 'destroy'])
