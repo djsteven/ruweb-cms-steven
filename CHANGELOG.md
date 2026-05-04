@@ -8,10 +8,14 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-- Refactor del perfil admin para separar tabs de Información y Seguridad.
+## 0.21.0 - 2026-05-04
+
+- La pantalla de `Profile` fue refactorizada para usar tabs separadas de Información y Seguridad.
+- Información de cuenta simplificada a `Full name`, `Email` y `Role` de solo lectura.
+- Cambio de contraseña movido a una tab de Seguridad dedicada con una UI más ordenada.
 - La gestión de `MCP API Key` se mueve desde `/admin/profile` a `/admin/claude-mcp`.
 
-## 0.20.0 - 2026-05-04
+## 0.20.0 - 2026-05-04 (d968920)
 
 - Nueva sección admin `Developer tools` con tabs de diagnóstico del sistema y migración entre entornos.
 - Exportación portable de snapshots `.appbackup` con `manifest`, `checksums`, dump JSONL por tabla y `uploads` públicos.

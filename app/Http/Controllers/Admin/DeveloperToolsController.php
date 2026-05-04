@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Services\Snapshots\EnvironmentReportService;
 use App\Services\Snapshots\SnapshotException;
 use App\Services\Snapshots\SnapshotService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -30,7 +32,9 @@ class DeveloperToolsController extends Controller
     public function download(): BinaryFileResponse|RedirectResponse
     {
         try {
-            $path = $this->snapshots->create('admin-download-'.now()->format('Ymd-His'), storage_path('app/private/snapshots/tmp'));
+            $siteName = Setting::get('site_name') ?: config('app.name');
+            $archiveName = Str::slug($siteName).'-'.now()->format('Ymd-His');
+            $path = $this->snapshots->create($archiveName, storage_path('app/private/snapshots/tmp'));
         } catch (SnapshotException $exception) {
             return redirect()
                 ->route('admin.developer-tools.index', ['tab' => 'migration'])

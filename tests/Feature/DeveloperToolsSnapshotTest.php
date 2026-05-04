@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Media;
+use App\Models\Setting;
 use App\Models\User;
 use App\Services\Snapshots\SnapshotException;
 use App\Services\Snapshots\SnapshotService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -57,6 +59,26 @@ class DeveloperToolsSnapshotTest extends TestCase
 
         $this->assertSame(0, $exitCode);
         $this->assertFileExists(storage_path('app/private/snapshots/feature-test.appbackup'));
+    }
+
+    public function test_download_uses_site_name_in_backup_filename(): void
+    {
+        Carbon::setTestNow('2026-05-04 17:18:39');
+        Setting::query()->create([
+            'key' => 'site_name',
+            'value' => 'Mi Sitio Demo',
+            'type' => 'string',
+            'group' => 'general',
+        ]);
+
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->post(route('admin.developer-tools.download'));
+
+        $response->assertOk();
+        $response->assertHeader('content-disposition', 'attachment; filename=mi-sitio-demo-20260504-171839.appbackup');
+
+        Carbon::setTestNow();
     }
 
     public function test_restore_replaces_database_and_uploads(): void
