@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Menu;
 use App\Models\MenuItem;
+use App\Models\Locale;
 use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder
@@ -11,7 +12,7 @@ class MenuSeeder extends Seeder
     public function run(): void
     {
         $header = Menu::updateOrCreate(
-            ['slug' => 'header'],
+            ['slug' => 'header', 'locale' => Locale::baseCode()],
             ['name' => 'Header Menu', 'location' => 'header']
         );
 
@@ -45,7 +46,7 @@ class MenuSeeder extends Seeder
         }
 
         Menu::updateOrCreate(
-            ['slug' => 'footer'],
+            ['slug' => 'footer', 'locale' => Locale::baseCode()],
             ['name' => 'Footer Menu', 'location' => 'footer']
         );
     }

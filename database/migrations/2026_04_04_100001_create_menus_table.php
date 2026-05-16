@@ -10,10 +10,14 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
+            $table->string('locale', 10)->default(config('cms.locales.default', 'es'))->index();
             $table->string('name');
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->string('location')->nullable();
             $table->timestamps();
+
+            $table->unique(['locale', 'slug']);
+            $table->unique(['locale', 'location']);
         });
     }
 

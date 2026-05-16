@@ -1,12 +1,13 @@
 @php
     use App\Contracts\Editorial\Seoable;
     use App\Helpers\ContentHelper;
+    use App\Models\Locale;
     use App\Models\Setting;
 
     $entity = $seoable ?? $page ?? null;
     $entity = $entity instanceof Seoable ? $entity : null;
     $meta = $entity ? $entity->meta() : [];
-    $siteName = Setting::get('site_name') ?: config('app.name');
+    $siteName = Setting::getLocalized('site_name') ?: config('app.name');
     $faviconSetting = Setting::get('site_favicon');
     $googleTagId = Setting::get('google_tag_id');
     $metaPixelId = Setting::get('meta_pixel_id');
@@ -30,6 +31,11 @@
     $description = ContentHelper::metaDescription($meta);
     $image = ContentHelper::metaImage($meta);
     $url = $entity ? url($entity->url()) : url()->current();
+    $alternates = collect();
+    if ($entity && method_exists($entity, 'availablePublishedTranslations')) {
+        $alternates = $entity->availablePublishedTranslations();
+    }
+    $baseAlternate = $alternates->firstWhere('locale', Locale::baseCode());
 @endphp
 
 <title>{{ $title }}{{ $title !== $siteName ? ' — ' . $siteName : '' }}</title>
@@ -47,6 +53,12 @@
 @endif
 
 <link rel="canonical" href="{{ $url }}">
+@foreach($alternates as $alternate)
+<link rel="alternate" hreflang="{{ $alternate->locale }}" href="{{ url($alternate->url()) }}">
+@endforeach
+@if($baseAlternate)
+<link rel="alternate" hreflang="x-default" href="{{ url($baseAlternate->url()) }}">
+@endif
 
 {{-- Open Graph --}}
 <meta property="og:type" content="website">

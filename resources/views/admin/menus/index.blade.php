@@ -16,7 +16,7 @@
     @endif
 </div>
 
-@if ($menus->isEmpty())
+@if ($menuGroups->isEmpty())
     <div class="text-center py-20 text-gray-600">
         <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
@@ -36,13 +36,18 @@
                 <tr class="border-b border-white/[0.06]">
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.menu_col_name') }}</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">{{ __('admin.menu_col_slug') }}</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">{{ __('admin.language') }}</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden md:table-cell">{{ __('admin.menu_col_location') }}</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden md:table-cell">{{ __('admin.menu_col_items') }}</th>
                     <th class="text-right text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.menu_col_actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-white/[0.04]">
-                @foreach ($menus as $menu)
+                @foreach ($menuGroups as $group)
+                    @php
+                        $menu = $group['primary'];
+                        $translations = $group['translations'];
+                    @endphp
                     <tr class="hover:bg-white/[0.02] transition-colors">
                         <td class="px-4 py-3">
                             <a href="{{ route('admin.menus.edit', $menu) }}" class="text-sm text-white hover:text-sky-400 transition-colors">
@@ -52,13 +57,45 @@
                         <td class="px-4 py-3 hidden sm:table-cell">
                             <span class="text-sm text-gray-500">{{ $menu->slug }}</span>
                         </td>
+                        <td class="px-4 py-3 hidden sm:table-cell">
+                            <div class="flex items-center gap-1">
+                                @foreach(($locales ?? collect()) as $locale)
+                                    @php
+                                        $translation = $translations->get($locale->code);
+                                        $badgeColor = $translation
+                                            ? 'bg-sky-500/10 text-sky-400 hover:ring-1 hover:ring-white/20'
+                                            : 'bg-white/[0.04] text-gray-600 hover:bg-white/[0.08] hover:text-gray-300';
+                                    @endphp
+                                    @if($translation)
+                                        <a href="{{ route('admin.menus.edit', $translation) }}"
+                                           title="{{ __('admin.edit_translation', ['lang' => $locale->name]) }}"
+                                           class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors {{ $badgeColor }}">
+                                            {{ strtoupper($locale->code) }}
+                                        </a>
+                                    @elseif(auth()->user()->isAdmin())
+                                        <form method="POST" action="{{ route('admin.menus.translate', [$menu, $locale->code]) }}" class="inline-flex">
+                                            @csrf
+                                            <button type="submit"
+                                                    title="{{ __('admin.create_translation', ['lang' => $locale->name]) }}"
+                                                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors {{ $badgeColor }}">
+                                                +{{ strtoupper($locale->code) }}
+                                            </button>
+                                        </form>
+                                    @else
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium {{ $badgeColor }}">
+                                            +{{ strtoupper($locale->code) }}
+                                        </span>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </td>
                         <td class="px-4 py-3 hidden md:table-cell">
                             <span class="text-sm text-gray-500">
                                 {{ config('cms.menu_locations.' . $menu->location, $menu->location ?: '—') }}
                             </span>
                         </td>
                         <td class="px-4 py-3 hidden md:table-cell">
-                            <span class="text-sm text-gray-500">{{ $menu->items_count }}</span>
+                            <span class="text-sm text-gray-500">{{ $group['items_count'] }}</span>
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">
@@ -87,8 +124,5 @@
         </table>
     </div>
 
-    <div class="mt-6">
-        {{ $menus->links() }}
-    </div>
 @endif
 @endsection

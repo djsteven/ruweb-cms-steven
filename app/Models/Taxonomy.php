@@ -2,13 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Taxonomy extends Model
 {
+    use HasTranslations;
+
     protected $fillable = [
+        'locale',
+        'translation_group_id',
+        'translation_status',
+        'source_fingerprint',
+        'source_field_hashes',
         'name',
         'slug',
         'type',
@@ -16,6 +24,13 @@ class Taxonomy extends Model
         'description',
         'order',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'source_field_hashes' => 'array',
+        ];
+    }
 
     public function parent(): BelongsTo
     {

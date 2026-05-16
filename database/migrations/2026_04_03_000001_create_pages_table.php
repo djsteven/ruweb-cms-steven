@@ -10,8 +10,13 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
+            $table->string('locale', 10)->default(config('cms.locales.default', 'es'))->index();
+            $table->uuid('translation_group_id')->nullable()->index();
+            $table->string('translation_status', 30)->nullable()->index();
+            $table->string('source_fingerprint', 64)->nullable();
+            $table->json('source_field_hashes')->nullable();
             $table->string('title', 255);
-            $table->string('slug', 255)->unique();
+            $table->string('slug', 255);
             $table->string('template_key', 100)->default('default');
             $table->json('content_json')->nullable();
             $table->string('status', 20)->default('draft')->index();
@@ -19,6 +24,8 @@ return new class extends Migration
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
+
+            $table->unique(['locale', 'slug']);
         });
     }
 

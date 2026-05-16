@@ -11,7 +11,7 @@ class MenuItem extends Model
 {
     protected $fillable = [
         'menu_id', 'parent_id', 'label', 'type',
-        'linkable_type', 'linkable_id', 'url', 'target', 'order',
+        'linkable_type', 'linkable_id', 'url', 'target', 'translation_status', 'order',
     ];
 
     public function menu(): BelongsTo
@@ -44,7 +44,9 @@ class MenuItem extends Model
             return match ($this->type) {
                 'page'     => $this->linkable->url(),
                 'post'     => $this->linkable->url(),
-                'taxonomy' => route('blog.index', ['category' => $this->linkable->slug]),
+                'taxonomy' => $this->linkable->locale === Locale::baseCode()
+                    ? route('blog.index', ['category' => $this->linkable->slug])
+                    : route('localized.blog.index', ['locale' => $this->linkable->locale, 'category' => $this->linkable->slug]),
                 default    => '#',
             };
         }

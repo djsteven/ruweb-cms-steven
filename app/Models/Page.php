@@ -8,15 +8,21 @@ use App\Contracts\Editorial\Publishable;
 use App\Contracts\Editorial\Seoable;
 use App\Traits\HasMedia;
 use App\Traits\HasPublicationState;
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\View;
 
 class Page extends Model implements Mediable, Previewable, Publishable, Seoable
 {
-    use HasMedia, HasPublicationState;
+    use HasMedia, HasPublicationState, HasTranslations;
 
     protected $fillable = [
+        'locale',
+        'translation_group_id',
+        'translation_status',
+        'source_fingerprint',
+        'source_field_hashes',
         'title',
         'slug',
         'template_key',
@@ -31,6 +37,7 @@ class Page extends Model implements Mediable, Previewable, Publishable, Seoable
     {
         return [
             'content_json' => 'array',
+            'source_field_hashes' => 'array',
             'published_at' => 'datetime',
         ];
     }
@@ -68,7 +75,22 @@ class Page extends Model implements Mediable, Previewable, Publishable, Seoable
 
     public function url(): string
     {
-        return '/'.ltrim($this->slug, '/');
+        return $this->localizedUrl();
+    }
+
+    public function localizedUrl(): string
+    {
+        if ($this->translation_group_id && $this->translation_group_id === Setting::get('homepage_translation_group_id')) {
+            return $this->isBaseLocale() ? '/' : '/'.$this->locale;
+        }
+
+        $path = '/'.ltrim($this->slug, '/');
+
+        if ($this->isBaseLocale()) {
+            return $path;
+        }
+
+        return '/'.$this->locale.$path;
     }
 
     public function seoTitleFallback(): ?string

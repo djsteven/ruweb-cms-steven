@@ -1,8 +1,14 @@
 <header class="border-b border-gray-100">
+    @php
+        $isBaseLocale = app()->getLocale() === \App\Models\Locale::baseCode();
+        $homeHref = $isBaseLocale
+            ? route('home')
+            : route('localized.home', ['locale' => app()->getLocale()]);
+    @endphp
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             {{-- Logo / Site name --}}
-            <a href="{{ route('home') }}" class="flex items-center gap-2">
+            <a href="{{ $homeHref }}" class="flex items-center gap-2">
                 @if($siteLogoMedia ?? null)
                     <x-responsive-img
                         :media="$siteLogoMedia"
@@ -20,6 +26,23 @@
             {{-- Desktop nav --}}
             <x-menu-component slug="header"
                 class="hidden sm:flex items-center gap-6 [&_a]:text-sm [&_a]:text-gray-600 [&_a:hover]:text-gray-900 [&_a]:transition-colors [&_.sub-menu]:hidden" />
+
+            @php
+                $languageAlternates = collect();
+                $localizedEntity = $page ?? $post ?? null;
+                if ($localizedEntity && method_exists($localizedEntity, 'availablePublishedTranslations')) {
+                    $languageAlternates = $localizedEntity->availablePublishedTranslations()->where('locale', '!=', app()->getLocale());
+                }
+            @endphp
+            @if($languageAlternates->isNotEmpty())
+                <div class="hidden sm:flex items-center gap-2">
+                    @foreach($languageAlternates as $alternate)
+                        <a href="{{ $alternate->url() }}" class="text-xs font-medium text-gray-500 hover:text-gray-900">
+                            {{ strtoupper($alternate->locale) }}
+                        </a>
+                    @endforeach
+                </div>
+            @endif
 
             {{-- Mobile hamburger --}}
             <button id="mobile-menu-toggle" class="sm:hidden text-gray-600 hover:text-gray-900">

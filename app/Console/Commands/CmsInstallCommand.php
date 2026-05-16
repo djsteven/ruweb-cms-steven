@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Database\Seeders\HomepageSeeder;
+use Database\Seeders\LocaleSeeder;
 use Database\Seeders\SettingsSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
@@ -54,6 +55,7 @@ class CmsInstallCommand extends Command
         $dbName = $this->ask('Database name', env('DB_DATABASE', 'ruweb-cms'));
         $dbUser = $this->ask('Database username', env('DB_USERNAME', 'root'));
         $dbPass = $this->secret('Database password (leave empty for none)') ?? '';
+        $baseLocale = $this->choice('Base website language', ['es', 'en'], 'es');
 
         // Update .env
         $this->updateEnv([
@@ -65,6 +67,7 @@ class CmsInstallCommand extends Command
             'DB_DATABASE' => $dbName,
             'DB_USERNAME' => $dbUser,
             'DB_PASSWORD' => $dbPass,
+            'CMS_BASE_LOCALE' => $baseLocale,
         ]);
 
         // Test connection and create database
@@ -102,6 +105,9 @@ class CmsInstallCommand extends Command
         $this->info('  ✓ Migrations complete');
 
         // Seed default settings
+        app(LocaleSeeder::class)->run($baseLocale);
+        $this->info('  ✓ Locales seeded');
+
         Artisan::call('db:seed', [
             '--class' => SettingsSeeder::class,
             '--force' => true,

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StorePageRequest extends FormRequest
 {
@@ -15,7 +16,14 @@ class StorePageRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'unique:pages,slug'],
+            'locale' => ['nullable', 'string', Rule::in(\App\Models\Locale::installedCodes())],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::notIn(\App\Models\Locale::catalogCodes()),
+                Rule::unique('pages', 'slug')->where('locale', $this->input('locale', \App\Models\Locale::baseCode())),
+            ],
             'template_key' => ['required', 'string', 'in:' . implode(',', array_keys(config('cms.templates')))],
             'status' => ['required', 'string', 'in:' . implode(',', config('cms.statuses'))],
             'featured_image' => ['nullable', 'integer', 'exists:media,id'],

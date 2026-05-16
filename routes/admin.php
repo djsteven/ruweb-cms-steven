@@ -9,8 +9,10 @@ use App\Http\Controllers\Admin\ClaudeMcpController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DeveloperToolsController;
 use App\Http\Controllers\Admin\EmailController;
+use App\Http\Controllers\Admin\EditorialControlController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MediaHealthController;
+use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PostController;
@@ -36,6 +38,7 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('claude-mcp', [ClaudeMcpController::class, 'index'])->name('claude-mcp.index');
+    Route::get('editorial-control', [EditorialControlController::class, 'index'])->name('editorial-control.index');
     Route::post('claude-mcp/api-key', [ClaudeMcpController::class, 'generateMcpApiKey'])->name('claude-mcp.api-key.generate');
     Route::delete('claude-mcp/api-key', [ClaudeMcpController::class, 'revokeMcpApiKey'])->name('claude-mcp.api-key.revoke');
     Route::get('profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -49,9 +52,11 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
 
     Route::resource('pages', PageController::class)
         ->except(['show']);
+    Route::post('pages/{page}/translations/{locale}', [PageController::class, 'translate'])->name('pages.translate');
 
     Route::resource('posts', PostController::class)
         ->except(['show']);
+    Route::post('posts/{post}/translations/{locale}', [PostController::class, 'translate'])->name('posts.translate');
 
     Route::prefix('taxonomies/{type}')->name('taxonomies.')->group(function () {
         Route::get('/', [TaxonomyController::class, 'index'])->name('index');
@@ -60,9 +65,11 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
         Route::get('/{taxonomy}/edit', [TaxonomyController::class, 'edit'])->name('edit');
         Route::put('/{taxonomy}', [TaxonomyController::class, 'update'])->name('update');
         Route::delete('/{taxonomy}', [TaxonomyController::class, 'destroy'])->name('destroy');
+        Route::post('/{taxonomy}/translations/{locale}', [TaxonomyController::class, 'translate'])->name('translate');
     });
 
     Route::resource('menus', MenuController::class)->except(['show']);
+    Route::post('menus/{menu}/translations/{locale}', [MenuController::class, 'translate'])->name('menus.translate');
     Route::put('menus/{menu}/items', [MenuController::class, 'syncItems'])->name('menus.items.sync');
 
     Route::post('pages/{page}/preview', [PageController::class, 'previewRender'])->name('pages.preview');
@@ -84,5 +91,8 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
         Route::post('email/test', [EmailController::class, 'sendTestEmail'])->name('email.test');
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+        Route::get('languages', [LanguageController::class, 'index'])->name('languages.index');
+        Route::post('languages', [LanguageController::class, 'store'])->name('languages.store');
+        Route::put('languages', [LanguageController::class, 'update'])->name('languages.update');
     });
 });

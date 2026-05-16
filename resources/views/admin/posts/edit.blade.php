@@ -3,8 +3,15 @@
 @section('editor-title', $post->title)
 
 @section('editor-actions')
+    @include('admin.partials._language-switcher', [
+        'model' => $post,
+        'locales' => $locales,
+        'editRoute' => 'admin.posts.edit',
+        'translateRoute' => 'admin.posts.translate',
+    ])
+
     @if ($post->isPublished())
-        <a href="{{ route('blog.show', $post->slug) }}" target="_blank"
+        <a href="{{ $post->url() }}" target="_blank"
            class="text-xs text-gray-500 hover:text-gray-300 transition-colors hidden sm:inline">
             {{ __('admin.view_live') }}
         </a>

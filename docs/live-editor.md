@@ -96,6 +96,8 @@ Each content type using live preview should provide:
 2. an `update()` flow that can return JSON for async save requests
 3. a preview POST route
 
+For multilingual content, preview must render using the locale of the model being edited, not the admin UI locale. The preview controller should call `app()->setLocale($model->locale)` before rendering the model's `previewView()` / `previewData()`.
+
 The async save request posts the form with `Accept: application/json`. Forms should include Laravel method spoofing when the route expects `PUT` or `PATCH`.
 
 ## Scope Boundary

@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role'         => \App\Http\Middleware\RoleMiddleware::class,
             'admin.locale' => \App\Http\Middleware\SetAdminLocale::class,
+            'public.locale' => \App\Http\Middleware\SetPublicLocale::class,
             'mcp.auth'     => \App\Http\Middleware\AuthenticateMcpApiKey::class,
         ]);
         $middleware->redirectGuestsTo('/admin/login');

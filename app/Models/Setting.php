@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Crypt;
 
@@ -23,6 +24,11 @@ class Setting extends Model
 
     protected static array $cache = [];
 
+    public function translations(): HasMany
+    {
+        return $this->hasMany(SettingTranslation::class);
+    }
+
     public static function get(string $key, mixed $default = null): mixed
     {
         if (array_key_exists($key, static::$cache)) {
@@ -41,6 +47,36 @@ class Setting extends Model
         return $value;
     }
 
+    public static function getLocalized(string $key, ?string $locale = null, mixed $default = null): mixed
+    {
+        $locale = $locale ?: app()->getLocale();
+        $cacheKey = $key.':'.$locale;
+
+        if (array_key_exists($cacheKey, static::$cache)) {
+            return static::$cache[$cacheKey];
+        }
+
+        $setting = static::where('key', $key)->first();
+
+        if (! $setting) {
+            return $default;
+        }
+
+        $translation = $setting->translations()
+            ->where('locale', $locale)
+            ->first();
+
+        $rawValue = $translation?->value;
+        if ($rawValue === null || $rawValue === '') {
+            $rawValue = $setting->value;
+        }
+
+        $value = static::castValue($rawValue, $setting->type);
+        static::$cache[$cacheKey] = $value;
+
+        return $value;
+    }
+
     public static function set(string $key, mixed $value): void
     {
         $setting = static::where('key', $key)->first();
@@ -53,6 +89,27 @@ class Setting extends Model
         }
 
         unset(static::$cache[$key]);
+        foreach (array_keys(static::$cache) as $cacheKey) {
+            if (str_starts_with($cacheKey, $key.':')) {
+                unset(static::$cache[$cacheKey]);
+            }
+        }
+    }
+
+    public static function setLocalized(string $key, string $locale, mixed $value): void
+    {
+        $setting = static::where('key', $key)->first();
+
+        if (! $setting) {
+            return;
+        }
+
+        $setting->translations()->updateOrCreate(
+            ['locale' => $locale],
+            ['value' => $value]
+        );
+
+        unset(static::$cache[$key.':'.$locale]);
     }
 
     public static function getGroup(string $group): Collection

@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 class Menu extends Model
 {
-    protected $fillable = ['name', 'slug', 'location'];
+    protected $fillable = ['locale', 'name', 'slug', 'location'];
 
     public function items(): HasMany
     {
@@ -37,11 +37,21 @@ class Menu extends Model
 
     public static function findBySlug(string $slug): ?static
     {
-        return static::where('slug', $slug)->first();
+        return static::where('slug', $slug)
+            ->where('locale', app()->getLocale())
+            ->first()
+            ?: static::where('slug', $slug)
+                ->where('locale', Locale::baseCode())
+                ->first();
     }
 
     public static function findByLocation(string $location): ?static
     {
-        return static::where('location', $location)->first();
+        return static::where('location', $location)
+            ->where('locale', app()->getLocale())
+            ->first()
+            ?: static::where('location', $location)
+                ->where('locale', Locale::baseCode())
+                ->first();
     }
 }

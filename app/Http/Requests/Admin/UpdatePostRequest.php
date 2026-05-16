@@ -2,11 +2,15 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Http\Requests\Admin\Concerns\ValidatesStaleTranslationFields;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdatePostRequest extends FormRequest
 {
+    use ValidatesStaleTranslationFields;
+
     public function authorize(): bool
     {
         return in_array($this->user()?->role, config('cms.roles', []));
@@ -16,7 +20,17 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:posts,slug,' . $this->route('post')->id],
+            'locale' => ['nullable', 'string', Rule::in(\App\Models\Locale::installedCodes())],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                Rule::notIn(\App\Models\Locale::catalogCodes()),
+                Rule::unique('posts', 'slug')
+                    ->where('locale', $this->input('locale', $this->route('post')->locale))
+                    ->ignore($this->route('post')->id),
+            ],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'content' => ['nullable', 'string'],
             'status' => ['required', 'string', 'in:' . implode(',', config('cms.statuses'))],
@@ -28,6 +42,13 @@ class UpdatePostRequest extends FormRequest
             'meta_json.og_description' => ['nullable', 'string', 'max:320'],
             'categories' => ['nullable', 'array'],
             'categories.*' => ['integer', Rule::exists('taxonomies', 'id')->where('type', 'category')],
+            'acknowledged_fields' => ['nullable', 'array'],
+            'acknowledged_fields.*' => ['string'],
         ];
+    }
+
+    protected function staleTranslationEntity(): ?Model
+    {
+        return $this->route('post');
     }
 }

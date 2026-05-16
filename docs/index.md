@@ -7,6 +7,7 @@ This index is the entry point for developers and LLM agents working on the start
 - `docs/framework-philosophy.md` — principles and boundaries that guide framework decisions
 - `docs/architecture.md` — high-level structure, request flow, and system boundaries
 - `docs/content-model.md` — canonical shape of structured content blocks
+- `docs/multilanguage.md` — public multilingual content, locale routing, editorial schema, and translation contract
 - `docs/editorial-contract.md` — shared contracts for publishable, SEO, media, and preview behavior
 - `docs/templates.md` — how template registration and rendering work
 - `docs/live-editor.md` — shared editor shell and preview contract

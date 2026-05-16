@@ -9,14 +9,20 @@ use App\Contracts\Editorial\Seoable;
 use App\Traits\HasMedia;
 use App\Traits\HasPublicationState;
 use App\Traits\HasTaxonomies;
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Post extends Model implements Mediable, Previewable, Publishable, Seoable
 {
-    use HasMedia, HasPublicationState, HasTaxonomies;
+    use HasMedia, HasPublicationState, HasTaxonomies, HasTranslations;
 
     protected $fillable = [
+        'locale',
+        'translation_group_id',
+        'translation_status',
+        'source_fingerprint',
+        'source_field_hashes',
         'title',
         'slug',
         'excerpt',
@@ -32,6 +38,7 @@ class Post extends Model implements Mediable, Previewable, Publishable, Seoable
     {
         return [
             'meta_json' => 'array',
+            'source_field_hashes' => 'array',
             'published_at' => 'datetime',
         ];
     }
@@ -53,7 +60,18 @@ class Post extends Model implements Mediable, Previewable, Publishable, Seoable
 
     public function url(): string
     {
-        return route('blog.show', $this->slug);
+        return $this->localizedUrl();
+    }
+
+    public function localizedUrl(): string
+    {
+        $path = '/blog/'.ltrim($this->slug, '/');
+
+        if ($this->isBaseLocale()) {
+            return $path;
+        }
+
+        return '/'.$this->locale.$path;
     }
 
     public function seoTitleFallback(): ?string

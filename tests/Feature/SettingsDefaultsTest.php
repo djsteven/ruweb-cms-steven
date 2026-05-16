@@ -27,9 +27,9 @@ class SettingsDefaultsTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('settings', [
-            'key' => 'homepage_slug',
+            'key' => 'homepage_translation_group_id',
             'type' => 'select',
-            'value' => 'inicio',
+            'value' => null,
         ]);
 
         $this->assertDatabaseHas('settings', [

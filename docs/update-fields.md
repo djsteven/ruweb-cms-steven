@@ -12,6 +12,8 @@ Use this document when:
 
 Do not use this document as the source of truth for the data shape itself. That lives in `docs/content-model.md`.
 
+For multilingual content, consult `docs/multilanguage.md` before updating fields. The editorial schema defines which JSON paths are translatable, preserved, remapped, or localized media.
+
 ## Core Rule
 
 Editable content lives in the database-backed structured payload, not in the template file.

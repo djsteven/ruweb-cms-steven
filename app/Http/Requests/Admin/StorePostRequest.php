@@ -16,7 +16,15 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', 'unique:posts,slug'],
+            'locale' => ['nullable', 'string', Rule::in(\App\Models\Locale::installedCodes())],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
+                Rule::notIn(\App\Models\Locale::catalogCodes()),
+                Rule::unique('posts', 'slug')->where('locale', $this->input('locale', \App\Models\Locale::baseCode())),
+            ],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'content' => ['nullable', 'string'],
             'status' => ['required', 'string', 'in:' . implode(',', config('cms.statuses'))],

@@ -17,6 +17,7 @@ export function initEditorEngine(config = {}) {
 
     let previewTimer = null;
     let savedSnapshot = formSnapshot();
+    let savedStatus = currentStatus();
 
     function formSnapshot() {
         const data = new FormData(form);
@@ -40,6 +41,10 @@ export function initEditorEngine(config = {}) {
         if (updateBtn) updateBtn.disabled = !dirty;
         if (saveDraftBtn) saveDraftBtn.disabled = !dirty;
         headerSaveBtn.disabled = !dirty;
+    }
+
+    function currentStatus() {
+        return new FormData(form).get('status') || null;
     }
 
     function refreshPreview() {
@@ -85,6 +90,14 @@ export function initEditorEngine(config = {}) {
     }
 
     async function save(statusOverride) {
+        const beforeSave = new CustomEvent('editor:before-save', { cancelable: true });
+        form.dispatchEvent(beforeSave);
+
+        if (beforeSave.defaultPrevented) {
+            updateDirtyState();
+            return;
+        }
+
         if (updateBtn) updateBtn.disabled = true;
         if (saveDraftBtn) saveDraftBtn.disabled = true;
         headerSaveBtn.disabled = true;
@@ -105,15 +118,44 @@ export function initEditorEngine(config = {}) {
             });
 
             if (response.ok) {
+                const nextStatus = requestData.get('status') || null;
                 savedSnapshot = formSnapshot();
                 showToast(savedMsg);
+
+                if (nextStatus && savedStatus && nextStatus !== savedStatus) {
+                    window.removeEventListener('beforeunload', onBeforeUnload);
+                    window.location.reload();
+                    return;
+                }
+
+                savedStatus = nextStatus || savedStatus;
             } else {
-                showToast(errorMsg, 'error');
+                const message = await responseErrorMessage(response);
+                showToast(message || errorMsg, 'error');
             }
         } catch (_) {
             showToast(errorMsg, 'error');
         } finally {
             updateDirtyState();
+        }
+    }
+
+    async function responseErrorMessage(response) {
+        const contentType = response.headers.get('content-type') || '';
+
+        if (!contentType.includes('application/json')) {
+            return null;
+        }
+
+        try {
+            const payload = await response.json();
+            const firstError = payload?.errors
+                ? Object.values(payload.errors).flat()[0]
+                : null;
+
+            return firstError || payload?.message || null;
+        } catch (_) {
+            return null;
         }
     }
 

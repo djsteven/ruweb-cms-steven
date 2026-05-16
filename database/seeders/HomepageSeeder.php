@@ -3,14 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\Page;
+use App\Models\Locale;
+use App\Models\Setting;
 use Illuminate\Database\Seeder;
 
 class HomepageSeeder extends Seeder
 {
     public function run(): void
     {
-        Page::updateOrCreate(
-            ['slug' => 'inicio'],
+        $page = Page::updateOrCreate(
+            ['slug' => 'inicio', 'locale' => Locale::baseCode()],
             [
                 'title' => 'Inicio',
                 'template_key' => 'home',
@@ -39,5 +41,10 @@ class HomepageSeeder extends Seeder
                 'updated_by' => null,
             ]
         );
+
+        $page->source_fingerprint = $page->translatableFingerprint();
+        $page->save();
+
+        Setting::set('homepage_translation_group_id', $page->translation_group_id);
     }
 }

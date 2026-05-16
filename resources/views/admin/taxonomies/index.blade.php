@@ -46,6 +46,7 @@
                 <tr class="border-b border-white/[0.06]">
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.col_title') }}</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">{{ __('admin.col_slug') }}</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden md:table-cell">{{ __('admin.language') }}</th>
                     <th class="text-right text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.col_actions') }}</th>
                 </tr>
             </thead>
@@ -62,6 +63,35 @@
                         </td>
                         <td class="px-4 py-3 hidden sm:table-cell">
                             <span class="text-sm text-gray-500">{{ $taxonomy->slug }}</span>
+                        </td>
+                        <td class="px-4 py-3 hidden md:table-cell">
+                            <div class="flex items-center gap-1">
+                                @foreach(($locales ?? collect()) as $locale)
+                                    @php
+                                        $state = $taxonomy->derivedTranslationState($locale->code);
+                                        $translation = $taxonomy->translations->firstWhere('locale', $locale->code);
+                                        $badgeColor = $state === 'published'
+                                            ? 'bg-sky-500/10 text-sky-400'
+                                            : ($state === 'missing' ? 'bg-white/[0.04] text-gray-600' : 'bg-yellow-500/10 text-yellow-400');
+                                    @endphp
+                                    @if($translation)
+                                        <a href="{{ route('admin.taxonomies.edit', [$type, $translation]) }}"
+                                           title="{{ __('admin.edit_translation', ['lang' => $locale->name]) }}"
+                                           class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors hover:ring-1 hover:ring-white/20 {{ $badgeColor }}">
+                                            {{ strtoupper($locale->code) }}
+                                        </a>
+                                    @else
+                                        <form method="POST" action="{{ route('admin.taxonomies.translate', [$type, $taxonomy, $locale->code]) }}" class="inline-flex">
+                                            @csrf
+                                            <button type="submit"
+                                                    title="{{ __('admin.create_translation', ['lang' => $locale->name]) }}"
+                                                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors hover:bg-white/[0.08] hover:text-gray-300 {{ $badgeColor }}">
+                                                +{{ strtoupper($locale->code) }}
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endforeach
+                            </div>
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">

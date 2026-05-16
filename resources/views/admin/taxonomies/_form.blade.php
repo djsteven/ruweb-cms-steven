@@ -3,10 +3,13 @@
     $isEdit = $taxonomy !== null;
 @endphp
 
-<form method="POST"
+<form id="editor-form"
+      method="POST"
       action="{{ $isEdit ? route('admin.taxonomies.update', [$type, $taxonomy]) : route('admin.taxonomies.store', $type) }}">
     @csrf
     @if($isEdit) @method('PUT') @endif
+    <input type="hidden" name="locale" value="{{ old('locale', $taxonomy?->locale ?? \App\Models\Locale::baseCode()) }}">
+    @include('admin.partials.stale-fields', ['staleFieldNames' => $staleFieldNames ?? []])
 
     <div class="space-y-5">
 

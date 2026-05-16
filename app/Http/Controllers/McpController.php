@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Media;
+use App\Models\Locale;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Page;
@@ -426,9 +427,12 @@ class McpController extends Controller
 
         $validated = Validator::make($request->all(), [
             'name'     => ['required', 'string', 'max:255'],
-            'slug'     => ['required', 'string', 'max:255', 'unique:menus,slug'],
-            'location' => ['nullable', 'string', 'max:255'],
+            'locale'   => ['nullable', 'string', Rule::in(Locale::installedCodes())],
+            'slug'     => ['required', 'string', 'max:255', Rule::unique('menus', 'slug')->where('locale', $request->input('locale', Locale::baseCode()))],
+            'location' => ['nullable', 'string', 'max:255', Rule::unique('menus', 'location')->where('locale', $request->input('locale', Locale::baseCode()))],
         ])->validate();
+
+        $validated['locale'] = $validated['locale'] ?? Locale::baseCode();
 
         $menu = Menu::create($validated);
 
@@ -443,8 +447,9 @@ class McpController extends Controller
 
         $validated = Validator::make($request->all(), [
             'name'     => ['sometimes', 'string', 'max:255'],
-            'slug'     => ['sometimes', 'string', 'max:255', Rule::unique('menus', 'slug')->ignore($menu->id)],
-            'location' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'locale'   => ['sometimes', 'string', Rule::in(Locale::installedCodes())],
+            'slug'     => ['sometimes', 'string', 'max:255', Rule::unique('menus', 'slug')->where('locale', $request->input('locale', $menu->locale))->ignore($menu->id)],
+            'location' => ['sometimes', 'nullable', 'string', 'max:255', Rule::unique('menus', 'location')->where('locale', $request->input('locale', $menu->locale))->ignore($menu->id)],
         ])->validate();
 
         $menu->update($validated);
@@ -599,6 +604,7 @@ class McpController extends Controller
             'id'         => $menu->id,
             'name'       => $menu->name,
             'slug'       => $menu->slug,
+            'locale'     => $menu->locale,
             'location'   => $menu->location,
             'items_count' => $menu->items_count ?? $menu->items()->count(),
             'created_at' => $menu->created_at?->toISOString(),

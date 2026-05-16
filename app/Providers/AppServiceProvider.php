@@ -32,10 +32,10 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('layouts.public', function ($view) {
-            $siteLogo = Setting::get('site_logo');
+            $siteLogo = Setting::getLocalized('site_logo');
 
             $view->with([
-                'siteName' => Setting::get('site_name') ?: config('app.name'),
+                'siteName' => Setting::getLocalized('site_name') ?: config('app.name'),
                 'siteLogo' => $siteLogo?->url(),
                 'siteLogoMedia' => $siteLogo,
             ]);

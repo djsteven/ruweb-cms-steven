@@ -10,8 +10,13 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+            $table->string('locale', 10)->default(config('cms.locales.default', 'es'))->index();
+            $table->uuid('translation_group_id')->nullable()->index();
+            $table->string('translation_status', 30)->nullable()->index();
+            $table->string('source_fingerprint', 64)->nullable();
+            $table->json('source_field_hashes')->nullable();
             $table->string('title', 255);
-            $table->string('slug', 255)->unique();
+            $table->string('slug', 255);
             $table->text('excerpt')->nullable();
             $table->longText('content')->nullable();
             $table->json('meta_json')->nullable();
@@ -22,6 +27,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->index('created_at');
+            $table->unique(['locale', 'slug']);
         });
     }
 

@@ -84,6 +84,8 @@ return [
     'badge_draft' => 'Draft',
     'action_view' => 'View',
     'action_edit' => 'Edit',
+    'action_create' => 'Create',
+    'action_update' => 'Update',
     'view_live' => 'View live →',
 
     // Pages create
@@ -341,10 +343,11 @@ return [
         'site_favicon' => [
             'label' => 'Site Favicon',
         ],
-        'homepage_slug' => [
+        'homepage_translation_group_id' => [
             'label' => 'Homepage',
             'help' => 'Choose which published page will be shown at the root URL (/).',
             'empty' => 'No published pages available',
+            'unpublished' => 'Current homepage is no longer published',
         ],
         'default_social_image' => [
             'label' => 'Default Social Share Image',
@@ -541,6 +544,27 @@ return [
     'copy' => 'Copy',
     'show' => 'Show',
     'editor_title' => 'Editor',
+    'language' => 'Language',
+    'languages' => 'Languages',
+    'languages_subtitle' => 'Enable the languages available for editing and publishing the site.',
+    'editorial_control' => 'Editorial control',
+    'editorial_control_subtitle' => 'Review missing, pending, and outdated translations.',
+    'type' => 'Type',
+    'base_language' => 'Base language',
+    'secondary_language' => 'Secondary language',
+    'active' => 'Active',
+    'public' => 'Public',
+    'add_language' => 'Add language',
+    'add_language_subtitle' => 'Install another language from the catalog. You can enable and publish it afterwards.',
+    'edit_translation' => 'Edit :lang',
+    'create_translation' => 'Translate to :lang',
+    'translation_not_supported' => 'This template does not support translation',
+    'language_added' => 'Language added.',
+    'needs_review' => 'Needs review',
+    'field_outdated' => 'Original changed',
+    'field_outdated_hint' => 'Review or mark done.',
+    'mark_no_changes' => 'No changes',
+    'save_blocked_outdated' => 'Review updated original fields or mark them as no changes needed before saving.',
 
     // Auth errors
     'invalid_credentials' => 'Invalid credentials.',

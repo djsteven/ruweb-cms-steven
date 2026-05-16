@@ -17,6 +17,7 @@ return new class extends Migration
             $table->nullableMorphs('linkable');
             $table->string('url')->nullable();
             $table->string('target')->default('_self');
+            $table->string('translation_status', 30)->nullable()->index();
             $table->unsignedInteger('order')->default(0);
             $table->timestamps();
 

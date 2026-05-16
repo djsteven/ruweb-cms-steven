@@ -1,5 +1,23 @@
 <div class="bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 space-y-4">
     <div>
+        <label for="locale" class="block text-sm font-medium text-gray-300 mb-1.5">{{ __('admin.language') }}</label>
+        <select
+            id="locale"
+            name="locale"
+            class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
+        >
+            @foreach(($locales ?? collect()) as $locale)
+                <option value="{{ $locale->code }}" {{ old('locale', $menu?->locale ?? \App\Models\Locale::baseCode()) === $locale->code ? 'selected' : '' }}>
+                    {{ $locale->name }} ({{ strtoupper($locale->code) }})
+                </option>
+            @endforeach
+        </select>
+        @error('locale')
+            <p class="mt-1 text-xs text-red-400">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div>
         <label for="name" class="block text-sm font-medium text-gray-300 mb-1.5">{{ __('admin.menu_name') }}</label>
         <input
             type="text"

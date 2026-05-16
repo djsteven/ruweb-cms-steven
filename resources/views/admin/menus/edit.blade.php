@@ -14,6 +14,7 @@ function flattenMenuTree($items, $parentId = null) {
             'linkable_id' => $item->linkable_id,
             'url'         => $item->url,
             'target'      => $item->target,
+            'translation_status' => $item->translation_status,
             'order'       => $idx,
         ];
         if ($item->children->isNotEmpty()) {
@@ -36,6 +37,30 @@ function flattenMenuTree($items, $parentId = null) {
             <span class="text-gray-400">{{ $menu->name }}</span>
         </div>
         <h1 class="text-lg font-semibold text-white">{{ $menu->name }}</h1>
+        <div class="mt-3 flex items-center gap-1">
+            @foreach($locales as $locale)
+                @php
+                    $translation = ($menuTranslations ?? collect())->get($locale->code);
+                    $badgeColor = $translation
+                        ? ($translation->id === $menu->id ? 'bg-sky-500/10 text-sky-400 ring-1 ring-sky-500/20' : 'bg-white/[0.04] text-gray-400 hover:text-gray-200')
+                        : 'bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20';
+                @endphp
+                @if($translation)
+                    <a href="{{ route('admin.menus.edit', $translation) }}"
+                       class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium transition-colors {{ $badgeColor }}">
+                        {{ strtoupper($locale->code) }}
+                    </a>
+                @elseif(auth()->user()->isAdmin())
+                    <form method="POST" action="{{ route('admin.menus.translate', [$menu, $locale->code]) }}" class="inline-flex">
+                        @csrf
+                        <button type="submit"
+                                class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium transition-colors {{ $badgeColor }}">
+                            +{{ strtoupper($locale->code) }}
+                        </button>
+                    </form>
+                @endif
+            @endforeach
+        </div>
     </div>
     @if(auth()->user()->isAdmin())
     <form method="POST" action="{{ route('admin.menus.destroy', $menu) }}"
@@ -316,6 +341,7 @@ function flattenMenuTree($items, $parentId = null) {
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
                 </svg>
                 <span class="flex-1 text-sm text-white truncate item-label-text">${esc(item.label)}</span>
+                ${item.translation_status === 'needs_review' ? `<span class="text-xs text-yellow-400 px-1.5 py-0.5 bg-yellow-500/10 rounded shrink-0">{{ __('admin.needs_review') }}</span>` : ''}
                 <span class="text-xs text-gray-600 px-1.5 py-0.5 bg-white/5 rounded shrink-0">${esc(typeLabels[item.type] || item.type)}</span>
                 <button type="button" class="toggle-btn text-gray-600 hover:text-gray-300 transition-colors shrink-0">
                     <svg class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

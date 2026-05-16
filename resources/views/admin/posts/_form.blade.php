@@ -12,6 +12,8 @@
       class="flex flex-col h-full">
     @csrf
     @if($isEdit) @method('PUT') @endif
+    <input type="hidden" name="locale" value="{{ old('locale', $post?->locale ?? \App\Models\Locale::baseCode()) }}">
+    @include('admin.partials.stale-fields', ['staleFieldNames' => $staleFieldNames ?? []])
 
     {{-- Tab bar --}}
     <div class="flex-none flex border-b border-white/[0.06] -mx-5 px-5 mb-5">

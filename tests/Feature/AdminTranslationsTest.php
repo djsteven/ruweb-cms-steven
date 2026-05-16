@@ -9,9 +9,10 @@ class AdminTranslationsTest extends TestCase
     public function test_homepage_settings_translation_keys_exist_in_spanish_and_english(): void
     {
         $keys = [
-            'admin.settings_fields.homepage_slug.label',
-            'admin.settings_fields.homepage_slug.help',
-            'admin.settings_fields.homepage_slug.empty',
+            'admin.settings_fields.homepage_translation_group_id.label',
+            'admin.settings_fields.homepage_translation_group_id.help',
+            'admin.settings_fields.homepage_translation_group_id.empty',
+            'admin.settings_fields.homepage_translation_group_id.unpublished',
             'admin.analytics',
             'admin.analytics_subtitle',
             'admin.analytics_google_title',

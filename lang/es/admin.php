@@ -84,6 +84,8 @@ return [
     'badge_draft' => 'Borrador',
     'action_view' => 'Ver',
     'action_edit' => 'Editar',
+    'action_create' => 'Crear',
+    'action_update' => 'Actualizar',
     'view_live' => 'Ver en vivo →',
 
     // Pages create
@@ -341,10 +343,11 @@ return [
         'site_favicon' => [
             'label' => 'Favicon del sitio',
         ],
-        'homepage_slug' => [
+        'homepage_translation_group_id' => [
             'label' => 'Página de inicio',
             'help' => 'Selecciona cuál página publicada se mostrará en la URL raíz (/).',
             'empty' => 'No hay páginas publicadas disponibles',
+            'unpublished' => 'La página de inicio actual ya no está publicada',
         ],
         'default_social_image' => [
             'label' => 'Imagen para compartir por defecto',
@@ -541,6 +544,27 @@ return [
     'copy' => 'Copiar',
     'show' => 'Mostrar',
     'editor_title' => 'Editor',
+    'language' => 'Idioma',
+    'languages' => 'Idiomas',
+    'languages_subtitle' => 'Activa los idiomas disponibles para editar y publicar el sitio.',
+    'editorial_control' => 'Control editorial',
+    'editorial_control_subtitle' => 'Revisa traducciones faltantes, pendientes y desactualizadas.',
+    'type' => 'Tipo',
+    'base_language' => 'Idioma base',
+    'secondary_language' => 'Idioma secundario',
+    'active' => 'Activo',
+    'public' => 'Público',
+    'add_language' => 'Agregar idioma',
+    'add_language_subtitle' => 'Instala otro idioma del catálogo. Luego podrás activarlo y publicarlo.',
+    'language_added' => 'Idioma agregado.',
+    'edit_translation' => 'Editar :lang',
+    'create_translation' => 'Traducir a :lang',
+    'translation_not_supported' => 'Esta plantilla no admite traducción',
+    'needs_review' => 'Revisar',
+    'field_outdated' => 'Original cambiado',
+    'field_outdated_hint' => 'Revisá o marcá visto.',
+    'mark_no_changes' => 'Sin cambios',
+    'save_blocked_outdated' => 'Revisá los campos actualizados en el original o marcalos como sin cambios necesarios antes de guardar.',
 
     // Auth errors
     'invalid_credentials' => 'Credenciales inválidas.',

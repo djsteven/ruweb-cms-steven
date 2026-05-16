@@ -3,6 +3,13 @@
 @section('editor-title', $page->title)
 
 @section('editor-actions')
+    @include('admin.partials._language-switcher', [
+        'model' => $page,
+        'locales' => $locales,
+        'editRoute' => 'admin.pages.edit',
+        'translateRoute' => 'admin.pages.translate',
+    ])
+
     @if ($page->isPublished())
         <a href="{{ $page->url() }}" target="_blank"
            class="text-xs text-gray-500 hover:text-gray-300 transition-colors hidden sm:inline">

@@ -112,3 +112,8 @@ This document should not become:
 - a list of one project's current keys
 - a guide for one specific email provider
 - a duplicate of admin translation rules
+## Multilingual Settings
+
+Global/default values stay in `settings.value`. Localized overrides live in `setting_translations` and are resolved with `Setting::getLocalized($key, $locale)`.
+
+Only user-facing public values should be localized, such as site name, site description, social image, optional logo, and footer text. Operational values such as analytics, mail, favicon, and admin locale remain global. Homepage is global by translation group (`homepage_translation_group_id`), not one setting per locale.

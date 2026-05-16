@@ -15,7 +15,7 @@
 <form method="POST" action="{{ route('admin.menus.store') }}" class="max-w-lg">
     @csrf
 
-    @include('admin.menus._form', ['menu' => null])
+    @include('admin.menus._form', ['menu' => null, 'locales' => $locales])
 
     <div class="mt-5 flex items-center gap-3">
         <button type="submit" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white text-sm font-medium rounded-md transition-colors">

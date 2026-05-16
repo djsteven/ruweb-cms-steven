@@ -9,7 +9,7 @@ class ContentHelper
 {
     public static function metaTitle(array $meta, ?string $default = null): string
     {
-        $siteName = Setting::get('site_name') ?: config('app.name');
+        $siteName = Setting::getLocalized('site_name') ?: config('app.name');
 
         return ($meta['og_title'] ?? null)
             ?: ($meta['title'] ?? null)
@@ -22,7 +22,7 @@ class ContentHelper
         return $meta['og_description']
             ?? $meta['description']
             ?? $default
-            ?? Setting::get('site_description')
+            ?? Setting::getLocalized('site_description')
             ?? '';
     }
 
@@ -37,7 +37,7 @@ class ContentHelper
             }
         }
 
-        $fallback = Setting::get('default_social_image');
+        $fallback = Setting::getLocalized('default_social_image');
         if ($fallback instanceof Media) {
             return $fallback->url();
         }

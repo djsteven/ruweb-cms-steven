@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Locale;
 use App\Models\Page;
 use App\Models\Setting;
 use Illuminate\Http\RedirectResponse;
@@ -19,17 +20,18 @@ class SettingController extends Controller
             ->filter(fn ($v, $k) => ! in_array($k, ['analytics', 'email']))
             ->sortBy(fn ($v, $k) => array_search($k, $groupOrder) !== false ? array_search($k, $groupOrder) : 99);
         $homepageOptions = Page::published()
+            ->where('locale', Locale::baseCode())
             ->orderBy('title')
-            ->get(['title', 'slug'])
-            ->mapWithKeys(fn (Page $page) => [$page->slug => $page->title . ' (/' . ltrim($page->slug, '/') . ')'])
+            ->get(['title', 'slug', 'translation_group_id'])
+            ->mapWithKeys(fn (Page $page) => [$page->translation_group_id => $page->title . ' (/' . ltrim($page->slug, '/') . ')'])
             ->all();
 
-        $homepageSetting = $groups->get('general')?->firstWhere('key', 'homepage_slug');
+        $homepageSetting = $groups->get('general')?->firstWhere('key', 'homepage_translation_group_id');
         if ($homepageSetting) {
             if (empty($homepageOptions)) {
-                $homepageOptions[$homepageSetting->value ?: 'inicio'] = __('admin.settings_fields.homepage_slug.empty');
+                $homepageOptions[$homepageSetting->value] = __('admin.settings_fields.homepage_translation_group_id.empty');
             } elseif (! empty($homepageSetting->value) && ! array_key_exists($homepageSetting->value, $homepageOptions)) {
-                $homepageOptions[$homepageSetting->value] = $homepageSetting->value . ' (/' . ltrim($homepageSetting->value, '/') . ')';
+                $homepageOptions[$homepageSetting->value] = __('admin.settings_fields.homepage_translation_group_id.unpublished');
             }
 
             $homepageSetting->options = $homepageOptions;
@@ -42,13 +44,15 @@ class SettingController extends Controller
 
     public function update(Request $request): RedirectResponse
     {
-        $allowedHomepageSlugs = Page::published()->pluck('slug')->all();
-        $currentHomepageSlug = (string) (Setting::get('homepage_slug', 'inicio') ?: 'inicio');
-        $allowedHomepageSlugs[] = $currentHomepageSlug;
-        $allowedHomepageSlugs = array_values(array_unique(array_filter($allowedHomepageSlugs)));
+        $allowedHomepageGroups = Page::published()
+            ->where('locale', Locale::baseCode())
+            ->pluck('translation_group_id')
+            ->all();
+        $allowedHomepageGroups[] = Setting::get('homepage_translation_group_id');
+        $allowedHomepageGroups = array_values(array_unique(array_filter($allowedHomepageGroups)));
 
         $request->validate([
-            'settings.homepage_slug' => ['sometimes', 'string', Rule::in($allowedHomepageSlugs)],
+            'settings.homepage_translation_group_id' => ['sometimes', 'string', Rule::in($allowedHomepageGroups)],
         ]);
 
         $settings = $request->input('settings', []);

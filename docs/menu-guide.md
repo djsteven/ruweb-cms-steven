@@ -4,6 +4,14 @@ This starter includes an administrable menu system similar to WordPress menus. M
 
 ---
 
+## Multilingual Menus
+
+Menus are complete per locale. A header menu in English is a separate menu from the header menu in the base language, even when they share the same location.
+
+When duplicating a menu for another locale, internal page, post, and taxonomy targets must be remapped to the translated target in the same `translation_group_id`. If the translated target does not exist, the item should be marked for review or omitted from public rendering; secondary-language menus must not silently link to base-language content.
+
+---
+
 ## Database schema
 
 ### `menus`

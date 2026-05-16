@@ -47,6 +47,8 @@ Only two top-level keys are part of the standard structured content contract:
 
 Do not introduce additional top-level keys unless the project intentionally defines a different contract and documents it separately.
 
+For multilingual sites, each localized entity has its own `content_json`. Do not store values like `{ "es": "...", "en": "..." }` inside one JSON field. Translation behavior is described by the editorial schema in `docs/multilanguage.md`; the JSON column remains the storage format.
+
 ## Meta Block
 
 The `meta` block stores SEO and social-sharing values.

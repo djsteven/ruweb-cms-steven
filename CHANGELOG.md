@@ -8,7 +8,15 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.21.0 - 2026-05-04
+## 0.22.0 - 2026-05-15
+
+- Sistema multilenguaje extendido a Pages, Posts, Taxonomies, Menus y Settings con locales instalables, grupos de traducción y fingerprints por campo.
+- Admin actualizado con gestión de idiomas, control editorial de traducciones, badges por locale y acciones de crear/editar traducciones en los listados principales.
+- Frontend público alineado al locale activo en navegación, blog, SEO, sitemap y settings localizados, con copy público traducible por idioma.
+- Contrato y documentación de multilanguage actualizados para reflejar el comportamiento real del código y cubrir el flujo esperado para agentes.
+- Cobertura de tests agregada para rutas públicas localizadas, remaps de traducciones, menús localizados y detección de contenido desfasado.
+
+## 0.21.0 - 2026-05-04 (f6ceba3)
 
 - La pantalla de `Profile` fue refactorizada para usar tabs separadas de Información y Seguridad.
 - Información de cuenta simplificada a `Full name`, `Email` y `Role` de solo lectura.

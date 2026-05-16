@@ -65,6 +65,7 @@
                 <tr class="border-b border-white/[0.06]">
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.col_title') }}</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden sm:table-cell">{{ __('admin.col_slug') }}</th>
+                    <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3 hidden md:table-cell">{{ __('admin.language') }}</th>
                     <th class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.col_status') }}</th>
                     <th class="text-right text-xs font-medium text-gray-500 uppercase tracking-wider px-4 py-3">{{ __('admin.col_actions') }}</th>
                 </tr>
@@ -80,6 +81,35 @@
                         <td class="px-4 py-3 hidden sm:table-cell">
                             <span class="text-sm text-gray-500">/{{ $post->slug }}</span>
                         </td>
+                        <td class="px-4 py-3 hidden md:table-cell">
+                            <div class="flex items-center gap-1">
+                                @foreach(($locales ?? collect()) as $locale)
+                                    @php
+                                        $state = $post->derivedTranslationState($locale->code);
+                                        $translation = $post->translations->firstWhere('locale', $locale->code);
+                                        $badgeColor = $state === 'published'
+                                            ? 'bg-sky-500/10 text-sky-400'
+                                            : ($state === 'missing' ? 'bg-white/[0.04] text-gray-600' : 'bg-yellow-500/10 text-yellow-400');
+                                    @endphp
+                                    @if($translation)
+                                        <a href="{{ route('admin.posts.edit', $translation) }}"
+                                           title="{{ __('admin.edit_translation', ['lang' => $locale->name]) }}"
+                                           class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors hover:ring-1 hover:ring-white/20 {{ $badgeColor }}">
+                                            {{ strtoupper($locale->code) }}
+                                        </a>
+                                    @else
+                                        <form method="POST" action="{{ route('admin.posts.translate', [$post, $locale->code]) }}" class="inline-flex">
+                                            @csrf
+                                            <button type="submit"
+                                                    title="{{ __('admin.create_translation', ['lang' => $locale->name]) }}"
+                                                    class="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-medium transition-colors hover:bg-white/[0.08] hover:text-gray-300 {{ $badgeColor }}">
+                                                +{{ strtoupper($locale->code) }}
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </td>
                         <td class="px-4 py-3">
                             @if ($post->status === 'published')
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-sky-500/10 text-sky-400">{{ __('admin.badge_published') }}</span>
@@ -90,7 +120,7 @@
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">
                                 @if ($post->isPublished())
-                                    <a href="{{ route('blog.show', $post->slug) }}" target="_blank" class="text-gray-600 hover:text-gray-400 transition-colors" title="{{ __('admin.action_view') }}">
+                                    <a href="{{ $post->url() }}" target="_blank" class="text-gray-600 hover:text-gray-400 transition-colors" title="{{ __('admin.action_view') }}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                         </svg>
