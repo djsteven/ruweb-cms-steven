@@ -132,7 +132,7 @@ class ToolRegistry
                         'excerpt'       => ['type' => 'string', 'maxLength' => 500],
                         'content'       => ['type' => 'string', 'description' => 'Contenido HTML o markdown del post.'],
                         'featured_image' => ['type' => 'integer'],
-                        'meta_json'     => ['type' => 'object', 'description' => 'SEO: description, og_title, og_description.'],
+                        'meta_json'     => ['type' => 'object', 'description' => 'SEO: title, description.'],
                     ],
                 ],
             ],

@@ -11,16 +11,14 @@ class ContentHelper
     {
         $siteName = Setting::getLocalized('site_name') ?: config('app.name');
 
-        return ($meta['og_title'] ?? null)
-            ?: ($meta['title'] ?? null)
+        return ($meta['title'] ?? null)
             ?: $default
             ?: $siteName;
     }
 
     public static function metaDescription(array $meta, ?string $default = null): string
     {
-        return $meta['og_description']
-            ?? $meta['description']
+        return $meta['description']
             ?? $default
             ?? Setting::getLocalized('site_description')
             ?? '';

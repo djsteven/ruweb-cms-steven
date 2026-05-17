@@ -32,8 +32,6 @@ return [
             'schema' => [
                 'meta.title' => ['type' => 'text', 'translatable' => true],
                 'meta.description' => ['type' => 'textarea', 'translatable' => true],
-                'meta.og_title' => ['type' => 'text', 'translatable' => true],
-                'meta.og_description' => ['type' => 'textarea', 'translatable' => true],
                 'meta.featured_image' => ['type' => 'media', 'localized_media' => true],
                 'sections.content.is_visible' => ['type' => 'boolean', 'preserve' => true],
                 'sections.content.heading' => ['type' => 'text', 'translatable' => true],
@@ -46,8 +44,6 @@ return [
             'schema' => [
                 'meta.title' => ['type' => 'text', 'translatable' => true],
                 'meta.description' => ['type' => 'textarea', 'translatable' => true],
-                'meta.og_title' => ['type' => 'text', 'translatable' => true],
-                'meta.og_description' => ['type' => 'textarea', 'translatable' => true],
                 'meta.featured_image' => ['type' => 'media', 'localized_media' => true],
                 'sections.hero.is_visible' => ['type' => 'boolean', 'preserve' => true],
                 'sections.hero.heading' => ['type' => 'text', 'translatable' => true],
@@ -71,8 +67,6 @@ return [
             'schema' => [
                 'meta.title' => ['type' => 'text', 'translatable' => true],
                 'meta.description' => ['type' => 'textarea', 'translatable' => true],
-                'meta.og_title' => ['type' => 'text', 'translatable' => true],
-                'meta.og_description' => ['type' => 'textarea', 'translatable' => true],
                 'meta.featured_image' => ['type' => 'media', 'localized_media' => true],
                 'sections.hero.is_visible' => ['type' => 'boolean', 'preserve' => true],
                 'sections.hero.heading' => ['type' => 'text', 'translatable' => true],
@@ -99,8 +93,6 @@ return [
             'content' => ['type' => 'richtext', 'translatable' => true],
             'meta_json.title' => ['type' => 'text', 'translatable' => true],
             'meta_json.description' => ['type' => 'textarea', 'translatable' => true],
-            'meta_json.og_title' => ['type' => 'text', 'translatable' => true],
-            'meta_json.og_description' => ['type' => 'textarea', 'translatable' => true],
             'featured_image' => ['type' => 'media', 'localized_media' => true],
             'taxonomies' => ['type' => 'internal_reference', 'remap' => true],
         ],

@@ -94,7 +94,7 @@ class EditorialContractTest extends TestCase
             'content_json' => [
                 'meta' => [
                     'description' => 'About page description',
-                    'og_title' => 'About social title',
+                    'title' => 'About SEO title',
                 ],
             ],
         ]);
@@ -104,13 +104,15 @@ class EditorialContractTest extends TestCase
             'slug' => 'launch',
             'meta_json' => [
                 'description' => 'Post description',
-                'og_title' => 'Post social title',
+                'title' => 'Post SEO title',
             ],
         ]);
 
         $this->assertSame('About page description', $page->meta()['description']);
+        $this->assertSame('About SEO title', $page->meta()['title']);
         $this->assertSame('About', $page->seoTitleFallback());
         $this->assertSame('Post description', $post->meta()['description']);
+        $this->assertSame('Post SEO title', $post->meta()['title']);
         $this->assertSame('Launch', $post->seoTitleFallback());
     }
 
@@ -121,6 +123,7 @@ class EditorialContractTest extends TestCase
             'slug' => 'about',
             'content_json' => [
                 'meta' => [
+                    'title' => 'About SEO title',
                     'description' => 'About page description',
                 ],
             ],
@@ -134,6 +137,7 @@ class EditorialContractTest extends TestCase
             'excerpt' => 'Short launch summary',
             'content' => 'Launch body',
             'meta_json' => [
+                'title' => 'Launch SEO title',
                 'description' => 'Post description',
             ],
             'status' => 'published',
@@ -142,13 +146,13 @@ class EditorialContractTest extends TestCase
 
         $this->get(route('page.show', 'about'))
             ->assertOk()
-            ->assertSee('<title>About', false)
+            ->assertSee('<title>About SEO title', false)
             ->assertSee('content="About page description"', false)
             ->assertSee('href="'.route('page.show', 'about').'"', false);
 
         $this->get(route('blog.show', 'launch'))
             ->assertOk()
-            ->assertSee('<title>Launch', false)
+            ->assertSee('<title>Launch SEO title', false)
             ->assertSee('content="Post description"', false)
             ->assertSee('href="'.route('blog.show', 'launch').'"', false);
     }

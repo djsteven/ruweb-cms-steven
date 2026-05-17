@@ -209,30 +209,18 @@
             <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide">{{ __('admin.seo') }}</h3>
 
             <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_meta_description') }}</label>
+                <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_seo_title') }}</label>
+                <input type="text" name="content_json[meta][title]"
+                       value="{{ $contentJson['meta']['title'] ?? '' }}"
+                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
+                       placeholder="{{ __('admin.field_seo_title_ph') }}">
+            </div>
+
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">{{ __('admin.field_seo_description') }}</label>
                 <textarea name="content_json[meta][description]" rows="2"
                           class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
-                          placeholder="{{ __('admin.field_meta_description_ph') }}">{{ $contentJson['meta']['description'] ?? '' }}</textarea>
-            </div>
-
-            <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">
-                    {{ __('admin.field_og_title') }} <span class="text-gray-700">({{ __('admin.optional') }})</span>
-                </label>
-                <input type="text" name="content_json[meta][og_title]"
-                       value="{{ $contentJson['meta']['og_title'] ?? '' }}"
-                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
-                       placeholder="{{ __('admin.field_og_title_ph') }}">
-            </div>
-
-            <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">
-                    {{ __('admin.field_og_description') }} <span class="text-gray-700">({{ __('admin.optional') }})</span>
-                </label>
-                <input type="text" name="content_json[meta][og_description]"
-                       value="{{ $contentJson['meta']['og_description'] ?? '' }}"
-                       class="w-full bg-[#1a1a1a] border border-white/10 text-white text-sm rounded-md px-3 py-2 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/50"
-                       placeholder="{{ __('admin.field_og_description_ph') }}">
+                          placeholder="{{ __('admin.field_seo_description_ph') }}">{{ $contentJson['meta']['description'] ?? '' }}</textarea>
             </div>
         </div>
 

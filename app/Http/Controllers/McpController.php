@@ -199,9 +199,8 @@ class McpController extends Controller
             'content' => ['nullable', 'string'],
             'featured_image' => ['nullable', 'integer', 'exists:media,id'],
             'meta_json' => ['nullable', 'array'],
+            'meta_json.title' => ['nullable', 'string', 'max:255'],
             'meta_json.description' => ['nullable', 'string', 'max:320'],
-            'meta_json.og_title' => ['nullable', 'string', 'max:255'],
-            'meta_json.og_description' => ['nullable', 'string', 'max:320'],
         ])->validate();
 
         $userId = $request->user()->id;
@@ -234,9 +233,8 @@ class McpController extends Controller
             'content' => ['sometimes', 'nullable', 'string'],
             'featured_image' => ['nullable', 'integer', 'exists:media,id'],
             'meta_json' => ['sometimes', 'nullable', 'array'],
+            'meta_json.title' => ['nullable', 'string', 'max:255'],
             'meta_json.description' => ['nullable', 'string', 'max:320'],
-            'meta_json.og_title' => ['nullable', 'string', 'max:255'],
-            'meta_json.og_description' => ['nullable', 'string', 'max:320'],
         ])->validate();
 
         $featuredImageId = $validated['featured_image'] ?? null;

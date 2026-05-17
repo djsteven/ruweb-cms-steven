@@ -14,7 +14,7 @@ class AdminDashboardTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_dashboard_counts_only_base_locale_content(): void
+    public function test_dashboard_shows_editorial_counts_and_translation_coverage(): void
     {
         $this->seedLocales();
         $admin = User::factory()->create(['role' => 'admin']);
@@ -24,6 +24,7 @@ class AdminDashboardTest extends TestCase
             'title' => 'Inicio',
             'slug' => 'inicio',
             'template_key' => 'default',
+            'content_json' => ['meta' => ['title' => 'Inicio SEO']],
             'status' => 'published',
             'published_at' => now(),
         ]);
@@ -45,11 +46,21 @@ class AdminDashboardTest extends TestCase
             'status' => 'published',
             'published_at' => now(),
         ]);
+        Page::create([
+            'locale' => 'es',
+            'title' => 'Servicios',
+            'slug' => 'servicios',
+            'template_key' => 'default',
+            'content_json' => ['meta' => ['description' => 'Sin SEO title']],
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
 
         $basePost = Post::create([
             'locale' => 'es',
             'title' => 'Novedades',
             'slug' => 'novedades',
+            'meta_json' => ['title' => 'Novedades SEO', 'description' => 'Desc'],
             'status' => 'published',
             'published_at' => now(),
         ]);
@@ -61,14 +72,24 @@ class AdminDashboardTest extends TestCase
             'status' => 'published',
             'published_at' => now(),
         ]);
+        Post::create([
+            'locale' => 'es',
+            'title' => 'Sin SEO',
+            'slug' => 'sin-seo',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
 
         $response = $this->actingAs($admin)->get(route('admin.dashboard'));
 
         $response->assertOk();
-        $response->assertViewHas('pageCount', 1);
-        $response->assertViewHas('postCount', 1);
-        $response->assertViewHas('publishedPageCount', 1);
-        $response->assertViewHas('publishedPostCount', 1);
+        $response->assertSee('Páginas/posts sin foto destacada');
+        $response->assertSee('Páginas/posts sin SEO title');
+        $response->assertSee('Páginas/posts sin SEO description');
+        $response->assertSee('Traducciones pendientes');
+        $response->assertSee('Cobertura de traducciones');
+        $response->assertViewHas('pendingTranslationsCount', 5);
+        $response->assertViewHas('hasSecondaryPublicLocales', true);
     }
 
     public function test_dashboard_shows_pending_tasks_and_hides_completed_by_default(): void
@@ -99,6 +120,19 @@ class AdminDashboardTest extends TestCase
         $response->assertSee('Completadas');
         $response->assertSee('Configurar Google Tag ID');
         $response->assertSee('Habilitar HTTP/2');
+    }
+
+    public function test_dashboard_hides_translation_widgets_for_monolingual_sites(): void
+    {
+        Locale::create(['code' => 'es', 'name' => 'Español', 'is_base' => true, 'is_active' => true, 'is_public' => true, 'sort_order' => 0]);
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $response = $this->actingAs($admin)->get(route('admin.dashboard'));
+
+        $response->assertOk();
+        $response->assertDontSee('Traducciones pendientes');
+        $response->assertDontSee('Cobertura de traducciones');
+        $response->assertSee('Sin idiomas públicos extra');
     }
 
     private function seedLocales(): void

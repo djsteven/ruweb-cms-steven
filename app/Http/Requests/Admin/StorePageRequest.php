@@ -29,6 +29,8 @@ class StorePageRequest extends FormRequest
             'featured_image' => ['nullable', 'integer', 'exists:media,id'],
             'content_json' => ['nullable', 'array'],
             'content_json.meta' => ['nullable', 'array'],
+            'content_json.meta.title' => ['nullable', 'string', 'max:255'],
+            'content_json.meta.description' => ['nullable', 'string', 'max:320'],
             'content_json.sections' => ['nullable', 'array'],
         ];
     }

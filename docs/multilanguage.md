@@ -144,7 +144,7 @@ Workflow:
 4. Preserve `preserve` fields.
 5. Remap `remap` fields to equivalent translated records when they exist.
 6. Keep media IDs by default, but allow replacement for `localized_media`.
-7. Generate localized slug and SEO text.
+7. Generate localized slug, `SEO Title`, and `SEO Description`.
 8. Save `source_fingerprint` from the base entity.
 9. Set `translation_status = needs_review` when the translation still requires editorial review. If the translation is being finalized in the same workflow, the codebase also supports clearing the flag by syncing the translation from the current base fingerprint.
 

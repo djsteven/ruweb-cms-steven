@@ -8,7 +8,16 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.23.0 - 2026-05-17
+## 0.24.0 - 2026-05-17
+
+- Centro de control editorial reorganizado en tabs separadas para completitud de contenido y traducciones pendientes/desactualizadas.
+- Dashboard admin reemplazado por métricas accionables de foto destacada, SEO title, SEO description y traducciones pendientes, con cobertura por idioma cuando aplica.
+- Modelo SEO de Pages y Posts unificado en SEO title y SEO description, reutilizados para meta, Open Graph y Twitter.
+- Live editor simplificado para editar sólo SEO Title y SEO Description, eliminando campos OG duplicados.
+- Migración agregada para normalizar metadata SEO existente y limpiar claves `og_*` persistidas.
+- Contratos MCP, documentación y tests actualizados para el nuevo flujo editorial y SEO.
+
+## 0.23.0 - 2026-05-17 (eae84d2)
 
 - Dashboard admin corregido para contar sólo Pages y Posts del locale base, evitando duplicar traducciones en los totales.
 - Nueva tabla de checklist de setup inicial con pendientes arriba, completadas opcionales abajo y enlaces directos a Analytics y Email.

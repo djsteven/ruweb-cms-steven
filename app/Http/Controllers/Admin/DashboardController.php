@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Locale;
 use App\Models\Media;
-use App\Models\Page;
-use App\Models\Post;
 use App\Models\Setting;
+use App\Services\Editorial\EditorialInsightsService;
 use App\Services\Media\MediaHealthService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,29 +14,31 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     public function __construct(
-        protected MediaHealthService $health
+        protected MediaHealthService $health,
+        protected EditorialInsightsService $insights
     ) {
     }
 
     public function index(Request $request): View
     {
-        $baseLocale = Locale::baseCode();
         $showCompleted = $request->boolean('show_completed');
+        $editorial = $this->insights->summary();
         $setupTasks = collect($this->setupTasks($request))
             ->sortBy(fn (array $task): int => $task['completed'] ? 1 : 0)
             ->values();
+        $issueCounts = collect($editorial['completionIssues'])->keyBy('key');
 
         return view('admin.dashboard', [
             'mediaCount' => Media::count(),
-            'pageCount' => Page::where('locale', $baseLocale)->count(),
-            'postCount' => Post::where('locale', $baseLocale)->count(),
-            'publishedPageCount' => Page::where('locale', $baseLocale)->where('status', 'published')->count(),
-            'publishedPostCount' => Post::where('locale', $baseLocale)->where('status', 'published')->count(),
             'mediaHealth' => $this->health->summary(),
             'setupTasks' => $setupTasks,
             'pendingSetupTasks' => $setupTasks->where('completed', false)->values(),
             'completedSetupTasks' => $setupTasks->where('completed', true)->values(),
             'showCompleted' => $showCompleted,
+            'editorialIssueCounts' => $issueCounts,
+            'pendingTranslationsCount' => $editorial['pendingTranslationsCount'],
+            'hasSecondaryPublicLocales' => $editorial['hasSecondaryPublicLocales'],
+            'translationCoverage' => $editorial['translationCoverage'],
         ]);
     }
 

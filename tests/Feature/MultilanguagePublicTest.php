@@ -179,10 +179,10 @@ class MultilanguagePublicTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->get(route('admin.editorial-control.index'))
+            ->get(route('admin.editorial-control.index', ['tab' => 'translations']))
             ->assertOk()
             ->assertSee('Servicios')
-            ->assertSee('missing');
+            ->assertSee(__('admin.editorial_translation_state_missing'));
     }
 
     public function test_translation_save_clears_review_and_reaches_published_state(): void
@@ -540,10 +540,43 @@ class MultilanguagePublicTest extends TestCase
         $base->update(['content_json' => ['sections' => ['content' => ['heading' => 'Despues']]]]);
 
         $this->actingAs($user)
-            ->get(route('admin.editorial-control.index'))
+            ->get(route('admin.editorial-control.index', ['tab' => 'translations']))
             ->assertOk()
             ->assertSee(__('admin.action_create'))
             ->assertSee(__('admin.action_update'));
+    }
+
+    public function test_editorial_control_lists_editorial_completeness_issues(): void
+    {
+        $this->seedLocales();
+        $user = User::factory()->create(['role' => 'admin']);
+
+        Page::create([
+            'locale' => 'es',
+            'title' => 'Servicios',
+            'slug' => 'servicios',
+            'template_key' => 'default',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        Post::create([
+            'locale' => 'es',
+            'title' => 'Novedades',
+            'slug' => 'novedades',
+            'content' => 'Texto',
+            'meta_json' => ['title' => 'SEO title'],
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $this->actingAs($user)
+            ->get(route('admin.editorial-control.index'))
+            ->assertOk()
+            ->assertSee(__('admin.editorial_completeness_title'))
+            ->assertSee(__('admin.editorial_issue_featured_image_title'))
+            ->assertSee(__('admin.editorial_issue_seo_title_title'))
+            ->assertSee(__('admin.editorial_issue_seo_description_title'));
     }
 
     public function test_menus_index_shows_missing_language_actions(): void

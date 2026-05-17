@@ -9,34 +9,57 @@
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <a href="{{ route('admin.pages.index') }}"
+    <a href="{{ route('admin.editorial-control.index', ['issue' => 'featured_image']) }}#editorial-completeness"
        class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
-        <div class="text-2xl font-semibold text-white">{{ $pageCount }}</div>
-        <div class="text-sm text-gray-500 mt-1">{{ __('admin.total_pages') }}</div>
+        <div class="text-2xl font-semibold text-white">{{ $editorialIssueCounts['featured_image']['count'] ?? 0 }}</div>
+        <div class="text-sm text-gray-500 mt-1">{{ __('admin.dashboard_editorial_featured_image') }}</div>
     </a>
-    <a href="{{ route('admin.posts.index') }}"
+    <a href="{{ route('admin.editorial-control.index', ['issue' => 'seo_title']) }}#editorial-completeness"
        class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
-        <div class="text-2xl font-semibold text-white">{{ $postCount }}</div>
-        <div class="text-sm text-gray-500 mt-1">{{ __('admin.total_posts') }}</div>
+        <div class="text-2xl font-semibold text-white">{{ $editorialIssueCounts['seo_title']['count'] ?? 0 }}</div>
+        <div class="text-sm text-gray-500 mt-1">{{ __('admin.dashboard_editorial_seo_title') }}</div>
     </a>
-    <a href="{{ route('admin.pages.index', ['status' => 'published']) }}"
+    <a href="{{ route('admin.editorial-control.index', ['issue' => 'seo_description']) }}#editorial-completeness"
        class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
-        <div class="text-2xl font-semibold text-sky-400">{{ $publishedPageCount }}</div>
-        <div class="text-sm text-gray-500 mt-1">{{ __('admin.published') }}</div>
+        <div class="text-2xl font-semibold text-white">{{ $editorialIssueCounts['seo_description']['count'] ?? 0 }}</div>
+        <div class="text-sm text-gray-500 mt-1">{{ __('admin.dashboard_editorial_seo_description') }}</div>
     </a>
-    <a href="{{ route('admin.posts.index', ['status' => 'published']) }}"
-       class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
-        <div class="text-2xl font-semibold text-sky-400">{{ $publishedPostCount }}</div>
-        <div class="text-sm text-gray-500 mt-1">{{ __('admin.published_blog') }}</div>
-    </a>
+    @if($hasSecondaryPublicLocales)
+        <a href="{{ route('admin.editorial-control.index', ['issue' => 'translations', 'translation_state' => 'pending']) }}#translations"
+           class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5 hover:ring-white/[0.12] transition-all">
+            <div class="text-2xl font-semibold text-white">{{ $pendingTranslationsCount }}</div>
+            <div class="text-sm text-gray-500 mt-1">{{ __('admin.dashboard_editorial_translations_pending') }}</div>
+        </a>
+    @else
+        <div class="block bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5">
+            <div class="text-2xl font-semibold text-gray-500">-</div>
+            <div class="text-sm text-gray-500 mt-1">{{ __('admin.dashboard_editorial_translations_disabled') }}</div>
+        </div>
+    @endif
 </div>
 
-<div class="mt-4">
-    <a href="{{ route('admin.media.index') }}"
-       class="inline-flex items-center gap-2 px-3 py-2 rounded-md bg-[#141414] ring-1 ring-white/[0.06] text-sm text-gray-400 hover:text-gray-300 hover:ring-white/[0.12] transition-all">
-        <span>{{ __('admin.media_files') }}: {{ $mediaCount }}</span>
-    </a>
-</div>
+@if($hasSecondaryPublicLocales)
+    <div class="mt-6 bg-[#141414] ring-1 ring-white/[0.06] rounded-xl p-5">
+        <div class="mb-4">
+            <h2 class="text-sm font-semibold text-white">{{ __('admin.dashboard_translation_coverage_title') }}</h2>
+            <p class="text-sm text-gray-500 mt-0.5">{{ __('admin.dashboard_translation_coverage_subtitle') }}</p>
+        </div>
+
+        <div class="space-y-4">
+            @foreach($translationCoverage as $item)
+                <div>
+                    <div class="flex items-center justify-between gap-3 text-sm mb-1.5">
+                        <div class="text-white font-medium">{{ $item['locale_name'] }} <span class="text-gray-500">({{ strtoupper($item['locale']) }})</span></div>
+                        <div class="text-gray-400">{{ $item['published'] }}/{{ $item['total'] }} · {{ $item['percent'] }}%</div>
+                    </div>
+                    <div class="h-2 rounded-full bg-[#1a1a1a] overflow-hidden">
+                        <div class="h-full bg-sky-500 rounded-full" style="width: {{ $item['percent'] }}%"></div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
 
 @if(auth()->user()?->isAdmin())
     <div class="mt-6 bg-[#141414] ring-1 ring-white/[0.06] rounded-xl overflow-hidden">

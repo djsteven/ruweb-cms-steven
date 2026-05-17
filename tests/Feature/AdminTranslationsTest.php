@@ -21,6 +21,14 @@ class AdminTranslationsTest extends TestCase
             'admin.analytics_validation.google_tag_id',
             'admin.analytics_validation.meta_pixel_id',
             'admin.analytics_validation.search_console_verification_token',
+            'admin.field_seo_title',
+            'admin.field_seo_description',
+            'admin.editorial_translations_title',
+            'admin.editorial_content_tab',
+            'admin.editorial_problem',
+            'admin.editorial_col_content',
+            'admin.editorial_completeness_title',
+            'admin.dashboard_translation_coverage_title',
         ];
 
         foreach ($keys as $key) {

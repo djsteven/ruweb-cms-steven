@@ -18,9 +18,7 @@ Do not use this document for template registration, page lifecycle, or editor be
 {
     "meta": {
         "title": "Optional page title override",
-        "description": "Page description for search engines",
-        "og_title": "Optional social sharing title override",
-        "og_description": "Optional social sharing description override",
+        "description": "Page description for search engines and social sharing",
         "featured_image": 42
     },
     "sections": {
@@ -51,20 +49,18 @@ For multilingual sites, each localized entity has its own `content_json`. Do not
 
 ## Meta Block
 
-The `meta` block stores SEO and social-sharing values.
+The `meta` block stores SEO values reused for social sharing.
 
 | Field | Purpose | Typical fallback |
 |-------|---------|------------------|
 | `title` | Optional title override for meta output | Entity title or site name |
-| `description` | Meta description tag | Global site description setting |
-| `og_title` | Open Graph / social title override | Entity title |
-| `og_description` | Open Graph / social description override | `description` |
+| `description` | Meta description, Open Graph description, and Twitter description | Global site description setting |
 | `featured_image` | Optional social image media identifier | Global default social image setting |
 
 Notes:
 
 - The primary title should remain in the entity's first-class column such as `title`; use `meta.title` only when the SEO/browser title intentionally differs.
-- `og_title` should be populated only when the social title differs from the main title.
+- Open Graph and Twitter title/description reuse the same `meta.title` and `meta.description` values.
 - Featured or social images should be resolved through the media system. Store media identifiers, not raw URLs.
 - Entity-level featured images should stay in the shared media relationship. `meta.featured_image` is for an explicit social image override.
 
