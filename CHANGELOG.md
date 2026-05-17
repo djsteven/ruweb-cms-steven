@@ -8,7 +8,15 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.22.0 - 2026-05-15
+## 0.23.0 - 2026-05-17
+
+- Dashboard admin corregido para contar sólo Pages y Posts del locale base, evitando duplicar traducciones en los totales.
+- Nueva tabla de checklist de setup inicial con pendientes arriba, completadas opcionales abajo y enlaces directos a Analytics y Email.
+- Checks de arranque agregados para Google Tag ID, Meta Pixel, Search Console, email sending y soporte HTTP/2.
+- Listado de taxonomías alineado con Pages y Posts mostrando badges y acciones de traducción por idioma.
+- Cobertura de tests agregada para los nuevos contadores y el comportamiento del checklist del dashboard.
+
+## 0.22.0 - 2026-05-15 (8783ad5)
 
 - Sistema multilenguaje extendido a Pages, Posts, Taxonomies, Menus y Settings con locales instalables, grupos de traducción y fingerprints por campo.
 - Admin actualizado con gestión de idiomas, control editorial de traducciones, badges por locale y acciones de crear/editar traducciones en los listados principales.
