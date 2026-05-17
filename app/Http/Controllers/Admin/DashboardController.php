@@ -8,6 +8,7 @@ use App\Models\Media;
 use App\Models\Setting;
 use App\Services\Editorial\EditorialInsightsService;
 use App\Services\Media\MediaHealthService;
+use App\Support\AdminLoginPath;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -53,6 +54,7 @@ class DashboardController extends Controller
         $siteFavicon = Setting::getLocalized('site_favicon');
         $siteLogo = Setting::getLocalized('site_logo');
         $defaultSocialImage = Setting::getLocalized('default_social_image');
+        $adminLoginPathCustomized = AdminLoginPath::isCustomized();
         $mailEnabled = (bool) Setting::get('mail_enabled');
         $mailConfigured = $mailEnabled
             && filled(Setting::get('brevo_api_key'))
@@ -115,6 +117,15 @@ class DashboardController extends Controller
                 'href' => route('admin.settings.index'),
                 'action' => __('admin.dashboard_task_cta_configure'),
                 'status_label' => $defaultSocialImage !== null ? __('admin.dashboard_task_done') : __('admin.dashboard_task_pending'),
+            ],
+            [
+                'key' => 'admin_login_path',
+                'title' => __('admin.dashboard_task_login_url_title'),
+                'description' => __('admin.dashboard_task_login_url_description', ['path' => AdminLoginPath::url()]),
+                'completed' => $adminLoginPathCustomized,
+                'href' => route('admin.settings.index', ['tab' => 'admin']),
+                'action' => __('admin.dashboard_task_cta_configure'),
+                'status_label' => $adminLoginPathCustomized ? __('admin.dashboard_task_done') : __('admin.dashboard_task_pending'),
             ],
             [
                 'key' => 'mail_enabled',

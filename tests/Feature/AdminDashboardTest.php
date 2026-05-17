@@ -110,6 +110,7 @@ class AdminDashboardTest extends TestCase
         $response->assertSee('Configurar favicon');
         $response->assertSee('Configurar logo del sitio');
         $response->assertSee('Configurar imagen para compartir por defecto');
+        $response->assertSee('Personalizar URL de login');
         $response->assertSee('Configurar Meta Pixel');
         $response->assertSee('Configurar Search Console');
         $response->assertSee('Configurar envío de email');
@@ -150,6 +151,7 @@ class AdminDashboardTest extends TestCase
         Setting::updateOrCreate(['key' => 'site_favicon'], ['value' => (string) $favicon->id, 'type' => 'media', 'group' => 'general']);
         Setting::updateOrCreate(['key' => 'site_logo'], ['value' => (string) $logo->id, 'type' => 'media', 'group' => 'general']);
         Setting::updateOrCreate(['key' => 'default_social_image'], ['value' => (string) $social->id, 'type' => 'media', 'group' => 'general']);
+        Setting::updateOrCreate(['key' => 'admin_login_path'], ['value' => 'panel-seguro', 'type' => 'string', 'group' => 'admin']);
         Setting::clearCache();
 
         $response = $this->actingAs($admin)->get(route('admin.dashboard', ['show_completed' => 1]), [
@@ -162,6 +164,7 @@ class AdminDashboardTest extends TestCase
         $response->assertSee('Configurar favicon');
         $response->assertSee('Configurar logo del sitio');
         $response->assertSee('Configurar imagen para compartir por defecto');
+        $response->assertSee('Personalizar URL de login');
         $response->assertSee('Habilitar HTTP/2');
     }
 

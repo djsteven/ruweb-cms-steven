@@ -1,8 +1,10 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -29,8 +31,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'public.locale' => \App\Http\Middleware\SetPublicLocale::class,
             'mcp.auth'     => \App\Http\Middleware\AuthenticateMcpApiKey::class,
         ]);
-        $middleware->redirectGuestsTo('/admin/login');
+        $middleware->redirectGuestsTo(fn () => '/');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (AuthenticationException $exception, Request $request) {
+            if ($request->is('admin') || $request->is('admin/*')) {
+                return response('', 404);
+            }
+
+            return null;
+        });
     })->create();

@@ -8,7 +8,15 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.25.0 - 2026-05-17
+## 0.26.0 - 2026-05-17
+
+- Nueva setting `URL de login` en Administración para mover el acceso al panel fuera de `/admin/login`.
+- El acceso no autenticado a rutas protegidas de `/admin` ahora responde `404` y ya no revela la URL de login personalizada.
+- La ruta de login activa pasa a resolverse de forma dinámica en redirects, emails y enlaces internos del admin.
+- La checklist del dashboard ahora marca como pendiente la personalización de la URL de login hasta que se configure.
+- Validación endurecida para rechazar segmentos reservados incluso si llegan con mayúsculas o formatos equivalentes.
+
+## 0.25.0 - 2026-05-17 (808ba6e)
 
 - Sidebar admin reordenado y simplificado: `Posts` agrupa categorías y `Archivos` agrupa salud de media; `Perfil` se mueve al footer del usuario.
 - Checklist del dashboard ampliado con tareas de branding: favicon, logo del sitio e imagen para compartir por defecto.

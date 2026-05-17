@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Locale;
 use App\Models\Page;
 use App\Models\Setting;
+use App\Support\AdminLoginPath;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -53,9 +54,34 @@ class SettingController extends Controller
 
         $request->validate([
             'settings.homepage_translation_group_id' => ['sometimes', 'string', Rule::in($allowedHomepageGroups)],
+            'settings.admin_login_path' => [
+                'sometimes',
+                'nullable',
+                'string',
+                'max:64',
+                'regex:/^[A-Za-z0-9-]+$/',
+                function (string $attribute, mixed $value, \Closure $fail): void {
+                    $raw = trim((string) $value);
+
+                    if ($raw === '') {
+                        return;
+                    }
+
+                    $normalized = AdminLoginPath::normalize($raw);
+                    $rawLower = strtolower(trim($raw, '/'));
+
+                    if ($normalized === AdminLoginPath::DEFAULT_SEGMENT && $rawLower !== AdminLoginPath::DEFAULT_SEGMENT) {
+                        $fail(__('validation.not_in'));
+                    }
+                },
+            ],
         ]);
 
         $settings = $request->input('settings', []);
+
+        if (array_key_exists('admin_login_path', $settings)) {
+            $settings['admin_login_path'] = AdminLoginPath::normalize($settings['admin_login_path']);
+        }
 
         foreach ($settings as $key => $value) {
             // Don't overwrite password-type settings when field is left blank.
@@ -67,6 +93,10 @@ class SettingController extends Controller
         }
 
         Setting::clearCache();
+
+        if (array_key_exists('admin_login_path', $settings)) {
+            AdminLoginPath::clearCache();
+        }
 
         return redirect()
             ->route('admin.settings.index')

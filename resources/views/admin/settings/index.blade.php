@@ -148,8 +148,10 @@
     }
 
     if (tabs.length) {
-        let initial = null;
+        const queryTab = new URLSearchParams(window.location.search).get('tab');
+        let initial = queryTab;
         try { initial = sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
+        initial = queryTab || initial;
         const valid = initial && Array.from(tabs).some(t => t.dataset.group === initial);
         switchTab(valid ? initial : tabs[0].dataset.group, false);
     }

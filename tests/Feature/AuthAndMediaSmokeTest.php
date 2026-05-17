@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Setting;
 use App\Models\User;
+use App\Support\AdminLoginPath;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +18,18 @@ class AuthAndMediaSmokeTest extends TestCase
     {
         $response = $this->get('/admin');
 
-        $response->assertRedirect('/admin/login');
+        $response->assertNotFound();
+    }
+
+    public function test_custom_login_path_replaces_default_admin_login_route(): void
+    {
+        Setting::set('admin_login_path', 'panel-seguro');
+        Setting::clearCache();
+        AdminLoginPath::clearCache();
+
+        $this->get('/admin')->assertNotFound();
+        $this->get('/admin/login')->assertNotFound();
+        $this->get('/admin/panel-seguro')->assertOk();
     }
 
     public function test_admin_can_upload_media_file(): void

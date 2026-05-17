@@ -162,6 +162,7 @@ return [
             'site_name',
             'site_description',
             'site_favicon',
+            'admin_login_path',
         ],
     ],
 ];

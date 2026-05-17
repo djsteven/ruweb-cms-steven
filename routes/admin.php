@@ -22,17 +22,6 @@ use App\Http\Controllers\Admin\TaxonomyController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Guest routes
-Route::middleware(['guest', 'admin.locale'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [LoginController::class, 'login'])->name('login.submit');
-
-    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
-});
-
 // Authenticated admin routes
 Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin')->name('admin.')->group(function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
@@ -95,4 +84,19 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
         Route::post('languages', [LanguageController::class, 'store'])->name('languages.store');
         Route::put('languages', [LanguageController::class, 'update'])->name('languages.update');
     });
+});
+
+// Guest routes
+Route::middleware(['guest', 'admin.locale'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+    Route::get('{adminLoginPath}', [LoginController::class, 'showLoginForm'])
+        ->where('adminLoginPath', '[A-Za-z0-9-]+')
+        ->name('login');
+    Route::post('{adminLoginPath}', [LoginController::class, 'login'])
+        ->where('adminLoginPath', '[A-Za-z0-9-]+')
+        ->name('login.submit');
 });

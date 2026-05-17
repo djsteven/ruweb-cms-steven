@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Support\AdminLoginPath;
 use Database\Seeders\HomepageSeeder;
 use Database\Seeders\LocaleSeeder;
 use Database\Seeders\SettingsSeeder;
@@ -159,7 +160,7 @@ class CmsInstallCommand extends Command
         $this->info('  ════════════════════════════════');
         $this->info('  Rüweb CMS installed successfully!');
         $this->info('');
-        $this->info("  Login at: " . config('app.url') . '/admin/login');
+        $this->info("  Login at: " . config('app.url') . AdminLoginPath::url());
         $this->info("  Email:    {$adminEmail}");
         $this->info('  ════════════════════════════════');
         $this->info('');
