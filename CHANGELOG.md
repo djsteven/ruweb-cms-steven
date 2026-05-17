@@ -8,7 +8,12 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.24.0 - 2026-05-17
+## 0.25.0 - 2026-05-17
+
+- Sidebar admin reordenado y simplificado: `Posts` agrupa categorías y `Archivos` agrupa salud de media; `Perfil` se mueve al footer del usuario.
+- Checklist del dashboard ampliado con tareas de branding: favicon, logo del sitio e imagen para compartir por defecto.
+
+## 0.24.0 - 2026-05-17 (ae7beac)
 
 - Centro de control editorial reorganizado en tabs separadas para completitud de contenido y traducciones pendientes/desactualizadas.
 - Dashboard admin reemplazado por métricas accionables de foto destacada, SEO title, SEO description y traducciones pendientes, con cobertura por idioma cuando aplica.

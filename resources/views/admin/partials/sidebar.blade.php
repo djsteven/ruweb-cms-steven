@@ -95,41 +95,65 @@
                     <span>{{ __('admin.editorial_control') }}</span>
                 </a>
             </li>
+            @php
+                $mediaGroupActive = request()->routeIs('admin.media.*');
+            @endphp
             <li>
-                <a href="{{ route('admin.media.index') }}"
-                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.media.*') && !request()->routeIs('admin.media.health')
-                              ? 'bg-sky-500/10 text-sky-400'
-                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                <button type="button" data-sidebar-toggle="media-group"
+                        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
+                               {{ $mediaGroupActive ? 'text-gray-300' : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
-                    <span>{{ __('admin.media') }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.media.health') }}"
-                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.media.health')
-                              ? 'bg-sky-500/10 text-sky-400'
-                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6m3 6V7m3 10v-3m5 8H4a2 2 0 01-2-2V4a2 2 0 012-2h16a2 2 0 012 2v16a2 2 0 01-2 2z"/>
+                    <span class="flex-1 text-left">{{ __('admin.media') }}</span>
+                    <svg data-sidebar-chevron="media-group"
+                         class="w-3 h-3 shrink-0 transition-transform duration-200 {{ $mediaGroupActive ? 'rotate-180' : '' }}"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
-                    <span>{{ __('admin.media_health') }}</span>
-                </a>
+                </button>
+                <ul id="media-group"
+                    class="mt-0.5 ml-3 pl-3 border-l border-white/[0.06] space-y-0.5 {{ $mediaGroupActive ? '' : 'hidden' }}">
+                    <li>
+                        <a href="{{ route('admin.media.index') }}"
+                           class="flex items-center px-2 py-1.5 rounded-md text-xs transition-colors
+                                  {{ request()->routeIs('admin.media.*') && !request()->routeIs('admin.media.health') ? 'text-sky-400' : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                            {{ __('admin.media') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.media.health') }}"
+                           class="flex items-center px-2 py-1.5 rounded-md text-xs transition-colors
+                                  {{ request()->routeIs('admin.media.health') ? 'text-sky-400' : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                            {{ __('admin.media_health') }}
+                        </a>
+                    </li>
+                </ul>
             </li>
             @if(auth()->user()->isAdmin())
             <li>
-                <a href="{{ route('admin.users.index') }}"
+                <a href="{{ route('admin.settings.index') }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.users.*')
+                          {{ request()->routeIs('admin.settings.*')
                               ? 'bg-sky-500/10 text-sky-400'
                               : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m8-4a4 4 0 11-8 0 4 4 0 018 0zm6 2a3 3 0 11-6 0 3 3 0 016 0zM9 8a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                    <span>{{ __('admin.users') }}</span>
+                    <span>{{ __('admin.settings') }}</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('admin.languages.index') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
+                          {{ request()->routeIs('admin.languages.*')
+                              ? 'bg-sky-500/10 text-sky-400'
+                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 8h7M11 21l5-10 5 10m-8.5-3h7"/>
+                    </svg>
+                    <span>{{ __('admin.languages') }}</span>
                 </a>
             </li>
             <li>
@@ -157,40 +181,15 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('admin.settings.index') }}"
+                <a href="{{ route('admin.users.index') }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.settings.*')
+                          {{ request()->routeIs('admin.users.*')
                               ? 'bg-sky-500/10 text-sky-400'
                               : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1M9 20H4v-2a4 4 0 014-4h1m8-4a4 4 0 11-8 0 4 4 0 018 0zm6 2a3 3 0 11-6 0 3 3 0 016 0zM9 8a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                    <span>{{ __('admin.settings') }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.languages.index') }}"
-                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.languages.*')
-                              ? 'bg-sky-500/10 text-sky-400'
-                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 8h7M11 21l5-10 5 10m-8.5-3h7"/>
-                    </svg>
-                    <span>{{ __('admin.languages') }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.developer-tools.index') }}"
-                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.developer-tools.*')
-                              ? 'bg-sky-500/10 text-sky-400'
-                              : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a4 4 0 015-1.1l-3.1 3.1 2.1 2.1 3.1-3.1a4 4 0 01-5.1 5.1L8.4 20.7a2 2 0 01-2.8-2.8l8.3-8.3a4 4 0 01.8-3.3z"/>
-                    </svg>
-                    <span>{{ __('admin.developer_tools') }}</span>
+                    <span>{{ __('admin.users') }}</span>
                 </a>
             </li>
             @endif
@@ -206,18 +205,20 @@
                     <span>{{ __('admin.claude_mcp') }}</span>
                 </a>
             </li>
+            @if(auth()->user()->isAdmin())
             <li>
-                <a href="{{ route('admin.profile.index') }}"
+                <a href="{{ route('admin.developer-tools.index') }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
-                          {{ request()->routeIs('admin.profile.*')
+                          {{ request()->routeIs('admin.developer-tools.*')
                               ? 'bg-sky-500/10 text-sky-400'
                               : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.88 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.7 6.3a4 4 0 015-1.1l-3.1 3.1 2.1 2.1 3.1-3.1a4 4 0 01-5.1 5.1L8.4 20.7a2 2 0 01-2.8-2.8l8.3-8.3a4 4 0 01.8-3.3z"/>
                     </svg>
-                    <span>{{ __('admin.profile') }}</span>
+                    <span>{{ __('admin.developer_tools') }}</span>
                 </a>
             </li>
+            @endif
         </ul>
     </nav>
 
@@ -229,7 +230,10 @@
         @endphp
         <div class="flex items-center justify-between gap-2">
             <div class="min-w-0">
-                <p class="text-xs font-medium text-gray-300 truncate">{{ auth()->user()->name }}</p>
+                <a href="{{ route('admin.profile.index') }}"
+                   class="block text-xs font-medium text-gray-300 truncate hover:text-white transition-colors {{ request()->routeIs('admin.profile.*') ? 'text-sky-400' : '' }}">
+                    {{ auth()->user()->name }}
+                </a>
                 <p class="text-xs text-gray-600 capitalize">{{ $roleLabel }}</p>
             </div>
             <form method="POST" action="{{ route('admin.logout') }}" class="shrink-0">

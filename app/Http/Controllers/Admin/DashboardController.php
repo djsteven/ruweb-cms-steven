@@ -50,6 +50,9 @@ class DashboardController extends Controller
         $googleTagId = trim((string) (Setting::get('google_tag_id') ?? ''));
         $metaPixelId = trim((string) (Setting::get('meta_pixel_id') ?? ''));
         $searchConsoleToken = trim((string) (Setting::get('search_console_verification_token') ?? ''));
+        $siteFavicon = Setting::getLocalized('site_favicon');
+        $siteLogo = Setting::getLocalized('site_logo');
+        $defaultSocialImage = Setting::getLocalized('default_social_image');
         $mailEnabled = (bool) Setting::get('mail_enabled');
         $mailConfigured = $mailEnabled
             && filled(Setting::get('brevo_api_key'))
@@ -85,6 +88,33 @@ class DashboardController extends Controller
                 'href' => route('admin.analytics.index'),
                 'action' => __('admin.dashboard_task_cta_configure'),
                 'status_label' => $searchConsoleToken !== '' ? __('admin.dashboard_task_done') : __('admin.dashboard_task_pending'),
+            ],
+            [
+                'key' => 'site_favicon',
+                'title' => __('admin.dashboard_task_favicon_title'),
+                'description' => __('admin.dashboard_task_favicon_description'),
+                'completed' => $siteFavicon !== null,
+                'href' => route('admin.settings.index'),
+                'action' => __('admin.dashboard_task_cta_configure'),
+                'status_label' => $siteFavicon !== null ? __('admin.dashboard_task_done') : __('admin.dashboard_task_pending'),
+            ],
+            [
+                'key' => 'site_logo',
+                'title' => __('admin.dashboard_task_logo_title'),
+                'description' => __('admin.dashboard_task_logo_description'),
+                'completed' => $siteLogo !== null,
+                'href' => route('admin.settings.index'),
+                'action' => __('admin.dashboard_task_cta_configure'),
+                'status_label' => $siteLogo !== null ? __('admin.dashboard_task_done') : __('admin.dashboard_task_pending'),
+            ],
+            [
+                'key' => 'default_social_image',
+                'title' => __('admin.dashboard_task_default_social_image_title'),
+                'description' => __('admin.dashboard_task_default_social_image_description'),
+                'completed' => $defaultSocialImage !== null,
+                'href' => route('admin.settings.index'),
+                'action' => __('admin.dashboard_task_cta_configure'),
+                'status_label' => $defaultSocialImage !== null ? __('admin.dashboard_task_done') : __('admin.dashboard_task_pending'),
             ],
             [
                 'key' => 'mail_enabled',
