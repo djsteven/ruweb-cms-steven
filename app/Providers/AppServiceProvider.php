@@ -9,10 +9,8 @@ use App\Models\Taxonomy;
 use App\Policies\MenuPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\TaxonomyPolicy;
-use App\Support\AdminLoginPath;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,10 +23,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        URL::defaults([
-            'adminLoginPath' => AdminLoginPath::segment(),
-        ]);
-
         Gate::policy(Menu::class, MenuPolicy::class);
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy(Taxonomy::class, TaxonomyPolicy::class);

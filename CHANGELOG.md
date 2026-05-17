@@ -8,7 +8,15 @@ Este changelog empieza **desde el primer snapshot funcional** del proyecto y se 
 
 ## Unreleased
 
-## 0.26.0 - 2026-05-17
+## 0.27.0 - 2026-05-17
+
+- La URL de login del admin pasa a vivir en la raíz del sitio y se resuelve dinámicamente desde Settings.
+- El acceso no autenticado a `/admin` ahora devuelve una 404 pública sin exponer la ruta real de login.
+- La validación de `admin_login_path` rechaza colisiones con locales y slugs de páginas del locale base.
+- La configuración de login se crea y reconstruye automáticamente cuando falta, incluyendo soporte para route cache.
+- Los tests de admin y smoke cubren el nuevo flujo de login público y la reconstrucción de rutas en caliente.
+
+## 0.26.0 - 2026-05-17 (033179f)
 
 - Nueva setting `URL de login` en Administración para mover el acceso al panel fuera de `/admin/login`.
 - El acceso no autenticado a rutas protegidas de `/admin` ahora responde `404` y ya no revela la URL de login personalizada.

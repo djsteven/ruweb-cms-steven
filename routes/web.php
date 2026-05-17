@@ -1,12 +1,21 @@
 <?php
 
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SitemapController;
 use App\Models\Locale;
+use App\Support\AdminLoginPath;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+
+Route::middleware(['guest', 'admin.locale'])->group(function () {
+    $loginPath = AdminLoginPath::segment();
+
+    Route::get('/' . $loginPath, [LoginController::class, 'showLoginForm'])->name('admin.login');
+    Route::post('/' . $loginPath, [LoginController::class, 'login'])->name('admin.login.submit');
+});
 
 $catalogLocales = Locale::catalogCodes();
 $localePattern = implode('|', array_map(

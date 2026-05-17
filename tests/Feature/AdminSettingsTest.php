@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\Page;
 use App\Models\Setting;
 use App\Models\User;
-use App\Support\AdminLoginPath;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Tests\TestCase;
 
 class AdminSettingsTest extends TestCase
@@ -35,11 +36,14 @@ class AdminSettingsTest extends TestCase
 
         $response->assertRedirect(route('admin.settings.index'));
         $this->assertSame('acceso-seguro', Setting::get('admin_login_path'));
-        AdminLoginPath::clearCache();
-        Auth::logout();
 
-        $this->get('/admin/login')->assertNotFound();
-        $this->get('/admin/acceso-seguro')->assertOk();
+        Auth::logout();
+        $this->rebuildRoutes();
+
+        $this->assertSame('acceso-seguro', Route::getRoutes()->getByName('admin.login')->uri());
+        $this->get('/acceso-seguro')
+            ->assertOk()
+            ->assertViewIs('admin.auth.login');
     }
 
     public function test_admin_login_path_rejects_reserved_segments(): void
@@ -48,7 +52,7 @@ class AdminSettingsTest extends TestCase
 
         $response = $this->actingAs($admin)->from(route('admin.settings.index'))->put(route('admin.settings.update'), [
             'settings' => [
-                'admin_login_path' => 'posts',
+                'admin_login_path' => 'admin',
             ],
         ]);
 
@@ -62,12 +66,34 @@ class AdminSettingsTest extends TestCase
 
         $response = $this->actingAs($admin)->from(route('admin.settings.index'))->put(route('admin.settings.update'), [
             'settings' => [
-                'admin_login_path' => 'Posts',
+                'admin_login_path' => 'Admin',
             ],
         ]);
 
         $response->assertRedirect(route('admin.settings.index'));
         $response->assertSessionHasErrors('settings.admin_login_path');
         $this->assertSame('login', Setting::get('admin_login_path', 'login'));
+    }
+
+    public function test_admin_login_path_rejects_base_locale_page_slug_collisions(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        Page::create([
+            'locale' => 'es',
+            'title' => 'Contacto',
+            'slug' => 'contacto',
+            'template_key' => 'default',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->actingAs($admin)->from(route('admin.settings.index'))->put(route('admin.settings.update'), [
+            'settings' => [
+                'admin_login_path' => 'contacto',
+            ],
+        ]);
+
+        $response->assertRedirect(route('admin.settings.index'));
+        $response->assertSessionHasErrors('settings.admin_login_path');
     }
 }

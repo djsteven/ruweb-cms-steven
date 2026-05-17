@@ -9,6 +9,7 @@ use App\Models\Setting;
 use App\Support\AdminLoginPath;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -16,6 +17,8 @@ class SettingController extends Controller
 {
     public function index(): View
     {
+        $this->ensureAdminLoginPathSettingExists();
+
         $groupOrder = ['general', 'admin'];
         $groups = Setting::allGrouped()
             ->filter(fn ($v, $k) => ! in_array($k, ['analytics', 'email']))
@@ -72,6 +75,21 @@ class SettingController extends Controller
 
                     if ($normalized === AdminLoginPath::DEFAULT_SEGMENT && $rawLower !== AdminLoginPath::DEFAULT_SEGMENT) {
                         $fail(__('validation.not_in'));
+                        return;
+                    }
+
+                    if (in_array($normalized, Locale::catalogCodes(), true)) {
+                        $fail(__('validation.not_in'));
+                        return;
+                    }
+
+                    $collidesWithPage = Page::query()
+                        ->where('locale', Locale::baseCode())
+                        ->where('slug', $normalized)
+                        ->exists();
+
+                    if ($collidesWithPage) {
+                        $fail(__('validation.not_in'));
                     }
                 },
             ],
@@ -86,6 +104,19 @@ class SettingController extends Controller
         foreach ($settings as $key => $value) {
             // Don't overwrite password-type settings when field is left blank.
             $existing = Setting::where('key', $key)->first();
+
+            if ($key === 'admin_login_path' && ! $existing) {
+                Setting::create([
+                    'key' => 'admin_login_path',
+                    'value' => $value,
+                    'type' => 'string',
+                    'group' => 'admin',
+                    'options' => null,
+                ]);
+
+                continue;
+            }
+
             if ($existing && $existing->type === 'password' && ($value === null || $value === '')) {
                 continue;
             }
@@ -96,10 +127,39 @@ class SettingController extends Controller
 
         if (array_key_exists('admin_login_path', $settings)) {
             AdminLoginPath::clearCache();
+
+            if (app()->routesAreCached()) {
+                // routes/web.php compiles the login route from this setting, so a
+                // stale route cache would keep serving the old path. Rebuild it; if
+                // that fails, a cleared cache still resolves routes dynamically.
+                try {
+                    Artisan::call('route:cache');
+                } catch (\Throwable) {
+                    Artisan::call('route:clear');
+                }
+            }
         }
 
         return redirect()
             ->route('admin.settings.index')
             ->with('success', __('admin.settings_saved'));
+    }
+
+    private function ensureAdminLoginPathSettingExists(): void
+    {
+        if (Setting::where('key', 'admin_login_path')->exists()) {
+            return;
+        }
+
+        Setting::create([
+            'key' => 'admin_login_path',
+            'value' => AdminLoginPath::DEFAULT_SEGMENT,
+            'type' => 'string',
+            'group' => 'admin',
+            'options' => null,
+        ]);
+
+        Setting::clearCache();
+        AdminLoginPath::clearCache();
     }
 }

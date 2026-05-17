@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Setting;
 use App\Models\User;
-use App\Support\AdminLoginPath;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -14,22 +14,32 @@ class AuthAndMediaSmokeTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_is_redirected_to_admin_login(): void
+    public function test_guest_admin_routes_render_public_404_for_unauthenticated_visitors(): void
     {
         $response = $this->get('/admin');
 
         $response->assertNotFound();
+        $response->assertSee('Back to Home');
     }
 
-    public function test_custom_login_path_replaces_default_admin_login_route(): void
+    public function test_default_login_path_serves_the_login_page(): void
+    {
+        $this->get('/login')
+            ->assertOk()
+            ->assertViewIs('admin.auth.login');
+    }
+
+    public function test_custom_login_path_serves_the_login_page(): void
     {
         Setting::set('admin_login_path', 'panel-seguro');
-        Setting::clearCache();
-        AdminLoginPath::clearCache();
 
-        $this->get('/admin')->assertNotFound();
-        $this->get('/admin/login')->assertNotFound();
-        $this->get('/admin/panel-seguro')->assertOk();
+        $this->rebuildRoutes();
+
+        $this->assertSame('panel-seguro', Route::getRoutes()->getByName('admin.login')->uri());
+
+        $this->get('/panel-seguro')
+            ->assertOk()
+            ->assertViewIs('admin.auth.login');
     }
 
     public function test_admin_can_upload_media_file(): void

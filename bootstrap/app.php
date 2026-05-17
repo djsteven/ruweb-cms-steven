@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $exception, Request $request) {
             if ($request->is('admin') || $request->is('admin/*')) {
-                return response('', 404);
+                return response()->view('errors.404', [], 404);
             }
 
             return null;

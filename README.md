@@ -44,7 +44,7 @@ composer run dev
 
 URLs:
 - App: `http://localhost:8000`
-- Admin login: `http://localhost:8000/admin/login`
+- Admin login: `http://localhost:8000/login`
 
 ### Credenciales admin
 Durante `php artisan cms:install` podés elegirlas. Los defaults del repo (si no cambiás nada) también están en `.env.example`:

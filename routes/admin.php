@@ -92,11 +92,4 @@ Route::middleware(['guest', 'admin.locale'])->prefix('admin')->name('admin.')->g
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
     Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-    Route::get('{adminLoginPath}', [LoginController::class, 'showLoginForm'])
-        ->where('adminLoginPath', '[A-Za-z0-9-]+')
-        ->name('login');
-    Route::post('{adminLoginPath}', [LoginController::class, 'login'])
-        ->where('adminLoginPath', '[A-Za-z0-9-]+')
-        ->name('login.submit');
 });

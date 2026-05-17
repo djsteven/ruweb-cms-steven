@@ -88,7 +88,7 @@ return [
     'dashboard_task_default_social_image_title' => 'Configure default social share image',
     'dashboard_task_default_social_image_description' => 'The default image used for social sharing previews is still missing.',
     'dashboard_task_login_url_title' => 'Customize login URL',
-    'dashboard_task_login_url_description' => 'Admin access is still using the default route. Define a custom URL to replace `/admin/login`. Active path: :path.',
+    'dashboard_task_login_url_description' => 'Admin access is still using the default route. Define a custom URL to replace `/login`. Active path: :path.',
     'dashboard_task_email_title' => 'Configure email sending',
     'dashboard_task_email_description' => 'Email sending is disabled or missing credentials/sender settings.',
     'dashboard_task_http2_title' => 'Enable HTTP/2',
@@ -391,7 +391,7 @@ return [
         ],
         'admin_login_path' => [
             'label' => 'Login URL',
-            'help' => 'Customize the final path segment used for admin sign-in. It will live under `/admin/...` and, once saved, the default `/admin/login` route will stop responding.',
+            'help' => 'Customize the exact root URL used for admin sign-in, for example `/my-access`. Once saved, the default `/login` route will stop responding.',
         ],
         'mail_enabled' => [
             'label' => 'Enable email sending',

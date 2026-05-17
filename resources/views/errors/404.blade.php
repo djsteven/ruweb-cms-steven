@@ -1,4 +1,4 @@
-@if(request()->is('admin/*'))
+@if(request()->is('admin/*') && auth()->check())
     @extends('admin.layouts.guest')
 
     @section('title', '404 Not Found')

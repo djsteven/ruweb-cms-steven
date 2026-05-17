@@ -88,7 +88,7 @@ return [
     'dashboard_task_default_social_image_title' => 'Configurar imagen para compartir por defecto',
     'dashboard_task_default_social_image_description' => 'Falta definir la imagen por defecto para compartir en redes sociales.',
     'dashboard_task_login_url_title' => 'Personalizar URL de login',
-    'dashboard_task_login_url_description' => 'El acceso admin sigue usando la ruta por defecto. Define una URL personalizada para reemplazar `/admin/login`. Ruta activa: :path.',
+    'dashboard_task_login_url_description' => 'El acceso admin sigue usando la ruta por defecto. Define una URL personalizada para reemplazar `/login`. Ruta activa: :path.',
     'dashboard_task_email_title' => 'Configurar envío de email',
     'dashboard_task_email_description' => 'El envío de email no está habilitado o faltan credenciales/remitente.',
     'dashboard_task_http2_title' => 'Habilitar HTTP/2',
@@ -391,7 +391,7 @@ return [
         ],
         'admin_login_path' => [
             'label' => 'URL de login',
-            'help' => 'Personaliza el segmento final de acceso al login del admin. Se usará bajo `/admin/...` y, al guardarlo, la ruta por defecto `/admin/login` dejará de responder.',
+            'help' => 'Personaliza la URL exacta de acceso al login del admin en la raíz del sitio, por ejemplo `/mi-acceso`. Al guardarla, la ruta por defecto `/login` dejará de responder.',
         ],
         'mail_enabled' => [
             'label' => 'Activar envío de emails',

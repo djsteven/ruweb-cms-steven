@@ -14,28 +14,18 @@ class AdminLoginPath
     /**
      * @return array<int, string>
      */
-    public static function reservedSegments(): array
+    public static function reservedRootSegments(): array
     {
         return [
             '',
             'login',
-            'logout',
-            'password',
-            'cache',
-            'pages',
-            'posts',
-            'taxonomies',
-            'menus',
-            'media',
-            'media-health',
-            'users',
-            'analytics',
-            'email',
-            'settings',
-            'languages',
-            'claude-mcp',
-            'developer-tools',
-            'editorial-control',
+            'admin',
+            'blog',
+            'mcp',
+            'authorize',
+            'token',
+            'up',
+            'sitemap-xml',
         ];
     }
 
@@ -62,7 +52,7 @@ class AdminLoginPath
 
     public static function url(): string
     {
-        return '/admin/' . self::segment();
+        return '/' . self::segment();
     }
 
     public static function normalize(mixed $value): string
@@ -80,7 +70,7 @@ class AdminLoginPath
             ->trim('-')
             ->value();
 
-        if ($segment === '' || in_array($segment, self::reservedSegments(), true)) {
+        if ($segment === '' || in_array($segment, self::reservedRootSegments(), true)) {
             return self::DEFAULT_SEGMENT;
         }
 
