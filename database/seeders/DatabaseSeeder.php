@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             SettingsSeeder::class,
             HomepageSeeder::class,
             MenuSeeder::class,
+            GoogleReviewsSettingsSeeder::class,
         ]);
     }
 }

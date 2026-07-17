@@ -61,4 +61,8 @@
     </div>
 </section>
 @endif
+
+@if($sections['google_reviews']['is_visible'] ?? 1)
+    <x-google-reviews />
+@endif
 @endsection

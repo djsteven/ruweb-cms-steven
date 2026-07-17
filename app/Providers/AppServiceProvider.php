@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\GoogleReview;
 use App\Models\Menu;
 use App\Models\Post;
 use App\Models\Setting;
 use App\Models\Taxonomy;
+use App\Policies\GoogleReviewPolicy;
 use App\Policies\MenuPolicy;
 use App\Policies\PostPolicy;
 use App\Policies\TaxonomyPolicy;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Gate::policy(GoogleReview::class, GoogleReviewPolicy::class);
         Gate::policy(Menu::class, MenuPolicy::class);
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy(Taxonomy::class, TaxonomyPolicy::class);

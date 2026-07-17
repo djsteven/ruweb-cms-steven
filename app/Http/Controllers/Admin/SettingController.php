@@ -18,6 +18,7 @@ class SettingController extends Controller
     public function index(): View
     {
         $this->ensureAdminLoginPathSettingExists();
+        $this->ensureGoogleReviewsSettingsExist();
 
         $groupOrder = ['general', 'admin'];
         $groups = Setting::allGrouped()
@@ -143,6 +144,36 @@ class SettingController extends Controller
         return redirect()
             ->route('admin.settings.index')
             ->with('success', __('admin.settings_saved'));
+    }
+
+    private function ensureGoogleReviewsSettingsExist(): void
+    {
+        $settings = [
+            ['key' => 'serpapi_key', 'type' => 'password'],
+            ['key' => 'google_place_id', 'type' => 'string'],
+        ];
+
+        $missing = false;
+
+        foreach ($settings as $data) {
+            if (Setting::where('key', $data['key'])->exists()) {
+                continue;
+            }
+
+            Setting::create([
+                'key' => $data['key'],
+                'value' => null,
+                'type' => $data['type'],
+                'group' => 'general',
+                'options' => null,
+            ]);
+
+            $missing = true;
+        }
+
+        if ($missing) {
+            Setting::clearCache();
+        }
     }
 
     private function ensureAdminLoginPathSettingExists(): void

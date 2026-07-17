@@ -40,7 +40,7 @@ return [
         ],
         'home' => [
             'name' => 'Homepage',
-            'sections' => ['hero', 'features', 'cta'],
+            'sections' => ['hero', 'features', 'cta', 'google_reviews'],
             'schema' => [
                 'meta.title' => ['type' => 'text', 'translatable' => true],
                 'meta.description' => ['type' => 'textarea', 'translatable' => true],
@@ -59,6 +59,7 @@ return [
                 'sections.cta.body' => ['type' => 'textarea', 'translatable' => true],
                 'sections.cta.button_label' => ['type' => 'text', 'translatable' => true],
                 'sections.cta.button_url' => ['type' => 'url', 'preserve' => true],
+                'sections.google_reviews.is_visible' => ['type' => 'boolean', 'preserve' => true],
             ],
         ],
         'home-alt' => [

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DeveloperToolsController;
 use App\Http\Controllers\Admin\EmailController;
 use App\Http\Controllers\Admin\EditorialControlController;
+use App\Http\Controllers\Admin\GoogleReviewController;
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\Admin\MediaHealthController;
 use App\Http\Controllers\Admin\LanguageController;
@@ -46,6 +47,13 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
     Route::resource('posts', PostController::class)
         ->except(['show']);
     Route::post('posts/{post}/translations/{locale}', [PostController::class, 'translate'])->name('posts.translate');
+
+    // Google Reviews (SerpAPI)
+    Route::resource('google-reviews', GoogleReviewController::class)
+        ->only(['index', 'destroy']);
+    Route::post('google-reviews/sync', [GoogleReviewController::class, 'sync'])->name('google-reviews.sync');
+    Route::patch('google-reviews/{googleReview}/toggle', [GoogleReviewController::class, 'toggle'])->name('google-reviews.toggle');
+    Route::patch('google-reviews/{googleReview}/feature', [GoogleReviewController::class, 'feature'])->name('google-reviews.feature');
 
     Route::prefix('taxonomies/{type}')->name('taxonomies.')->group(function () {
         Route::get('/', [TaxonomyController::class, 'index'])->name('index');
