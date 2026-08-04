@@ -7,57 +7,121 @@
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
     $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
+    $heroHeading = $hero['heading'] ?? 'Group Retreats in Costa Rica';
+    $heroBody = $hero['body'] ?? 'A private forest sanctuary for retreat leaders and guests seeking renewal, connection, and quiet luxury in the hills of Costa Rica.';
+    $heroButtonLabel = $hero['button_label'] ?? 'Request Availability';
+    $heroButtonUrl = $hero['button_url'] ?? '/contact';
 @endphp
 
-{{-- Hero --}}
-@if(($hero['is_visible'] ?? 1) && ($hero['heading'] ?? null))
-<section class="relative overflow-hidden py-20 sm:py-28 {{ $heroBackground ? 'bg-gray-900' : 'bg-gray-50' }}">
-    @if($heroBackground)
-        <div class="absolute inset-0">
+<section class="relative min-h-screen overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32">
+    <div class="ama-hero-media absolute inset-0">
+        @if($heroBackground)
             <x-responsive-img
                 :media="$heroBackground"
                 sizes="100vw"
                 alt=""
                 class="h-full w-full object-cover"
+                loading="eager"
             />
-            <div class="absolute inset-0 bg-black/45"></div>
-        </div>
-    @endif
-    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight {{ $heroBackground ? 'text-white' : 'text-gray-900' }}">{{ $hero['heading'] }}</h1>
-        @if($hero['body'] ?? null)
-            <p class="mt-6 text-lg sm:text-xl max-w-2xl mx-auto {{ $heroBackground ? 'text-gray-100' : 'text-gray-600' }}">{{ $hero['body'] }}</p>
+        @else
+            <div class="h-full w-full bg-[radial-gradient(circle_at_72%_30%,rgba(143,181,142,0.35),transparent_34%),linear-gradient(135deg,#24402b_0%,#0f1710_58%,#1a2a1c_100%)]"></div>
         @endif
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,16,0.88)_0%,rgba(15,23,16,0.64)_38%,rgba(15,23,16,0.18)_68%,rgba(15,23,16,0.42)_100%)]"></div>
+        <div class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-ama-ink to-transparent"></div>
+    </div>
+
+    <div class="relative z-10 flex min-h-[calc(100vh-7rem)] items-center px-6 pb-16 pt-20 sm:px-10 lg:px-section-inline">
+        <div class="max-w-3xl">
+            <p class="overline mb-8">AmaTierra Retreat Center</p>
+            <h1 class="display-title max-w-3xl text-[64px] leading-[0.94] sm:text-[86px] lg:text-[112px]">
+                {{ $heroHeading }}
+            </h1>
+            @if($heroBody)
+                <p class="mt-7 max-w-xl text-base leading-8 text-ama-bone/70 sm:text-lg">
+                    {{ $heroBody }}
+                </p>
+            @endif
+            <div class="mt-9 flex flex-wrap items-center gap-4">
+                <a href="{{ $heroButtonUrl }}" class="ama-button-primary">
+                    {{ $heroButtonLabel }}
+                    <span aria-hidden="true">↗</span>
+                </a>
+                <a href="/retreats" class="ama-button-secondary">
+                    Explore Retreats
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute right-7 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-4 lg:flex" aria-hidden="true">
+        <span class="h-1.5 w-1.5 rounded-full bg-ama-gold"></span>
+        <span class="h-10 w-10 rounded-full border border-ama-bone/35"></span>
+        <span class="h-1.5 w-1.5 rounded-full bg-ama-bone/35"></span>
+    </div>
+
+    <a href="#home-intro" class="absolute bottom-0 left-1/2 z-20 hidden h-20 w-20 -translate-x-1/2 translate-y-1/2 items-start justify-center rounded-full border border-ama-gold/35 bg-ama-ink-alt pt-5 text-ama-gold sm:flex" aria-label="Scroll to content">
+        <span aria-hidden="true">↓</span>
+    </a>
+</section>
+
+<section id="home-intro" class="bg-ama-ink px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
+    <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+            <p class="overline mb-6">Host or Join</p>
+            <h2 class="display-title text-5xl leading-none sm:text-6xl lg:text-7xl">
+                Retreats made for
+                <span class="text-editorial">renewal.</span>
+            </h2>
+        </div>
+        <div class="text-lg leading-8 text-ama-bone/60">
+            @if($features['body'] ?? null)
+                {!! nl2br(e($features['body'])) !!}
+            @else
+                AmaTierra supports retreat leaders, wellness seekers, and nature lovers with a peaceful setting, nourishing food, comfortable accommodations, and grounded hospitality.
+            @endif
+        </div>
     </div>
 </section>
-@endif
 
-{{-- Features --}}
-@if(($features['is_visible'] ?? 1) && ($features['heading'] ?? $features['body'] ?? null))
-<section class="py-16 sm:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+@if(($features['is_visible'] ?? 1) && (($features['items'] ?? null) || ($features['heading'] ?? null)))
+<section class="bg-ama-ink-alt px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
+    <div class="mx-auto max-w-6xl">
         @if($features['heading'] ?? null)
-            <h2 class="text-3xl font-bold text-gray-900 text-center mb-4">{{ $features['heading'] }}</h2>
+            <p class="overline mb-6">Why AmaTierra</p>
+            <h2 class="display-title max-w-3xl text-5xl leading-none sm:text-6xl">{{ $features['heading'] }}</h2>
         @endif
-        @if($features['body'] ?? null)
-            <div class="prose prose-gray max-w-none text-center">
-                {!! nl2br(e($features['body'])) !!}
+
+        @if($features['items'] ?? null)
+            <div class="mt-12 grid gap-[2px] md:grid-cols-3">
+                @foreach($features['items'] as $item)
+                    <article class="border border-white/[0.06] bg-ama-ink p-8">
+                        @if($item['title'] ?? null)
+                            <h3 class="font-display text-3xl text-ama-bone">{{ $item['title'] }}</h3>
+                        @endif
+                        @if($item['body'] ?? null)
+                            <p class="mt-4 leading-7 text-ama-bone/55">{{ $item['body'] }}</p>
+                        @endif
+                    </article>
+                @endforeach
             </div>
         @endif
     </div>
 </section>
 @endif
 
-{{-- CTA --}}
 @if(($cta['is_visible'] ?? 1) && ($cta['heading'] ?? $cta['body'] ?? null))
-<section class="bg-gray-900 py-16 sm:py-20">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<section class="bg-ama-ink px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
+    <div class="mx-auto max-w-4xl text-center">
+        <p class="overline justify-center mb-6">Begin Planning</p>
         @if($cta['heading'] ?? null)
-            <h2 class="text-3xl font-bold text-white mb-4">{{ $cta['heading'] }}</h2>
+            <h2 class="display-title text-5xl leading-none sm:text-6xl">{{ $cta['heading'] }}</h2>
         @endif
         @if($cta['body'] ?? null)
-            <p class="text-lg text-gray-300 max-w-2xl mx-auto">{{ $cta['body'] }}</p>
+            <p class="mx-auto mt-6 max-w-2xl text-lg leading-8 text-ama-bone/60">{{ $cta['body'] }}</p>
         @endif
+        <a href="{{ $cta['button_url'] ?? '/contact' }}" class="ama-button-primary mt-9">
+            {{ $cta['button_label'] ?? 'Request availability' }}
+        </a>
     </div>
 </section>
 @endif
