@@ -7,6 +7,15 @@
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
     $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
+    $heroVideoUrl = trim((string) ($hero['video_url'] ?? ''));
+
+    if ($heroVideoUrl !== '') {
+        $heroVideoUrl = str_replace('player.mediadelivery.net/play/', 'player.mediadelivery.net/embed/', $heroVideoUrl);
+        $heroVideoSrc = $heroVideoUrl.(str_contains($heroVideoUrl, '?') ? '&' : '?').'autoplay=true&muted=true&loop=true&preload=true&responsive=false';
+    } else {
+        $heroVideoSrc = null;
+    }
+
     $heroHeading = $hero['heading'] ?? 'Group Retreats in Costa Rica';
     $heroBody = $hero['body'] ?? 'A private forest sanctuary for retreat leaders and guests seeking renewal, connection, and quiet luxury in the hills of Costa Rica.';
     $heroButtonLabel = $hero['button_label'] ?? 'Request Availability';
@@ -15,7 +24,17 @@
 
 <section class="relative min-h-screen overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32">
     <div class="ama-hero-media absolute inset-0">
-        @if($heroBackground)
+        @if($heroVideoSrc)
+            <iframe
+                src="{{ $heroVideoSrc }}"
+                title="AmaTierra retreat video"
+                allow="autoplay; fullscreen; picture-in-picture"
+                loading="eager"
+                class="pointer-events-none absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-full min-w-[177.78vh] -translate-x-1/2 -translate-y-1/2 border-0"
+                aria-hidden="true"
+                tabindex="-1"
+            ></iframe>
+        @elseif($heroBackground)
             <x-responsive-img
                 :media="$heroBackground"
                 sizes="100vw"
@@ -26,7 +45,7 @@
         @else
             <div class="h-full w-full bg-[radial-gradient(circle_at_72%_30%,rgba(143,181,142,0.35),transparent_34%),linear-gradient(135deg,#24402b_0%,#0f1710_58%,#1a2a1c_100%)]"></div>
         @endif
-        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,16,0.88)_0%,rgba(15,23,16,0.64)_38%,rgba(15,23,16,0.18)_68%,rgba(15,23,16,0.42)_100%)]"></div>
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,16,0.9)_0%,rgba(15,23,16,0.66)_38%,rgba(15,23,16,0.18)_68%,rgba(15,23,16,0.42)_100%)]"></div>
         <div class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-ama-ink to-transparent"></div>
     </div>
 
