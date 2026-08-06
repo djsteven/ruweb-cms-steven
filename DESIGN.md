@@ -1,6 +1,6 @@
 ---
 name: AmaTierra Website
-version: 1.2.3
+version: 1.2.4
 description: Dark editorial design system for AmaTierra Retreat & Wellness Center.
 colors:
   ink:
@@ -85,6 +85,15 @@ components:
     firstHeadingLineColor: "#E8D5A8"
     remainingHeadingLinesColor: "#F0EBE0"
     overlay: "dark green/black gradient over full-color image"
+  offersShowcase:
+    layout: Light editorial two-column section
+    backgroundColor: "#FAF8F3"
+    headingFirstLineColor: "#7D874C"
+    headingAccentColor: "#000000"
+    headingFont: Playfair Display
+    bodyFont: DM Sans
+    cardShape: Circular image cards with subtle shadow and olive captions
+    cardCaptionColor: "#7D874C"
   buttonPrimary:
     backgroundColor: "#C9A96E"
     textColor: "#0F1710"
@@ -137,6 +146,8 @@ Gold is the premium accent and should stay scarce: eyebrows, rules, subtle highl
 
 Body copy on dark surfaces should be `bone` at reduced opacity, usually between 0.60 and 0.72. Do not use gold for small paragraph copy.
 
+Light editorial sections may use `#FAF8F3` with dark body text and muted olive heading accents. Keep these inversions sparse so they feel intentional.
+
 ## Header And Menu
 
 The header is a fixed, light rounded capsule over the hero. It contains the AmaTierra logo, the main navigation, and a persistent green `Book Now` CTA.
@@ -164,7 +175,7 @@ Current implemented section order:
 1. **Hero**: compact desktop video/photo background with Playfair Display heading and body copy only. No eyebrow, in-hero CTAs, or decorative navigation indicators.
 2. **Mountain Sanctuary Intro**: compact dark green editorial band immediately after the hero and visible in the first desktop viewport.
 3. **Audience Split Panels**: two full-bleed image panels for retreat leaders and individual guests.
-4. **Features / Why AmaTierra**: editable CMS feature content.
+4. **Offers Showcase**: light editorial content block with CMS-managed copy and circular image information cards.
 5. **CTA**: inquiry-focused call to action.
 6. **Google Reviews**: optional visible reviews block.
 
@@ -218,7 +229,29 @@ Visual rules:
 - Heading: large italic Playfair Display, split across lines using line breaks.
 - First heading line uses `goldPale` (`#E8D5A8`); remaining heading lines use `bone` (`#F0EBE0`).
 - Body: DM Sans, bone at reduced opacity, max width around 680px.
-- Entire panel may link to its configured CTA URL, while menu/page routes can remain placeholders until final content exists.
+- Audience panel CTAs sit below the body copy. The first action uses the gold primary treatment; secondary actions use transparent outlined buttons.
+
+### Offers Showcase
+
+This section replaces the older dark feature-card block and is editable through `sections.features` in the CMS.
+
+Default content:
+
+- Heading top line: `What Ama`
+- Heading accent line: `Tierra Offers`
+- Body copy:
+  - `Support for group leaders to host memorable retreats at reasonable rates.`
+  - `A variety of retreats for individuals to choose from where you can immerse in nature and renew your Spirit.`
+  - `A supportive environment for reflection and healing where you can be yourself and transform your energy to become more positive and whole.`
+
+Visual rules:
+
+- Background: warm off-white `#FAF8F3`.
+- Layout: two columns on desktop, stacked on mobile.
+- Heading: Playfair Display, first line olive `#7D874C`, second line italic black.
+- Body: DM Sans, dark text, comfortable measure.
+- Info cards: circular images with subtle shadow/ring, olive captions beneath, no nested card containers.
+- Pagination dots may be decorative until the cards become a real carousel; keep them visually quiet.
 
 ## Buttons
 
