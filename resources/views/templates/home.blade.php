@@ -20,8 +20,6 @@
 
     $heroHeading = $hero['heading'] ?? 'Group Retreats in Costa Rica';
     $heroBody = $hero['body'] ?? 'A private forest sanctuary for retreat leaders and guests seeking renewal, connection, and quiet luxury in the hills of Costa Rica.';
-    $heroButtonLabel = $hero['button_label'] ?? 'Request Availability';
-    $heroButtonUrl = $hero['button_url'] ?? '/contact';
     $introEyebrow = $intro['eyebrow'] ?? 'Mountain Sanctuary · Costa Rica';
     $introHeading = $intro['heading'] ?? 'AmaTierra';
     $introBody = $intro['body'] ?? 'A private retreat sanctuary in Costa Rica’s mist-covered mountain forest — where the jungle itself becomes the teacher.';
@@ -45,7 +43,7 @@
     ];
 @endphp
 
-<section class="relative min-h-screen overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32">
+<section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh]">
     <div class="ama-hero-media absolute inset-0">
         @if($heroVideoSrc)
             <iframe
@@ -72,9 +70,8 @@
         <div class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-ama-ink to-transparent"></div>
     </div>
 
-    <div class="relative z-10 flex min-h-[calc(100vh-7rem)] items-center px-6 pb-16 pt-20 sm:px-10 lg:px-section-inline">
+    <div class="relative z-10 flex min-h-[430px] items-center px-6 pb-16 pt-20 sm:px-10 lg:min-h-[calc(66vh-8rem)] lg:px-section-inline">
         <div class="max-w-3xl">
-            <p class="overline mb-8">AmaTierra Retreat Center</p>
             <h1 class="display-title max-w-3xl text-[64px] leading-[0.94] sm:text-[86px] lg:text-[112px]">
                 {{ $heroHeading }}
             </h1>
@@ -83,15 +80,6 @@
                     {{ $heroBody }}
                 </p>
             @endif
-            <div class="mt-9 flex flex-wrap items-center gap-4">
-                <a href="{{ $heroButtonUrl }}" class="ama-button-primary">
-                    {{ $heroButtonLabel }}
-                    <span aria-hidden="true">↗</span>
-                </a>
-                <a href="/retreats" class="ama-button-secondary">
-                    Explore Retreats
-                </a>
-            </div>
         </div>
     </div>
 
