@@ -75,9 +75,12 @@
             'fallback_image' => 'Join a Yoga Retreat at Amatierra.jpg',
         ],
     ];
-    $savedOfferCards = $features['cards'] ?? [];
+    $savedOfferCards = collect($features['cards'] ?? [])->values();
     $offerCards = collect($defaultOfferCards)
-        ->map(fn ($defaultCard, $index) => array_merge($defaultCard, $savedOfferCards[$index] ?? []))
+        ->map(fn ($defaultCard, $index) => array_merge($defaultCard, $savedOfferCards->get($index, [])))
+        ->concat($savedOfferCards->slice(count($defaultOfferCards)))
+        ->filter(fn ($card) => filled($card['title'] ?? null) || filled($card['body'] ?? null) || filled($card['image_id'] ?? null))
+        ->values()
         ->all();
 @endphp
 
@@ -221,10 +224,10 @@
 
 @if(($features['is_visible'] ?? 1) && ($offersHeadingTop || $offersHeadingAccent || $offerCopyLines->isNotEmpty() || count($offerCards)))
 <section id="home-offers" class="bg-[#FAF8F3] px-6 py-18 text-ama-ink sm:px-10 lg:px-section-inline lg:py-[104px]">
-    <div class="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[minmax(320px,0.78fr)_minmax(0,1.22fr)] lg:items-center xl:gap-20">
+    <div class="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[minmax(320px,0.72fr)_minmax(0,1.28fr)] lg:items-center xl:gap-16">
         <div>
             @if($offersHeadingTop || $offersHeadingAccent)
-                <h2 class="display-title text-[50px] leading-[1.04] sm:text-[64px] lg:text-[72px]">
+                <h2 class="display-title text-[50px] leading-[1.04] sm:text-[64px] lg:text-[68px] xl:text-[72px]">
                     @if($offersHeadingTop)
                         <span class="block text-[#7D874C]">{{ $offersHeadingTop }}</span>
                     @endif
@@ -243,7 +246,7 @@
         </div>
 
         @if(count($offerCards))
-            <div class="grid gap-10 sm:grid-cols-2 lg:gap-14 xl:gap-20">
+            <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-3 xl:gap-x-10">
                 @foreach($offerCards as $card)
                     @php
                         $offerImage = isset($card['image_id']) ? \App\Models\Media::find((int) $card['image_id']) : null;
@@ -253,11 +256,11 @@
                         }
                     @endphp
                     <article class="group text-center">
-                        <div class="mx-auto aspect-square w-[min(270px,72vw)] overflow-hidden rounded-full bg-ama-parchment shadow-[0_22px_60px_rgba(15,23,16,0.14)] ring-1 ring-ama-ink/5 sm:w-[260px] lg:w-[280px]">
+                        <div class="mx-auto aspect-square w-[min(250px,72vw)] overflow-hidden rounded-full bg-ama-parchment shadow-[0_22px_60px_rgba(15,23,16,0.14)] ring-1 ring-ama-ink/5 sm:w-[230px] lg:w-[240px] xl:w-[250px]">
                             @if($offerImage)
                                 <x-responsive-img
                                     :media="$offerImage"
-                                    sizes="(min-width: 1024px) 280px, 72vw"
+                                    sizes="(min-width: 1280px) 250px, (min-width: 1024px) 240px, 72vw"
                                     :fallback-alt="$card['title'] ?? 'AmaTierra offer'"
                                     class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
                                 />
@@ -266,7 +269,7 @@
                             @endif
                         </div>
                         @if(($card['title'] ?? null) || ($card['body'] ?? null))
-                            <p class="mx-auto mt-7 max-w-[280px] text-base font-semibold leading-7 text-[#7D874C]">
+                            <p class="mx-auto mt-6 max-w-[250px] text-[15px] font-semibold leading-7 text-[#7D874C] sm:text-base">
                                 @if($card['title'] ?? null)
                                     <span class="block">{{ $card['title'] }}</span>
                                 @endif
@@ -277,7 +280,7 @@
                         @endif
                     </article>
                 @endforeach
-                <div class="flex items-center justify-center gap-3 sm:col-span-2" aria-hidden="true">
+                <div class="flex items-center justify-center gap-3 sm:col-span-2 xl:col-span-3" aria-hidden="true">
                     @foreach(range(1, 6) as $dot)
                         <span class="block size-3 rounded-full {{ $dot === 4 ? 'bg-[#25713B]' : 'bg-[#C7D2C8]' }}"></span>
                     @endforeach
