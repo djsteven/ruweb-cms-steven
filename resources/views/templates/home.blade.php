@@ -119,6 +119,10 @@
                 $panelImage = \App\Models\Media::where('original_filename', $fallbackImageName)->latest()->first();
             }
 
+            $headingLines = collect(preg_split('/\r\n|\r|\n/', (string) ($panel['heading'] ?? '')))
+                ->map(fn ($line) => trim($line))
+                ->filter()
+                ->values();
             $panelUrl = $panel['button_url'] ?? '#';
         @endphp
         <article class="group relative min-h-[560px] overflow-hidden lg:min-h-[720px]">
@@ -145,9 +149,11 @@
                             {{ $panel['eyebrow'] }}
                         </p>
                     @endif
-                    @if($panel['heading'] ?? null)
-                        <h2 class="display-title whitespace-pre-line text-[58px] italic leading-[0.98] text-ama-gold-pale sm:text-[70px] lg:text-[78px]">
-                            {{ $panel['heading'] }}
+                    @if($headingLines->isNotEmpty())
+                        <h2 class="display-title text-[58px] italic leading-[0.98] sm:text-[70px] lg:text-[78px]">
+                            @foreach($headingLines as $lineIndex => $line)
+                                <span class="block {{ $lineIndex === 0 ? 'text-ama-gold-pale' : 'text-ama-bone' }}">{{ $line }}</span>
+                            @endforeach
                         </h2>
                     @endif
                     @if($panel['body'] ?? null)
