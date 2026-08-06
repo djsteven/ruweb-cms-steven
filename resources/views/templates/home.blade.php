@@ -23,7 +23,7 @@
     $introEyebrow = $intro['eyebrow'] ?? 'Mountain Sanctuary · Costa Rica';
     $introHeading = $intro['heading'] ?? 'AmaTierra';
     $introBody = $intro['body'] ?? 'A private retreat sanctuary in Costa Rica’s mist-covered mountain forest — where the jungle itself becomes the teacher.';
-    $audiencePanels = $audience['panels'] ?? [
+    $defaultAudiencePanels = [
         [
             'eyebrow' => 'For Retreat Leaders',
             'heading' => "Host\na Retreat",
@@ -41,6 +41,10 @@
             'image_id' => null,
         ],
     ];
+    $savedAudiencePanels = $audience['panels'] ?? [];
+    $audiencePanels = collect($defaultAudiencePanels)
+        ->map(fn ($defaultPanel, $index) => array_merge($defaultPanel, $savedAudiencePanels[$index] ?? []))
+        ->all();
 @endphp
 
 <section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh] lg:pt-24">
