@@ -54,7 +54,7 @@ class Media extends Model
 
     public function url(): string
     {
-        return Storage::disk($this->disk)->url($this->path);
+        return $this->normalizeUrl(Storage::disk($this->disk)->url($this->path));
     }
 
     public function getUrlAttribute(): string
@@ -94,7 +94,7 @@ class Media extends Model
         return collect($this->variants)
             ->sortBy('width')
             ->filter(fn ($variant) => ! empty($variant['url']) && ! empty($variant['width']))
-            ->map(fn ($variant) => $variant['url'] . ' ' . $variant['width'] . 'w')
+            ->map(fn ($variant) => $this->normalizeUrl($variant['url']) . ' ' . $variant['width'] . 'w')
             ->implode(', ');
     }
 
@@ -147,5 +147,10 @@ class Media extends Model
     public function getIsOptimizedRasterAttribute(): bool
     {
         return $this->isOptimizedRaster();
+    }
+
+    private function normalizeUrl(string $url): string
+    {
+        return preg_replace('/:(80|443)(?=\/)/', '', $url);
     }
 }
