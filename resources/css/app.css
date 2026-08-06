@@ -163,19 +163,161 @@
         opacity: 0.72;
     }
 
-    .ama-nav-list > li > a:hover {
+    .ama-nav-list > li > a:hover,
+    .ama-nav-list > li:focus-within > a,
+    .ama-nav-list > li:hover > a {
         color: #C9A96E;
         opacity: 1;
     }
 
-    .ama-nav-list .sub-menu {
+    .ama-nav-list .has-children > a::after {
+        content: '';
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        margin-left: 8px;
+        border-right: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+        transform: translateY(-2px) rotate(45deg);
+        opacity: 0.62;
+    }
+
+    .ama-nav-list .ama-dropdown-menu,
+    .ama-nav-list .ama-mega-menu {
         display: none;
     }
 
-    .ama-mobile-panel .sub-menu {
+    .ama-nav-list > li:hover > .ama-dropdown-menu,
+    .ama-nav-list > li:focus-within > .ama-dropdown-menu {
+        display: grid;
+    }
+
+    .ama-nav-list .ama-dropdown-menu {
+        position: absolute;
+        top: calc(100% + 18px);
+        left: -20px;
+        min-width: 250px;
+        gap: 2px;
+        padding: 18px;
+        border: 1px solid rgba(201, 169, 110, 0.24);
+        border-radius: 18px;
+        background: rgba(250, 248, 243, 0.96);
+        color: #0F1710;
+        box-shadow: 0 24px 80px rgba(15, 23, 16, 0.24);
+        backdrop-filter: blur(18px);
+    }
+
+    .ama-nav-list .ama-dropdown-menu::before,
+    .ama-nav-list .ama-mega-menu::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: 100%;
+        left: 0;
+        height: 22px;
+    }
+
+    .ama-nav-list .ama-dropdown-menu a,
+    .ama-nav-list .ama-mega-links a {
+        display: block;
+        padding: 8px 0;
+        color: inherit;
+        font-size: 13px;
+        line-height: 1.35;
+        opacity: 0.72;
+    }
+
+    .ama-nav-list .ama-dropdown-menu a:hover,
+    .ama-nav-list .ama-mega-links a:hover {
+        color: #2D4A2F;
+        opacity: 1;
+        transform: translateX(3px);
+    }
+
+    .ama-nav-list > li:hover > .ama-mega-menu,
+    .ama-nav-list > li:focus-within > .ama-mega-menu {
+        display: block;
+    }
+
+    .ama-nav-list .has-mega-menu {
+        position: static;
+    }
+
+    .ama-nav-list .ama-mega-menu {
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: min(720px, calc(100vw - 64px));
+        padding-top: 18px;
+        transform: translateX(-50%);
+    }
+
+    .ama-mega-panel {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 30px;
+        padding: 28px;
+        border: 1px solid rgba(201, 169, 110, 0.24);
+        border-radius: 22px;
+        background: rgba(250, 248, 243, 0.97);
+        color: #0F1710;
+        box-shadow: 0 30px 90px rgba(15, 23, 16, 0.28);
+        backdrop-filter: blur(18px);
+    }
+
+    .ama-mega-column + .ama-mega-column {
+        border-left: 1px solid rgba(45, 74, 47, 0.12);
+        padding-left: 30px;
+    }
+
+    .ama-mega-heading {
+        display: inline-flex;
+        margin-bottom: 12px;
+        color: #2D4A2F;
+        font-size: 10px;
+        font-weight: 400;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+    }
+
+    .ama-mega-links li {
+        list-style: none;
+    }
+
+    .ama-mobile-panel .sub-menu,
+    .ama-mobile-panel .ama-mega-links {
         padding-left: 18px;
         margin-top: 8px;
         border-left: 1px solid rgba(201, 169, 110, 0.24);
+    }
+
+    .ama-mobile-panel .ama-mega-menu {
+        display: block;
+        margin-top: 8px;
+    }
+
+    .ama-mobile-panel .ama-mega-panel {
+        display: grid;
+        gap: 14px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        box-shadow: none;
+        backdrop-filter: none;
+    }
+
+    .ama-mobile-panel .ama-mega-column + .ama-mega-column {
+        border-left: 0;
+        padding-left: 0;
+    }
+
+    .ama-mobile-panel .ama-mega-heading {
+        margin-top: 8px;
+        margin-bottom: 2px;
+        color: #C9A96E;
+        font-size: 10px;
+        letter-spacing: 0.16em;
     }
 
     .ama-hero-media img {
