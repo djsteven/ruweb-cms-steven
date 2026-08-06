@@ -30,6 +30,9 @@
             'body' => 'Everything a retreat leader needs in one place — open-air yoga pavilions, private accommodation, nourishing on-site meals, and a dedicated team handling every logistical detail, so you focus entirely on your group.',
             'button_label' => 'Host a Retreat',
             'button_url' => '/contact',
+            'buttons' => [
+                ['label' => 'LETS START', 'url' => '/contact'],
+            ],
             'image_id' => null,
         ],
         [
@@ -38,6 +41,10 @@
             'body' => 'Travel solo or with friends to one of our scheduled group yoga retreats. Experience deep community, skilled teachers, and a connection to nature that reshapes how you move through the world.',
             'button_label' => 'Join a Retreat',
             'button_url' => '/retreats',
+            'buttons' => [
+                ['label' => 'SEE UPCOMING RETREATS', 'url' => '/retreats'],
+                ['label' => 'CONTACT US', 'url' => '/contact'],
+            ],
             'image_id' => null,
         ],
     ];
@@ -127,10 +134,11 @@
                 ->map(fn ($line) => trim($line))
                 ->filter()
                 ->values();
-            $panelUrl = $panel['button_url'] ?? '#';
+            $panelButtons = collect($panel['buttons'] ?? [])
+                ->filter(fn ($button) => filled($button['label'] ?? null))
+                ->values();
         @endphp
         <article class="group relative min-h-[560px] overflow-hidden lg:min-h-[720px]">
-            <a href="{{ $panelUrl }}" class="absolute inset-0 z-30" aria-label="{{ $panel['button_label'] ?? $panel['heading'] ?? 'Explore' }}"></a>
             <div class="absolute inset-0 bg-ama-moss">
                 @if($panelImage)
                     <x-responsive-img
@@ -164,6 +172,18 @@
                         <p class="mt-7 max-w-2xl text-base leading-8 text-ama-bone/72 sm:text-lg">
                             {{ $panel['body'] }}
                         </p>
+                    @endif
+                    @if($panelButtons->isNotEmpty())
+                        <div class="relative z-30 mt-8 flex flex-wrap items-center gap-3">
+                            @foreach($panelButtons as $buttonIndex => $button)
+                                <a
+                                    href="{{ $button['url'] ?? '#' }}"
+                                    class="inline-flex min-h-11 items-center justify-center border px-5 text-[10px] font-normal uppercase tracking-[0.18em] transition {{ $buttonIndex === 0 ? 'border-ama-gold bg-ama-gold text-ama-ink hover:border-ama-gold-pale hover:bg-ama-gold-pale' : 'border-ama-bone/35 bg-transparent text-ama-bone hover:border-ama-bone/70' }}"
+                                >
+                                    {{ $button['label'] }}
+                                </a>
+                            @endforeach
+                        </div>
                     @endif
                 </div>
             </div>
