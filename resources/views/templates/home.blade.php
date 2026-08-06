@@ -5,6 +5,7 @@
     $sections = $page->sections();
     $hero = $sections['hero'] ?? [];
     $intro = $sections['intro'] ?? [];
+    $audience = $sections['audience'] ?? [];
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
     $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
@@ -24,6 +25,24 @@
     $introEyebrow = $intro['eyebrow'] ?? 'Mountain Sanctuary · Costa Rica';
     $introHeading = $intro['heading'] ?? 'AmaTierra';
     $introBody = $intro['body'] ?? 'A private retreat sanctuary in Costa Rica’s mist-covered mountain forest — where the jungle itself becomes the teacher.';
+    $audiencePanels = $audience['panels'] ?? [
+        [
+            'eyebrow' => 'For Retreat Leaders',
+            'heading' => "Host\na Retreat",
+            'body' => 'Everything a retreat leader needs in one place — open-air yoga pavilions, private accommodation, nourishing on-site meals, and a dedicated team handling every logistical detail, so you focus entirely on your group.',
+            'button_label' => 'Host a Retreat',
+            'button_url' => '/contact',
+            'image_id' => null,
+        ],
+        [
+            'eyebrow' => 'For Individual Guests',
+            'heading' => "Join\na Retreat",
+            'body' => 'Step into a restorative stay shaped by yoga, wellness, nature, nourishing food, and the quiet rhythm of Costa Rica’s mountain forest.',
+            'button_label' => 'Join a Retreat',
+            'button_url' => '/retreats',
+            'image_id' => null,
+        ],
+    ];
 @endphp
 
 <section class="relative min-h-screen overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32">
@@ -106,6 +125,54 @@
             </p>
         @endif
     </div>
+</section>
+@endif
+
+@if(($audience['is_visible'] ?? 1) && count($audiencePanels))
+<section class="grid bg-ama-ink text-ama-bone lg:grid-cols-2">
+    @foreach($audiencePanels as $panel)
+        @php
+            $panelImage = isset($panel['image_id']) ? \App\Models\Media::find((int) $panel['image_id']) : null;
+            $panelUrl = $panel['button_url'] ?? '#';
+        @endphp
+        <article class="group relative min-h-[560px] overflow-hidden lg:min-h-[720px]">
+            <a href="{{ $panelUrl }}" class="absolute inset-0 z-30" aria-label="{{ $panel['button_label'] ?? $panel['heading'] ?? 'Explore' }}"></a>
+            <div class="absolute inset-0 bg-ama-moss">
+                @if($panelImage)
+                    <x-responsive-img
+                        :media="$panelImage"
+                        sizes="(min-width: 1024px) 50vw, 100vw"
+                        :fallback-alt="$panel['heading'] ?? ''"
+                        class="h-full w-full object-cover grayscale transition duration-700 group-hover:scale-[1.04] group-hover:grayscale-0"
+                    />
+                @else
+                    <div class="h-full w-full bg-[radial-gradient(circle_at_50%_40%,rgba(143,181,142,0.2),transparent_34%),linear-gradient(135deg,#314336_0%,#1a2a1c_45%,#0f1710_100%)]"></div>
+                @endif
+            </div>
+            <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,16,0.76)_0%,rgba(15,23,16,0.55)_48%,rgba(15,23,16,0.28)_100%)]"></div>
+            <div class="absolute inset-0 bg-ama-ink/10 transition duration-700 group-hover:bg-ama-ink/0"></div>
+
+            <div class="relative z-20 flex min-h-[560px] items-center px-8 py-20 sm:px-14 lg:min-h-[720px] lg:px-[12vw] xl:px-[124px]">
+                <div class="max-w-[680px]">
+                    @if($panel['eyebrow'] ?? null)
+                        <p class="mb-5 inline-flex items-center gap-3 font-sans text-[13px] font-normal uppercase tracking-[0.22em] text-[#69B342] before:block before:h-px before:w-6 before:bg-[#69B342]">
+                            {{ $panel['eyebrow'] }}
+                        </p>
+                    @endif
+                    @if($panel['heading'] ?? null)
+                        <h2 class="display-title whitespace-pre-line text-[58px] italic leading-[0.98] text-ama-gold-pale sm:text-[70px] lg:text-[78px]">
+                            {{ $panel['heading'] }}
+                        </h2>
+                    @endif
+                    @if($panel['body'] ?? null)
+                        <p class="mt-7 max-w-2xl text-base leading-8 text-ama-bone/72 sm:text-lg">
+                            {{ $panel['body'] }}
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </article>
+    @endforeach
 </section>
 @endif
 
