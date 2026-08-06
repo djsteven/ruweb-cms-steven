@@ -72,7 +72,7 @@
 
     <div class="relative z-10 flex min-h-[430px] items-center px-6 pb-16 pt-20 sm:px-10 lg:min-h-[calc(66vh-6rem)] lg:px-section-inline lg:pb-10 lg:pt-12">
         <div class="max-w-3xl">
-            <h1 class="display-title max-w-3xl text-[64px] leading-[0.94] sm:text-[86px] lg:text-[112px]">
+            <h1 class="display-title max-w-3xl text-[52px] leading-[0.96] sm:text-[68px] lg:text-[88px] xl:text-[96px]">
                 {{ $heroHeading }}
             </h1>
             @if($heroBody)
