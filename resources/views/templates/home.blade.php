@@ -98,7 +98,7 @@
                 <p class="overline overline-no-rule mb-6">{{ $introEyebrow }}</p>
             @endif
             @if($introHeading)
-                <h2 class="display-title text-[64px] italic leading-none text-ama-gold-pale sm:text-[82px] lg:text-[96px]">
+                <h2 class="display-title text-[48px] italic leading-none text-ama-gold-pale sm:text-[60px] lg:text-[72px]">
                     {{ $introHeading }}
                 </h2>
             @endif
