@@ -4,6 +4,7 @@
 @php
     $sections = $page->sections();
     $hero = $sections['hero'] ?? [];
+    $intro = $sections['intro'] ?? [];
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
     $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
@@ -20,6 +21,9 @@
     $heroBody = $hero['body'] ?? 'A private forest sanctuary for retreat leaders and guests seeking renewal, connection, and quiet luxury in the hills of Costa Rica.';
     $heroButtonLabel = $hero['button_label'] ?? 'Request Availability';
     $heroButtonUrl = $hero['button_url'] ?? '/contact';
+    $introEyebrow = $intro['eyebrow'] ?? 'Mountain Sanctuary · Costa Rica';
+    $introHeading = $intro['heading'] ?? 'AmaTierra';
+    $introBody = $intro['body'] ?? 'A private retreat sanctuary in Costa Rica’s mist-covered mountain forest — where the jungle itself becomes the teacher.';
 @endphp
 
 <section class="relative min-h-screen overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32">
@@ -83,24 +87,27 @@
     </a>
 </section>
 
-<section id="home-intro" class="bg-ama-ink px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
-    <div class="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+@if(($intro['is_visible'] ?? 1) && ($introEyebrow || $introHeading || $introBody))
+<section id="home-intro" class="bg-ama-ink-alt px-6 py-14 text-ama-bone sm:px-10 lg:px-section-inline lg:py-16">
+    <div class="mx-auto grid max-w-[1450px] gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:items-center">
         <div>
-            <p class="overline mb-6">Host or Join</p>
-            <h2 class="display-title text-5xl leading-none sm:text-6xl lg:text-7xl">
-                Retreats made for
-                <span class="text-editorial">renewal.</span>
-            </h2>
-        </div>
-        <div class="text-lg leading-8 text-ama-bone/60">
-            @if($features['body'] ?? null)
-                {!! nl2br(e($features['body'])) !!}
-            @else
-                AmaTierra supports retreat leaders, wellness seekers, and nature lovers with a peaceful setting, nourishing food, comfortable accommodations, and grounded hospitality.
+            @if($introEyebrow)
+                <p class="overline mb-6">{{ $introEyebrow }}</p>
+            @endif
+            @if($introHeading)
+                <h2 class="display-title text-[64px] italic leading-none text-ama-gold-pale sm:text-[82px] lg:text-[96px]">
+                    {{ $introHeading }}
+                </h2>
             @endif
         </div>
+        @if($introBody)
+            <p class="max-w-md text-lg leading-8 text-ama-bone/68 lg:justify-self-end">
+                {{ $introBody }}
+            </p>
+        @endif
     </div>
 </section>
+@endif
 
 @if(($features['is_visible'] ?? 1) && (($features['items'] ?? null) || ($features['heading'] ?? null)))
 <section class="bg-ama-ink-alt px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
@@ -115,7 +122,7 @@
                 @foreach($features['items'] as $item)
                     <article class="border border-white/[0.06] bg-ama-ink p-8">
                         @if($item['title'] ?? null)
-                            <h3 class="font-display text-3xl text-ama-bone">{{ $item['title'] }}</h3>
+                            <h3 class="display-title text-3xl text-ama-bone">{{ $item['title'] }}</h3>
                         @endif
                         @if($item['body'] ?? null)
                             <p class="mt-4 leading-7 text-ama-bone/55">{{ $item['body'] }}</p>
