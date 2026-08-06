@@ -100,10 +100,6 @@
         <span class="h-10 w-10 rounded-full border border-ama-bone/35"></span>
         <span class="h-1.5 w-1.5 rounded-full bg-ama-bone/35"></span>
     </div>
-
-    <a href="#home-intro" class="absolute bottom-0 left-1/2 z-20 hidden h-20 w-20 -translate-x-1/2 translate-y-1/2 items-start justify-center rounded-full border border-ama-gold/35 bg-ama-ink-alt pt-5 text-ama-gold sm:flex" aria-label="Scroll to content">
-        <span aria-hidden="true">↓</span>
-    </a>
 </section>
 
 @if(($intro['is_visible'] ?? 1) && ($introEyebrow || $introHeading || $introBody))
