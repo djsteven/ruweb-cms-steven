@@ -48,9 +48,9 @@
                     </div>
                 @endif
 
-                <a href="/contact" class="ama-button-primary min-h-10 rounded-full px-5 text-[9px]">
+                <a href="/contact" class="ama-header-cta">
                     Book Now
-                    <span aria-hidden="true">↗</span>
+                    <span aria-hidden="true">→</span>
                 </a>
             </div>
 
@@ -64,9 +64,9 @@
         <div id="mobile-menu" class="ama-mobile-panel hidden border-t border-current/10 px-6 pb-6 pt-2 lg:hidden">
             <x-menu-component slug="header"
                 class="space-y-3 [&_a]:block [&_a]:py-1.5 [&_a]:text-sm [&_a]:text-current/75 [&_a:hover]:text-ama-gold" />
-            <a href="/contact" class="ama-button-primary mt-5 w-full rounded-full">
+            <a href="/contact" class="ama-header-cta mt-5 w-full">
                 Book Now
-                <span aria-hidden="true">↗</span>
+                <span aria-hidden="true">→</span>
             </a>
         </div>
     </div>
