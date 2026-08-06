@@ -129,6 +129,14 @@
     @foreach($audiencePanels as $panel)
         @php
             $panelImage = isset($panel['image_id']) ? \App\Models\Media::find((int) $panel['image_id']) : null;
+
+            if (! $panelImage) {
+                $fallbackImageName = $loop->first
+                    ? 'Amatierra Group Retreat Costa Rica.jpg'
+                    : 'Join a Yoga Retreat at Amatierra.jpg';
+                $panelImage = \App\Models\Media::where('original_filename', $fallbackImageName)->latest()->first();
+            }
+
             $panelUrl = $panel['button_url'] ?? '#';
         @endphp
         <article class="group relative min-h-[560px] overflow-hidden lg:min-h-[720px]">
