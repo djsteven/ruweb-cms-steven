@@ -333,3 +333,22 @@
         width: min(calc(100% - 28px), 1180px);
     }
 }
+
+@media (min-width: 901px) {
+    .ama-nav-list .ama-mega-menu {
+        width: 720px;
+        max-width: calc(100vw - 64px);
+        margin-left: -360px;
+        transform: none !important;
+    }
+}
+
+@media (min-width: 901px) and (max-width: 784px) {
+    .ama-nav-list .ama-mega-menu {
+        right: 32px;
+        left: 32px;
+        width: auto;
+        max-width: none;
+        margin-left: 0;
+    }
+}
