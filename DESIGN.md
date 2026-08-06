@@ -1,6 +1,6 @@
 ---
 name: AmaTierra Website
-version: 1.2.0
+version: 1.2.1
 description: Dark editorial design system for AmaTierra Retreat & Wellness Center.
 colors:
   ink:
@@ -82,7 +82,7 @@ components:
     headingFont: Playfair Display Italic
     bodyFont: DM Sans
     eyebrowColor: "#69B342"
-    overlay: "dark green/black gradient over image"
+    overlay: "dark green/black gradient over full-color image"
   buttonPrimary:
     backgroundColor: "#C9A96E"
     textColor: "#0F1710"
@@ -159,12 +159,24 @@ All menu items may start as `#` links in the CMS until the final pages are creat
 
 Current implemented section order:
 
-1. **Hero**: full-screen video/photo background with Playfair Display heading and CTAs.
-2. **Mountain Sanctuary Intro**: dark green editorial band immediately after the hero.
+1. **Hero**: compact desktop video/photo background with Playfair Display heading and body copy only. No eyebrow or in-hero CTAs.
+2. **Mountain Sanctuary Intro**: dark green editorial band immediately after the hero and visible in the first desktop viewport.
 3. **Audience Split Panels**: two full-bleed image panels for retreat leaders and individual guests.
 4. **Features / Why AmaTierra**: editable CMS feature content.
 5. **CTA**: inquiry-focused call to action.
 6. **Google Reviews**: optional visible reviews block.
+
+### Hero
+
+The home hero should not consume the entire first desktop viewport. The first impression on desktop should show both the cinematic hero and the beginning of the Mountain Sanctuary Intro below it.
+
+Visual rules:
+
+- Background: immersive video or image with dark overlay.
+- Content: Playfair Display heading plus DM Sans supporting copy.
+- Do not show an eyebrow above the hero heading.
+- Do not show in-hero CTAs; the persistent header `Book Now` button remains the main visible action.
+- Desktop height should be compact enough for the next section to appear immediately.
 
 ### Mountain Sanctuary Intro
 
@@ -179,7 +191,7 @@ Default content:
 Visual rules:
 
 - Background: `inkAlt`
-- Left column: gold rule/eyebrow and large italic Playfair title in `goldPale`
+- Left column: gold eyebrow without leading rule, plus large italic Playfair title in `goldPale`
 - Right column: DM Sans paragraph, muted bone, max width around 420px
 - Desktop layout: wide left title column plus narrower right copy column
 - Mobile layout: stacked content with generous spacing
@@ -196,7 +208,7 @@ Default panels:
 Visual rules:
 
 - Two equal full-bleed columns on desktop; stacked panels on mobile.
-- Each panel uses a background image with dark overlay and subtle hover scale.
+- Each panel uses a full-color background image with dark overlay and subtle hover scale.
 - Eyebrow: green uppercase DM Sans with a short green rule.
 - Heading: large italic Playfair Display in `goldPale`, split across lines using line breaks.
 - Body: DM Sans, bone at reduced opacity, max width around 680px.
@@ -230,4 +242,4 @@ Fonts load from Google Fonts. Tailwind v4 tokens are exposed through the `@theme
 - `font-sans`: DM Sans
 - Colors: `ama-ink`, `ama-ink-alt`, `ama-moss`, `ama-sage`, `ama-dusk`, `ama-bone`, `ama-parchment`, `ama-gold`, `ama-gold-pale`, `ama-white`
 
-Use `.display-title` for Playfair Display headings, `.text-editorial` for italic Playfair accents, and `.overline` for gold uppercase labels with a leading rule.
+Use `.display-title` for Playfair Display headings, `.text-editorial` for italic Playfair accents, and `.overline` for gold uppercase labels with a leading rule. Use `.overline-no-rule` when the editorial label should appear without its leading rule.
