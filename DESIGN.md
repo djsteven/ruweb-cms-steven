@@ -1,6 +1,6 @@
 ---
 name: AmaTierra Website
-version: 1.2.1
+version: 1.2.2
 description: Dark editorial design system for AmaTierra Retreat & Wellness Center.
 colors:
   ink:
@@ -159,8 +159,8 @@ All menu items may start as `#` links in the CMS until the final pages are creat
 
 Current implemented section order:
 
-1. **Hero**: compact desktop video/photo background with Playfair Display heading and body copy only. No eyebrow or in-hero CTAs.
-2. **Mountain Sanctuary Intro**: dark green editorial band immediately after the hero and visible in the first desktop viewport.
+1. **Hero**: compact desktop video/photo background with Playfair Display heading and body copy only. No eyebrow, in-hero CTAs, or decorative navigation indicators.
+2. **Mountain Sanctuary Intro**: compact dark green editorial band immediately after the hero and visible in the first desktop viewport.
 3. **Audience Split Panels**: two full-bleed image panels for retreat leaders and individual guests.
 4. **Features / Why AmaTierra**: editable CMS feature content.
 5. **CTA**: inquiry-focused call to action.
@@ -174,8 +174,10 @@ Visual rules:
 
 - Background: immersive video or image with dark overlay.
 - Content: Playfair Display heading plus DM Sans supporting copy.
+- Hero heading scale should stay editorial but restrained: roughly 46px mobile, 60px tablet, 76px desktop, and 84px wide desktop.
 - Do not show an eyebrow above the hero heading.
 - Do not show in-hero CTAs; the persistent header `Book Now` button remains the main visible action.
+- Do not show decorative carousel/navigation dots when they are not interactive.
 - Desktop height should be compact enough for the next section to appear immediately.
 
 ### Mountain Sanctuary Intro
@@ -191,9 +193,10 @@ Default content:
 Visual rules:
 
 - Background: `inkAlt`
-- Left column: gold eyebrow without leading rule, plus large italic Playfair title in `goldPale`
+- Left column: gold eyebrow without leading rule, plus italic Playfair title in `goldPale`
 - Right column: DM Sans paragraph, muted bone, max width around 420px
 - Desktop layout: wide left title column plus narrower right copy column
+- Desktop vertical padding should be compact, around 40px top and bottom.
 - Mobile layout: stacked content with generous spacing
 
 ### Audience Split Panels
