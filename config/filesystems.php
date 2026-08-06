@@ -1,5 +1,8 @@
 <?php
 
+$appUrl = rtrim(env('APP_URL', 'http://localhost'), '/');
+$appUrl = preg_replace('/:(80|443)$/', '', $appUrl);
+
 return [
 
     /*
@@ -41,7 +44,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            'url' => $appUrl.'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
