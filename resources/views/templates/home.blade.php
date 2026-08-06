@@ -156,7 +156,7 @@
             <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,16,0.76)_0%,rgba(15,23,16,0.55)_48%,rgba(15,23,16,0.28)_100%)]"></div>
             <div class="absolute inset-0 bg-ama-ink/10 transition duration-700 group-hover:bg-ama-ink/0"></div>
 
-            <div class="relative z-20 flex min-h-[560px] items-center px-8 py-20 sm:px-14 lg:min-h-[720px] lg:px-[12vw] xl:px-[124px]">
+            <div class="relative z-20 flex min-h-[560px] items-center px-8 py-20 sm:px-14 lg:min-h-[720px] lg:px-16 xl:px-20 2xl:px-24">
                 <div class="max-w-[680px]">
                     @if($panel['eyebrow'] ?? null)
                         <p class="mb-5 inline-flex items-center gap-3 font-sans text-[13px] font-normal uppercase tracking-[0.22em] text-[#69B342] before:block before:h-px before:w-6 before:bg-[#69B342]">
