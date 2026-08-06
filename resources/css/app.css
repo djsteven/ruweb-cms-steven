@@ -112,6 +112,40 @@
         transform: translateY(-1px);
     }
 
+    .ama-header-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 142px;
+        min-height: 48px;
+        padding: 0 26px;
+        border: 0;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #25713B 0%, #69B342 100%);
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0;
+        line-height: 1;
+        text-transform: uppercase;
+        box-shadow: 0 10px 24px rgba(37, 113, 59, 0.22);
+        white-space: nowrap;
+    }
+
+    .ama-header-cta:hover {
+        color: #FFFFFF;
+        background: linear-gradient(90deg, #1F6333 0%, #5FA63C 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 12px 28px rgba(37, 113, 59, 0.28);
+    }
+
+    .ama-header-cta span {
+        font-size: 18px;
+        line-height: 1;
+        transform: translateY(-1px);
+    }
+
     .ama-button-secondary {
         display: inline-flex;
         align-items: center;
