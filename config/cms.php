@@ -40,7 +40,7 @@ return [
         ],
         'home' => [
             'name' => 'Homepage',
-            'sections' => ['hero', 'features', 'cta', 'google_reviews'],
+            'sections' => ['hero', 'intro', 'features', 'cta', 'google_reviews'],
             'schema' => [
                 'meta.title' => ['type' => 'text', 'translatable' => true],
                 'meta.description' => ['type' => 'textarea', 'translatable' => true],
@@ -52,6 +52,10 @@ return [
                 'sections.hero.image_id' => ['type' => 'media', 'localized_media' => true],
                 'sections.hero.button_label' => ['type' => 'text', 'translatable' => true],
                 'sections.hero.button_url' => ['type' => 'url', 'preserve' => true],
+                'sections.intro.is_visible' => ['type' => 'boolean', 'preserve' => true],
+                'sections.intro.eyebrow' => ['type' => 'text', 'translatable' => true],
+                'sections.intro.heading' => ['type' => 'text', 'translatable' => true],
+                'sections.intro.body' => ['type' => 'textarea', 'translatable' => true],
                 'sections.features.is_visible' => ['type' => 'boolean', 'preserve' => true],
                 'sections.features.heading' => ['type' => 'text', 'translatable' => true],
                 'sections.features.body' => ['type' => 'textarea', 'translatable' => true],
@@ -67,7 +71,7 @@ return [
         ],
         'home-alt' => [
             'name' => 'Homepage Alt',
-            'sections' => ['hero', 'features', 'cta'],
+            'sections' => ['hero', 'intro', 'features', 'cta'],
             'schema' => [
                 'meta.title' => ['type' => 'text', 'translatable' => true],
                 'meta.description' => ['type' => 'textarea', 'translatable' => true],
@@ -79,6 +83,10 @@ return [
                 'sections.hero.image_id' => ['type' => 'media', 'localized_media' => true],
                 'sections.hero.button_label' => ['type' => 'text', 'translatable' => true],
                 'sections.hero.button_url' => ['type' => 'url', 'preserve' => true],
+                'sections.intro.is_visible' => ['type' => 'boolean', 'preserve' => true],
+                'sections.intro.eyebrow' => ['type' => 'text', 'translatable' => true],
+                'sections.intro.heading' => ['type' => 'text', 'translatable' => true],
+                'sections.intro.body' => ['type' => 'textarea', 'translatable' => true],
                 'sections.features.is_visible' => ['type' => 'boolean', 'preserve' => true],
                 'sections.features.heading' => ['type' => 'text', 'translatable' => true],
                 'sections.features.body' => ['type' => 'textarea', 'translatable' => true],
