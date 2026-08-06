@@ -72,7 +72,7 @@
 
     <div class="relative z-10 flex min-h-[430px] items-center px-6 pb-16 pt-20 sm:px-10 lg:min-h-[calc(66vh-6rem)] lg:px-section-inline lg:pb-10 lg:pt-12">
         <div class="max-w-3xl">
-            <h1 class="display-title max-w-3xl text-[52px] leading-[0.96] sm:text-[68px] lg:text-[88px] xl:text-[96px]">
+            <h1 class="display-title max-w-3xl text-[46px] leading-[0.98] sm:text-[60px] lg:text-[76px] xl:text-[84px]">
                 {{ $heroHeading }}
             </h1>
             @if($heroBody)
@@ -82,16 +82,10 @@
             @endif
         </div>
     </div>
-
-    <div class="absolute right-7 top-1/2 z-20 hidden -translate-y-1/2 flex-col items-center gap-4 lg:flex" aria-hidden="true">
-        <span class="h-1.5 w-1.5 rounded-full bg-ama-gold"></span>
-        <span class="h-10 w-10 rounded-full border border-ama-bone/35"></span>
-        <span class="h-1.5 w-1.5 rounded-full bg-ama-bone/35"></span>
-    </div>
 </section>
 
 @if(($intro['is_visible'] ?? 1) && ($introEyebrow || $introHeading || $introBody))
-<section id="home-intro" class="bg-ama-ink-alt px-6 py-14 text-ama-bone sm:px-10 lg:px-section-inline lg:py-16">
+<section id="home-intro" class="bg-ama-ink-alt px-6 py-8 text-ama-bone sm:px-10 lg:px-section-inline lg:py-10">
     <div class="mx-auto grid max-w-[1450px] gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:items-center">
         <div>
             @if($introEyebrow)
