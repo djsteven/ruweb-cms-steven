@@ -90,6 +90,10 @@
         background: #C9A96E;
     }
 
+    .overline-no-rule::before {
+        display: none;
+    }
+
     .ama-button-primary {
         display: inline-flex;
         align-items: center;
