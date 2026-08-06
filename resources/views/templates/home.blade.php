@@ -52,6 +52,33 @@
     $audiencePanels = collect($defaultAudiencePanels)
         ->map(fn ($defaultPanel, $index) => array_merge($defaultPanel, $savedAudiencePanels[$index] ?? []))
         ->all();
+
+    $defaultOffersCopy = "Support for group leaders to host memorable retreats at reasonable rates.\nA variety of retreats for individuals to choose from where you can immerse in nature and renew your Spirit.\nA supportive environment for reflection and healing where you can be yourself and transform your energy to become more positive and whole.";
+    $offersHeadingTop = $features['heading_top'] ?? 'What Ama';
+    $offersHeadingAccent = $features['heading_accent'] ?? 'Tierra Offers';
+    $offersCopy = trim((string) ($features['body'] ?? $defaultOffersCopy));
+    $offerCopyLines = collect(preg_split('/\r\n|\r|\n/', $offersCopy))
+        ->map(fn ($line) => trim($line))
+        ->filter()
+        ->values();
+    $defaultOfferCards = [
+        [
+            'title' => 'Mountain rainforest location',
+            'body' => 'quiet, cool, and immersive',
+            'image_id' => null,
+            'fallback_image' => 'Amatierra Group Retreat Costa Rica.jpg',
+        ],
+        [
+            'title' => 'Easy access from San José',
+            'body' => 'with transportation support',
+            'image_id' => null,
+            'fallback_image' => 'Join a Yoga Retreat at Amatierra.jpg',
+        ],
+    ];
+    $savedOfferCards = $features['cards'] ?? [];
+    $offerCards = collect($defaultOfferCards)
+        ->map(fn ($defaultCard, $index) => array_merge($defaultCard, $savedOfferCards[$index] ?? []))
+        ->all();
 @endphp
 
 <section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh] lg:pt-24">
@@ -192,26 +219,69 @@
 </section>
 @endif
 
-@if(($features['is_visible'] ?? 1) && (($features['items'] ?? null) || ($features['heading'] ?? null)))
-<section class="bg-ama-ink-alt px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
-    <div class="mx-auto max-w-6xl">
-        @if($features['heading'] ?? null)
-            <p class="overline mb-6">Why AmaTierra</p>
-            <h2 class="display-title max-w-3xl text-5xl leading-none sm:text-6xl">{{ $features['heading'] }}</h2>
-        @endif
+@if(($features['is_visible'] ?? 1) && ($offersHeadingTop || $offersHeadingAccent || $offerCopyLines->isNotEmpty() || count($offerCards)))
+<section id="home-offers" class="bg-[#FAF8F3] px-6 py-18 text-ama-ink sm:px-10 lg:px-section-inline lg:py-[104px]">
+    <div class="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[minmax(320px,0.78fr)_minmax(0,1.22fr)] lg:items-center xl:gap-20">
+        <div>
+            @if($offersHeadingTop || $offersHeadingAccent)
+                <h2 class="display-title text-[50px] leading-[1.04] sm:text-[64px] lg:text-[72px]">
+                    @if($offersHeadingTop)
+                        <span class="block text-[#7D874C]">{{ $offersHeadingTop }}</span>
+                    @endif
+                    @if($offersHeadingAccent)
+                        <span class="block italic text-black">{{ $offersHeadingAccent }}</span>
+                    @endif
+                </h2>
+            @endif
+            @if($offerCopyLines->isNotEmpty())
+                <div class="mt-6 max-w-xl space-y-1 text-base leading-7 text-ama-ink/88 sm:text-[17px]">
+                    @foreach($offerCopyLines as $line)
+                        <p>{{ $line }}</p>
+                    @endforeach
+                </div>
+            @endif
+        </div>
 
-        @if($features['items'] ?? null)
-            <div class="mt-12 grid gap-[2px] md:grid-cols-3">
-                @foreach($features['items'] as $item)
-                    <article class="border border-white/[0.06] bg-ama-ink p-8">
-                        @if($item['title'] ?? null)
-                            <h3 class="display-title text-3xl text-ama-bone">{{ $item['title'] }}</h3>
-                        @endif
-                        @if($item['body'] ?? null)
-                            <p class="mt-4 leading-7 text-ama-bone/55">{{ $item['body'] }}</p>
+        @if(count($offerCards))
+            <div class="grid gap-10 sm:grid-cols-2 lg:gap-14 xl:gap-20">
+                @foreach($offerCards as $card)
+                    @php
+                        $offerImage = isset($card['image_id']) ? \App\Models\Media::find((int) $card['image_id']) : null;
+
+                        if (! $offerImage && ($card['fallback_image'] ?? null)) {
+                            $offerImage = \App\Models\Media::where('original_filename', $card['fallback_image'])->latest()->first();
+                        }
+                    @endphp
+                    <article class="group text-center">
+                        <div class="mx-auto aspect-square w-[min(270px,72vw)] overflow-hidden rounded-full bg-ama-parchment shadow-[0_22px_60px_rgba(15,23,16,0.14)] ring-1 ring-ama-ink/5 sm:w-[260px] lg:w-[280px]">
+                            @if($offerImage)
+                                <x-responsive-img
+                                    :media="$offerImage"
+                                    sizes="(min-width: 1024px) 280px, 72vw"
+                                    :fallback-alt="$card['title'] ?? 'AmaTierra offer'"
+                                    class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
+                                />
+                            @else
+                                <div class="h-full w-full bg-[radial-gradient(circle_at_40%_32%,rgba(143,181,142,0.45),transparent_34%),linear-gradient(135deg,#E8E0D0_0%,#F0EBE0_52%,#8FB58E_100%)]"></div>
+                            @endif
+                        </div>
+                        @if(($card['title'] ?? null) || ($card['body'] ?? null))
+                            <p class="mx-auto mt-7 max-w-[280px] text-base font-semibold leading-7 text-[#7D874C]">
+                                @if($card['title'] ?? null)
+                                    <span class="block">{{ $card['title'] }}</span>
+                                @endif
+                                @if($card['body'] ?? null)
+                                    <span class="block">{{ $card['body'] }}</span>
+                                @endif
+                            </p>
                         @endif
                     </article>
                 @endforeach
+                <div class="flex items-center justify-center gap-3 sm:col-span-2" aria-hidden="true">
+                    @foreach(range(1, 6) as $dot)
+                        <span class="block size-3 rounded-full {{ $dot === 4 ? 'bg-[#25713B]' : 'bg-[#C7D2C8]' }}"></span>
+                    @endforeach
+                </div>
             </div>
         @endif
     </div>
