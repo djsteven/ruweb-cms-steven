@@ -143,6 +143,7 @@
     }
 
     .ama-header-pill {
+        position: relative;
         border: 1px solid rgba(240, 235, 224, 0.18);
         background: rgba(250, 248, 243, 0.92);
         color: #0F1710;
@@ -240,13 +241,14 @@
     }
 
     .ama-nav-list .has-mega-menu {
-        position: static;
+        position: static !important;
     }
 
     .ama-nav-list .ama-mega-menu {
         position: absolute;
-        top: 100%;
+        top: calc(100% + 10px);
         left: 50%;
+        z-index: 60;
         width: min(720px, calc(100vw - 64px));
         padding-top: 18px;
         transform: translateX(-50%);
