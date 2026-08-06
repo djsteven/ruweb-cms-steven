@@ -107,7 +107,7 @@
     <div class="mx-auto grid max-w-[1450px] gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:items-center">
         <div>
             @if($introEyebrow)
-                <p class="overline mb-6">{{ $introEyebrow }}</p>
+                <p class="overline overline-no-rule mb-6">{{ $introEyebrow }}</p>
             @endif
             @if($introHeading)
                 <h2 class="display-title text-[64px] italic leading-none text-ama-gold-pale sm:text-[82px] lg:text-[96px]">
