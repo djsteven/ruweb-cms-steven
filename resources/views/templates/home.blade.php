@@ -118,8 +118,8 @@
 
             if (! $panelImage) {
                 $fallbackImageName = $loop->first
-                    ? 'Amatierra Group Retreat Costa Rica.jpg'
-                    : 'Join a Yoga Retreat at Amatierra.jpg';
+                    ? 'Join a Yoga Retreat at Amatierra.jpg'
+                    : 'Amatierra Group Retreat Costa Rica.jpg';
                 $panelImage = \App\Models\Media::where('original_filename', $fallbackImageName)->latest()->first();
             }
 
