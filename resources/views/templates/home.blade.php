@@ -43,7 +43,7 @@
     ];
 @endphp
 
-<section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh]">
+<section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh] lg:pt-24">
     <div class="ama-hero-media absolute inset-0">
         @if($heroVideoSrc)
             <iframe
@@ -70,7 +70,7 @@
         <div class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-ama-ink to-transparent"></div>
     </div>
 
-    <div class="relative z-10 flex min-h-[430px] items-center px-6 pb-16 pt-20 sm:px-10 lg:min-h-[calc(66vh-8rem)] lg:px-section-inline">
+    <div class="relative z-10 flex min-h-[430px] items-center px-6 pb-16 pt-20 sm:px-10 lg:min-h-[calc(66vh-6rem)] lg:px-section-inline lg:pb-10 lg:pt-12">
         <div class="max-w-3xl">
             <h1 class="display-title max-w-3xl text-[64px] leading-[0.94] sm:text-[86px] lg:text-[112px]">
                 {{ $heroHeading }}
