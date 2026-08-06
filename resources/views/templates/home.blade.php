@@ -35,7 +35,7 @@
         [
             'eyebrow' => 'For Individual Guests',
             'heading' => "Join\na Retreat",
-            'body' => 'Step into a restorative stay shaped by yoga, wellness, nature, nourishing food, and the quiet rhythm of Costa Rica’s mountain forest.',
+            'body' => 'Travel solo or with friends to one of our scheduled group yoga retreats. Experience deep community, skilled teachers, and a connection to nature that reshapes how you move through the world.',
             'button_label' => 'Join a Retreat',
             'button_url' => '/retreats',
             'image_id' => null,
