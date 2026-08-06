@@ -7,18 +7,18 @@
     @endphp
 
     <div id="site-header-pill" class="ama-header-pill overflow-hidden rounded-full">
-        <div class="flex min-h-[58px] items-center justify-between gap-5 px-5 sm:px-7">
+        <div class="flex min-h-[68px] items-center justify-between gap-5 px-5 sm:px-7">
             <a href="{{ $homeHref }}" class="flex min-w-0 items-center gap-3" aria-label="{{ $siteName }} home">
                 @if($siteLogoMedia ?? null)
                     <x-responsive-img
                         :media="$siteLogoMedia"
-                        sizes="132px"
+                        sizes="180px"
                         :fallback-alt="$siteName"
-                        class="h-9 w-auto max-w-[150px] object-contain"
+                        class="h-12 w-auto max-w-[210px] object-contain sm:h-14"
                         loading="eager"
                     />
                 @elseif($siteLogo ?? null)
-                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-9 w-auto max-w-[150px] object-contain" loading="eager">
+                    <img src="{{ $siteLogo }}" alt="{{ $siteName }}" class="h-12 w-auto max-w-[210px] object-contain sm:h-14" loading="eager">
                 @else
                     <span class="font-display text-2xl leading-none tracking-[-0.01em]">{{ $siteName }}</span>
                 @endif
