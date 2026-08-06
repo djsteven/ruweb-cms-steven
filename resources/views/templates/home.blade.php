@@ -147,7 +147,7 @@
                         :media="$panelImage"
                         sizes="(min-width: 1024px) 50vw, 100vw"
                         :fallback-alt="$panel['heading'] ?? ''"
-                        class="h-full w-full object-cover grayscale transition duration-700 group-hover:scale-[1.04] group-hover:grayscale-0"
+                        class="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
                     />
                 @else
                     <div class="h-full w-full bg-[radial-gradient(circle_at_50%_40%,rgba(143,181,142,0.2),transparent_34%),linear-gradient(135deg,#314336_0%,#1a2a1c_45%,#0f1710_100%)]"></div>
