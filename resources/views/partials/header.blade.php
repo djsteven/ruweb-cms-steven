@@ -6,7 +6,7 @@
             : route('localized.home', ['locale' => app()->getLocale()]);
     @endphp
 
-    <div id="site-header-pill" class="ama-header-pill overflow-hidden rounded-full">
+    <div id="site-header-pill" class="ama-header-pill rounded-[34px]">
         <div class="flex min-h-[68px] items-center justify-between gap-5 px-5 sm:px-7">
             <a href="{{ $homeHref }}" class="flex min-w-0 items-center gap-3" aria-label="{{ $siteName }} home">
                 @if($siteLogoMedia ?? null)
