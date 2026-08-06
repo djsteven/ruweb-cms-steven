@@ -1,6 +1,6 @@
 ---
 name: AmaTierra Website
-version: 1.1.0
+version: 1.2.0
 description: Dark editorial design system for AmaTierra Retreat & Wellness Center.
 colors:
   ink:
@@ -35,7 +35,7 @@ colors:
     role: Header booking CTA start color.
   ctaGreenLight:
     value: "#69B342"
-    role: Header booking CTA end color.
+    role: Header booking CTA end color and audience panel eyebrow color.
   white:
     value: "#FFFFFF"
     role: Text only on green CTA fills.
@@ -52,7 +52,7 @@ typography:
     fontWeight: 400
     color: "#E8D5A8"
     letterSpacing: "0"
-    role: Signature title moments such as AmaTierra in the mountain sanctuary intro, and short emotional accents.
+    role: Signature title moments, audience panel headings, and short emotional accents.
   body:
     fontFamily: DM Sans
     fontWeight: 300
@@ -77,6 +77,12 @@ components:
     fontSize: "14px"
     letterSpacing: "0"
     textTransform: uppercase
+  audiencePanel:
+    layout: Full-bleed two-column split panel
+    headingFont: Playfair Display Italic
+    bodyFont: DM Sans
+    eyebrowColor: "#69B342"
+    overlay: "dark green/black gradient over image"
   buttonPrimary:
     backgroundColor: "#C9A96E"
     textColor: "#0F1710"
@@ -119,11 +125,7 @@ The signature section-heading pattern is a Playfair heading with optional italic
 <h2 class="display-title italic text-ama-gold-pale">AmaTierra</h2>
 ```
 
-Eyebrows sit above headings in gold, uppercase, at 10px with 0.3em letter spacing, preceded by a short horizontal rule:
-
-```html
-<p class="overline">Mountain Sanctuary · Costa Rica</p>
-```
+Eyebrows sit above headings in uppercase DM Sans with a short horizontal rule. Standard editorial eyebrows use gold; the two audience split panels use green to match the supplied reference.
 
 ## Color System
 
@@ -131,7 +133,7 @@ Default surfaces are `ink` and `inkAlt`. Alternate between them to create sectio
 
 Gold is the premium accent and should stay scarce: eyebrows, rules, subtle highlights, and decorative details. The persistent header booking CTA is green, not gold, matching the client reference.
 
-Body copy on dark surfaces should be `bone` at reduced opacity, usually between 0.60 and 0.70. Do not use gold for small paragraph copy.
+Body copy on dark surfaces should be `bone` at reduced opacity, usually between 0.60 and 0.72. Do not use gold for small paragraph copy.
 
 ## Header And Menu
 
@@ -159,9 +161,10 @@ Current implemented section order:
 
 1. **Hero**: full-screen video/photo background with Playfair Display heading and CTAs.
 2. **Mountain Sanctuary Intro**: dark green editorial band immediately after the hero.
-3. **Features / Why AmaTierra**: editable CMS feature content.
-4. **CTA**: inquiry-focused call to action.
-5. **Google Reviews**: optional visible reviews block.
+3. **Audience Split Panels**: two full-bleed image panels for retreat leaders and individual guests.
+4. **Features / Why AmaTierra**: editable CMS feature content.
+5. **CTA**: inquiry-focused call to action.
+6. **Google Reviews**: optional visible reviews block.
 
 ### Mountain Sanctuary Intro
 
@@ -180,6 +183,24 @@ Visual rules:
 - Right column: DM Sans paragraph, muted bone, max width around 420px
 - Desktop layout: wide left title column plus narrower right copy column
 - Mobile layout: stacked content with generous spacing
+
+### Audience Split Panels
+
+This section appears after the Mountain Sanctuary Intro and is editable through `sections.audience` in the CMS.
+
+Default panels:
+
+- **For Retreat Leaders**: `Host / a Retreat`
+- **For Individual Guests**: `Join / a Retreat`
+
+Visual rules:
+
+- Two equal full-bleed columns on desktop; stacked panels on mobile.
+- Each panel uses a background image with dark overlay and subtle hover scale.
+- Eyebrow: green uppercase DM Sans with a short green rule.
+- Heading: large italic Playfair Display in `goldPale`, split across lines using line breaks.
+- Body: DM Sans, bone at reduced opacity, max width around 680px.
+- Entire panel may link to its configured CTA URL, while menu/page routes can remain placeholders until final content exists.
 
 ## Buttons
 
