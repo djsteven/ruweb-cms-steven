@@ -1,6 +1,6 @@
 ---
 name: AmaTierra Website
-version: 1.2.2
+version: 1.2.3
 description: Dark editorial design system for AmaTierra Retreat & Wellness Center.
 colors:
   ink:
@@ -82,6 +82,8 @@ components:
     headingFont: Playfair Display Italic
     bodyFont: DM Sans
     eyebrowColor: "#69B342"
+    firstHeadingLineColor: "#E8D5A8"
+    remainingHeadingLinesColor: "#F0EBE0"
     overlay: "dark green/black gradient over full-color image"
   buttonPrimary:
     backgroundColor: "#C9A96E"
@@ -213,7 +215,8 @@ Visual rules:
 - Two equal full-bleed columns on desktop; stacked panels on mobile.
 - Each panel uses a full-color background image with dark overlay and subtle hover scale.
 - Eyebrow: green uppercase DM Sans with a short green rule.
-- Heading: large italic Playfair Display in `goldPale`, split across lines using line breaks.
+- Heading: large italic Playfair Display, split across lines using line breaks.
+- First heading line uses `goldPale` (`#E8D5A8`); remaining heading lines use `bone` (`#F0EBE0`).
 - Body: DM Sans, bone at reduced opacity, max width around 680px.
 - Entire panel may link to its configured CTA URL, while menu/page routes can remain placeholders until final content exists.
 
