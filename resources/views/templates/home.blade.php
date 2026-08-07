@@ -307,7 +307,7 @@
             <article class="flex flex-col rounded-[26px] bg-white p-5 shadow-[0_20px_70px_rgba(50,45,30,.09)]">
                 <div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-ama-parchment">
                     @if($retreat->featuredImage())<x-responsive-img :media="$retreat->featuredImage()" sizes="(min-width:1024px) 420px, 100vw" :fallback-alt="$retreat->title" class="h-full w-full object-cover" />@endif
-                    <span class="absolute left-4 top-4 rounded-full bg-white px-5 py-2 text-sm">Available</span>
+                    <span class="absolute left-4 top-4 rounded-full bg-white px-5 py-2 text-sm">{{ str_contains(strtoupper($retreat->title), 'SOLD OUT') ? 'Sold Out' : 'Available' }}</span>
                 </div>
                 <p class="mt-6 text-sm">{{ $retreat->starts_at->format('j M') }} – {{ $retreat->ends_at->format('j M Y') }}</p>
                 <h3 class="mt-2 font-display text-3xl leading-none">{{ $retreat->title }}</h3>
