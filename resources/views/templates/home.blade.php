@@ -298,13 +298,12 @@
     </blockquote>
 </section>
 
-@if($upcomingRetreats->isNotEmpty())
 <section id="upcoming-retreats" class="relative overflow-hidden bg-[#F2ECDD] px-6 py-20 text-ama-ink sm:px-10 lg:px-section-inline lg:py-28">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,.72),transparent_60%)]"></div>
     <div class="relative mx-auto max-w-[1450px]">
         <h2 class="display-title text-center text-5xl leading-[.9] text-black sm:text-6xl lg:text-7xl">Upcoming<br><span class="italic">Group Retreats</span></h2>
         <div class="mt-14 grid gap-7 lg:grid-cols-3">
-            @foreach($upcomingRetreats as $retreat)
+            @forelse($upcomingRetreats as $retreat)
             <article class="flex flex-col rounded-[26px] bg-white p-5 shadow-[0_20px_70px_rgba(50,45,30,.09)]">
                 <div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-ama-parchment">
                     @if($retreat->featuredImage())<x-responsive-img :media="$retreat->featuredImage()" sizes="(min-width:1024px) 420px, 100vw" :fallback-alt="$retreat->title" class="h-full w-full object-cover" />@endif
@@ -318,11 +317,12 @@
                     <a href="{{ route('retreats.show', $retreat) }}" class="rounded-full bg-[#838D4A] px-6 py-2 text-sm text-white hover:bg-[#6f783e]">View Details</a>
                 </div>
             </article>
-            @endforeach
+            @empty
+                <p class="col-span-full py-10 text-center text-lg text-ama-ink/60">New retreat dates will be announced soon.</p>
+            @endforelse
         </div>
     </div>
 </section>
-@endif
 
 @if(($cta['is_visible'] ?? 1) && ($cta['heading'] ?? $cta['body'] ?? null))
 <section class="bg-ama-ink px-6 py-20 text-ama-bone sm:px-10 lg:px-section-inline lg:py-section">
