@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\RetreatController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\TaxonomyController;
 use App\Http\Controllers\Admin\UserController;
@@ -46,6 +47,7 @@ Route::middleware(['auth', 'role:admin,editor', 'admin.locale'])->prefix('admin'
 
     Route::resource('posts', PostController::class)
         ->except(['show']);
+    Route::resource('retreats', RetreatController::class)->except(['show']);
     Route::post('posts/{post}/translations/{locale}', [PostController::class, 'translate'])->name('posts.translate');
 
     // Google Reviews (SerpAPI)

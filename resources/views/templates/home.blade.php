@@ -82,6 +82,7 @@
         ->filter(fn ($card) => filled($card['title'] ?? null) || filled($card['body'] ?? null) || filled($card['image_id'] ?? null))
         ->values()
         ->all();
+    $upcomingRetreats = \App\Models\Retreat::query()->published()->upcoming()->with('media')->limit(3)->get();
 @endphp
 
 <section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh] lg:pt-24">
@@ -229,10 +230,10 @@
             @if($offersHeadingTop || $offersHeadingAccent)
                 <h2 class="display-title text-[50px] leading-[1.04] sm:text-[64px] lg:text-[68px] xl:text-[72px]">
                     @if($offersHeadingTop)
-                        <span class="block text-[#7D874C]">{{ $offersHeadingTop }}</span>
+                        <span class="text-[#7D874C]">{{ $offersHeadingTop }}</span>
                     @endif
                     @if($offersHeadingAccent)
-                        <span class="block italic text-black">{{ $offersHeadingAccent }}</span>
+                        <span class="italic text-black"> {{ $offersHeadingAccent }}</span>
                     @endif
                 </h2>
             @endif
@@ -287,6 +288,38 @@
                 </div>
             </div>
         @endif
+    </div>
+</section>
+@endif
+
+<section class="bg-[#FAF8F3] px-6 pb-16 text-ama-bone sm:px-10 lg:px-section-inline lg:pb-24">
+    <blockquote class="mx-auto max-w-[1450px] rounded-[28px] bg-[#838D4A] px-8 py-12 font-display text-3xl leading-tight sm:px-16 sm:text-4xl lg:px-20 lg:py-16 lg:text-5xl">
+        “Our unique forest environment, friendly staff, comfortable accommodations and healthy, delicious food all add to a retreat experience that you will remember forever.”
+    </blockquote>
+</section>
+
+@if($upcomingRetreats->isNotEmpty())
+<section id="upcoming-retreats" class="relative overflow-hidden bg-[#F2ECDD] px-6 py-20 text-ama-ink sm:px-10 lg:px-section-inline lg:py-28">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,.72),transparent_60%)]"></div>
+    <div class="relative mx-auto max-w-[1450px]">
+        <h2 class="display-title text-center text-5xl leading-[.9] text-black sm:text-6xl lg:text-7xl">Upcoming<br><span class="italic">Group Retreats</span></h2>
+        <div class="mt-14 grid gap-7 lg:grid-cols-3">
+            @foreach($upcomingRetreats as $retreat)
+            <article class="flex flex-col rounded-[26px] bg-white p-5 shadow-[0_20px_70px_rgba(50,45,30,.09)]">
+                <div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-ama-parchment">
+                    @if($retreat->featuredImage())<x-responsive-img :media="$retreat->featuredImage()" sizes="(min-width:1024px) 420px, 100vw" :fallback-alt="$retreat->title" class="h-full w-full object-cover" />@endif
+                    <span class="absolute left-4 top-4 rounded-full bg-white px-5 py-2 text-sm">Available</span>
+                </div>
+                <p class="mt-6 text-sm">{{ $retreat->starts_at->format('j M') }} – {{ $retreat->ends_at->format('j M Y') }}</p>
+                <h3 class="mt-2 font-display text-3xl leading-none">{{ $retreat->title }}</h3>
+                @if($retreat->excerpt)<p class="mt-4 line-clamp-4 text-base leading-7 text-ama-ink/55">{{ $retreat->excerpt }}</p>@endif
+                <div class="mt-auto flex items-center justify-between border-t border-ama-ink/10 pt-5">
+                    <span class="text-sm text-[#25713B]">{{ $retreat->organizer }}</span>
+                    <a href="{{ route('retreats.show', $retreat) }}" class="rounded-full bg-[#838D4A] px-6 py-2 text-sm text-white hover:bg-[#6f783e]">View Details</a>
+                </div>
+            </article>
+            @endforeach
+        </div>
     </div>
 </section>
 @endif

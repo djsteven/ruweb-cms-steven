@@ -72,6 +72,13 @@
                 </ul>
             </li>
             <li>
+                <a href="{{ route('admin.retreats.index') }}"
+                   class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors {{ request()->routeIs('admin.retreats.*') ? 'bg-sky-500/10 text-sky-400' : 'text-gray-500 hover:text-gray-300 hover:bg-white/[0.04]' }}">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M5 5h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z"/></svg>
+                    <span>Upcoming Retreats</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('admin.menus.index') }}"
                    class="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors
                           {{ request()->routeIs('admin.menus.*')
