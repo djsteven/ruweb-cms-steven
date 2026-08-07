@@ -302,10 +302,10 @@
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,.72),transparent_60%)]"></div>
     <div class="relative mx-auto max-w-[1450px]">
         <h2 class="display-title text-center text-5xl leading-[.9] text-black sm:text-6xl lg:text-7xl">Upcoming<br><span class="italic">Group Retreats</span></h2>
-        <div class="mt-14 grid gap-7 lg:grid-cols-3">
+        <div class="ama-retreat-grid">
             @forelse($upcomingRetreats as $retreat)
             <article class="flex flex-col rounded-[26px] bg-white p-5 shadow-[0_20px_70px_rgba(50,45,30,.09)]">
-                <div class="relative aspect-[4/3] overflow-hidden rounded-[20px] bg-ama-parchment">
+                <div class="ama-retreat-card-media relative bg-ama-parchment">
                     @if($retreat->featuredImage())<x-responsive-img :media="$retreat->featuredImage()" sizes="(min-width:1024px) 420px, 100vw" :fallback-alt="$retreat->title" class="h-full w-full object-cover" />@endif
                     <span class="absolute left-4 top-4 rounded-full bg-white px-5 py-2 text-sm">{{ str_contains(strtoupper($retreat->title), 'SOLD OUT') ? 'Sold Out' : 'Available' }}</span>
                 </div>
@@ -314,7 +314,7 @@
                 @if($retreat->excerpt)<p class="mt-4 line-clamp-4 text-base leading-7 text-ama-ink/55">{{ $retreat->excerpt }}</p>@endif
                 <div class="mt-auto flex items-center justify-between border-t border-ama-ink/10 pt-5">
                     <span class="text-sm text-[#25713B]">{{ $retreat->organizer }}</span>
-                    <a href="{{ route('retreats.show', $retreat) }}" class="rounded-full bg-[#838D4A] px-6 py-2 text-sm text-white hover:bg-[#6f783e]">View Details</a>
+                    <a href="{{ route('retreats.show', $retreat) }}" class="ama-retreat-details text-sm">View Details</a>
                 </div>
             </article>
             @empty

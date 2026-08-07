@@ -366,6 +366,53 @@
     .ama-hero-media img {
         filter: saturate(0.86);
     }
+
+    #upcoming-retreats h2 {
+        margin-bottom: 56px;
+    }
+
+    #upcoming-retreats .ama-retreat-grid {
+        display: grid;
+        gap: 32px;
+        margin-top: 0;
+    }
+
+    #upcoming-retreats .ama-retreat-card-media {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+    #upcoming-retreats .ama-retreat-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    #upcoming-retreats .ama-retreat-details {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 8px 24px;
+        border-radius: 999px;
+        background: #838D4A;
+        color: #FFFFFF;
+        font-weight: 400;
+        white-space: nowrap;
+    }
+
+    #upcoming-retreats .ama-retreat-details:hover {
+        background: #6F783E;
+        color: #FFFFFF;
+    }
+}
+
+@media (min-width: 1024px) {
+    #upcoming-retreats .ama-retreat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 900px) {
