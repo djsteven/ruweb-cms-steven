@@ -76,7 +76,7 @@
                             <button type="button" class="retreat-editor-tab" data-editor-tab="code">Code</button>
                         </div>
                         <div class="retreat-toolbar" data-rich-toolbar>
-                            <button type="button" class="retreat-media-button" data-command="insertImage">＋ Add media</button>
+                            <button type="button" class="retreat-media-button" data-editor-media>＋ Add media</button>
                             <select data-format aria-label="Text format">
                                 <option value="p">Paragraph</option>
                                 <option value="h2">Heading 2</option>
@@ -99,6 +99,12 @@
                         </div>
                         <div id="retreat-rich-editor" contenteditable="true">{!! old('content', $retreat?->content) !!}</div>
                         <textarea id="retreat-code-editor" aria-label="HTML code editor"></textarea>
+                    </div>
+                    <div class="media-selector" data-name="retreat_editor_media" data-type="image" data-editor-media-selector hidden>
+                        <input type="hidden" class="media-selector-input">
+                        <div class="media-selector-preview"></div>
+                        <button type="button" class="media-selector-btn" data-label="Choose image">Choose image</button>
+                        <button type="button" class="media-selector-clear">Clear</button>
                     </div>
                     <textarea hidden name="content" id="retreat-content"></textarea>
                 </div>
@@ -140,22 +146,70 @@
     const codeEditor = document.getElementById('retreat-code-editor');
     const contentField = document.getElementById('retreat-content');
     const toolbar = document.querySelector('[data-rich-toolbar]');
+    const mediaSelector = document.querySelector('[data-editor-media-selector]');
+    const mediaInput = mediaSelector?.querySelector('.media-selector-input');
+    const mediaTrigger = mediaSelector?.querySelector('.media-selector-btn');
+    let savedRange = null;
     if (!form || !visualEditor || !codeEditor || !contentField || !toolbar) return;
 
-    toolbar.querySelector('[data-format]')?.addEventListener('change', event => {
-        document.execCommand('formatBlock', false, event.target.value);
+    const saveSelection = () => {
+        const selection = window.getSelection();
+        if (selection?.rangeCount && visualEditor.contains(selection.anchorNode)) {
+            savedRange = selection.getRangeAt(0).cloneRange();
+        }
+    };
+
+    const restoreSelection = () => {
         visualEditor.focus();
+        if (!savedRange) return;
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(savedRange);
+    };
+
+    ['keyup', 'mouseup', 'input', 'focus'].forEach(eventName => visualEditor.addEventListener(eventName, saveSelection));
+    toolbar.querySelectorAll('button').forEach(button => button.addEventListener('mousedown', event => event.preventDefault()));
+
+    toolbar.querySelector('[data-format]')?.addEventListener('change', event => {
+        restoreSelection();
+        document.execCommand('formatBlock', false, `<${event.target.value}>`);
+        saveSelection();
     });
 
     toolbar.querySelectorAll('button[data-command]').forEach(button => button.addEventListener('click', () => {
         const command = button.dataset.command;
         let value = button.dataset.value || null;
         if (command === 'createLink') value = prompt('Enter the link URL:');
-        if (command === 'insertImage') value = prompt('Enter the image URL:');
-        if ((command === 'createLink' || command === 'insertImage') && !value) return;
+        if (command === 'createLink' && !value) return;
+        restoreSelection();
         document.execCommand(command, false, value);
-        visualEditor.focus();
+        saveSelection();
     }));
+
+    toolbar.querySelector('[data-editor-media]')?.addEventListener('click', () => {
+        saveSelection();
+        mediaTrigger?.click();
+    });
+
+    mediaInput?.addEventListener('change', async () => {
+        if (!mediaInput.value) return;
+        try {
+            const response = await fetch(`/admin/media/${mediaInput.value}`, {
+                headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            });
+            if (!response.ok) throw new Error('Unable to load the selected image.');
+            const media = await response.json();
+            restoreSelection();
+            document.execCommand('insertImage', false, media.url);
+            const insertedImage = Array.from(visualEditor.querySelectorAll('img')).reverse().find(image => image.src === media.url);
+            if (insertedImage) insertedImage.alt = media.alt || media.title || '';
+            saveSelection();
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            mediaInput.value = '';
+        }
+    });
 
     document.querySelectorAll('[data-editor-tab]').forEach(tab => tab.addEventListener('click', () => {
         const showCode = tab.dataset.editorTab === 'code';
