@@ -293,7 +293,7 @@
 @endif
 
 <section class="bg-[#FAF8F3] px-6 pb-16 text-ama-bone sm:px-10 lg:px-section-inline lg:pb-24">
-    <blockquote class="mx-auto max-w-[1450px] rounded-[28px] bg-[#838D4A] px-8 py-12 font-display text-3xl leading-tight sm:px-16 sm:text-4xl lg:px-20 lg:py-16 lg:text-5xl">
+    <blockquote class="mx-auto max-w-[1280px] rounded-[24px] bg-[#838D4A] px-8 py-8 font-display text-2xl leading-[1.28] sm:px-12 sm:py-10 sm:text-3xl lg:px-16 lg:py-12 lg:text-[34px]">
         “Our unique forest environment, friendly staff, comfortable accommodations and healthy, delicious food all add to a retreat experience that you will remember forever.”
     </blockquote>
 </section>
