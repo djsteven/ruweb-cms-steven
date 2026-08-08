@@ -85,6 +85,20 @@
     $upcomingRetreats = \App\Models\Retreat::query()->published()->upcoming()->with('media')->limit(3)->get();
 @endphp
 
+<style>
+    .ama-home-container { width: min(calc(100% - 40px), 1200px); margin-inline: auto; }
+    .ama-retreat-quote blockquote { border-radius: 24px; padding: 32px; font-size: 24px; line-height: 1.28; }
+    @media (min-width: 640px) {
+        .ama-home-container { width: min(calc(100% - 64px), 1200px); }
+        .ama-retreat-quote blockquote { padding: 40px 48px; font-size: 30px; }
+    }
+    @media (min-width: 1024px) {
+        .ama-audience-content { padding-left: max(32px, calc((100vw - 1200px) / 2)); padding-right: 48px; }
+        .ama-home-audience article:nth-child(even) .ama-audience-content { padding-left: 48px; padding-right: max(32px, calc((100vw - 1200px) / 2)); }
+        .ama-retreat-quote blockquote { padding: 48px 64px; font-size: 34px; }
+    }
+</style>
+
 <section class="relative min-h-[640px] overflow-hidden bg-ama-ink pt-28 text-ama-bone sm:pt-32 lg:min-h-[66vh] lg:pt-24">
     <div class="ama-hero-media absolute inset-0">
         @if($heroVideoSrc)
@@ -112,7 +126,7 @@
         <div class="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-ama-ink to-transparent"></div>
     </div>
 
-    <div class="relative z-10 flex min-h-[430px] items-center px-6 pb-16 pt-20 sm:px-10 lg:min-h-[calc(66vh-6rem)] lg:px-section-inline lg:pb-10 lg:pt-12">
+    <div class="ama-home-container relative z-10 flex min-h-[430px] items-center pb-16 pt-20 lg:min-h-[calc(66vh-6rem)] lg:pb-10 lg:pt-12">
         <div class="max-w-3xl">
             <h1 class="display-title max-w-3xl text-[46px] leading-[0.98] sm:text-[60px] lg:text-[76px] xl:text-[84px]">
                 {{ $heroHeading }}
@@ -127,8 +141,8 @@
 </section>
 
 @if(($intro['is_visible'] ?? 1) && ($introEyebrow || $introHeading || $introBody))
-<section id="home-intro" class="bg-ama-ink-alt px-6 py-8 text-ama-bone sm:px-10 lg:px-section-inline lg:py-10">
-    <div class="mx-auto grid max-w-[1450px] gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:items-center">
+<section id="home-intro" class="bg-ama-ink-alt py-8 text-ama-bone lg:py-10">
+    <div class="ama-home-container grid gap-10 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)] lg:items-center">
         <div>
             @if($introEyebrow)
                 <p class="overline overline-no-rule mb-6">{{ $introEyebrow }}</p>
@@ -149,7 +163,7 @@
 @endif
 
 @if(($audience['is_visible'] ?? 1) && count($audiencePanels))
-<section class="grid bg-ama-ink text-ama-bone lg:grid-cols-2">
+<section class="ama-home-audience grid bg-ama-ink text-ama-bone lg:grid-cols-2">
     @foreach($audiencePanels as $panel)
         @php
             $panelImage = isset($panel['image_id']) ? \App\Models\Media::find((int) $panel['image_id']) : null;
@@ -185,7 +199,7 @@
             <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(15,23,16,0.76)_0%,rgba(15,23,16,0.55)_48%,rgba(15,23,16,0.28)_100%)]"></div>
             <div class="absolute inset-0 bg-ama-ink/10 transition duration-700 group-hover:bg-ama-ink/0"></div>
 
-            <div class="relative z-20 flex min-h-[560px] items-center px-8 py-20 sm:px-14 lg:min-h-[720px] lg:px-16 xl:px-20 2xl:px-24">
+            <div class="ama-audience-content relative z-20 flex min-h-[560px] items-center px-5 py-20 sm:px-8 lg:min-h-[720px]">
                 <div class="max-w-[680px]">
                     @if($panel['eyebrow'] ?? null)
                         <p class="mb-5 inline-flex items-center gap-3 font-sans text-[13px] font-normal uppercase tracking-[0.22em] text-[#69B342] before:block before:h-px before:w-6 before:bg-[#69B342]">
@@ -224,8 +238,8 @@
 @endif
 
 @if(($features['is_visible'] ?? 1) && ($offersHeadingTop || $offersHeadingAccent || $offerCopyLines->isNotEmpty() || count($offerCards)))
-<section id="home-offers" class="bg-[#FAF8F3] px-6 py-18 text-ama-ink sm:px-10 lg:px-section-inline lg:py-[104px]">
-    <div class="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[minmax(320px,0.72fr)_minmax(0,1.28fr)] lg:items-center xl:gap-16">
+<section id="home-offers" class="bg-[#FAF8F3] py-18 text-ama-ink lg:py-[104px]">
+    <div class="ama-home-container grid gap-14 lg:grid-cols-[minmax(320px,0.72fr)_minmax(0,1.28fr)] lg:items-center xl:gap-16">
         <div>
             @if($offersHeadingTop || $offersHeadingAccent)
                 <h2 class="display-title text-[50px] leading-[1.04] sm:text-[64px] lg:text-[68px] xl:text-[72px]">
@@ -292,15 +306,15 @@
 </section>
 @endif
 
-<section class="bg-[#FAF8F3] px-6 pb-16 text-ama-bone sm:px-10 lg:px-section-inline lg:pb-24">
-    <blockquote class="mx-auto max-w-[1280px] rounded-[24px] bg-[#838D4A] px-8 py-8 font-display text-2xl leading-[1.28] sm:px-12 sm:py-10 sm:text-3xl lg:px-16 lg:py-12 lg:text-[34px]">
+<section class="ama-retreat-quote bg-[#FAF8F3] pb-16 text-ama-bone lg:pb-24">
+    <blockquote class="ama-home-container bg-[#838D4A] font-display">
         “Our unique forest environment, friendly staff, comfortable accommodations and healthy, delicious food all add to a retreat experience that you will remember forever.”
     </blockquote>
 </section>
 
-<section id="upcoming-retreats" class="relative overflow-hidden bg-[#F2ECDD] px-6 py-20 text-ama-ink sm:px-10 lg:px-section-inline lg:py-28">
+<section id="upcoming-retreats" class="relative overflow-hidden bg-[#F2ECDD] py-20 text-ama-ink lg:py-28">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,.72),transparent_60%)]"></div>
-    <div class="relative mx-auto max-w-[1450px]">
+    <div class="ama-home-container relative">
         <h2 class="display-title text-center text-5xl leading-[.9] text-black sm:text-6xl lg:text-7xl">Upcoming<br><span class="italic">Group Retreats</span></h2>
         <div class="ama-retreat-grid">
             @forelse($upcomingRetreats as $retreat)
