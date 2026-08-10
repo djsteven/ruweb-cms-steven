@@ -128,7 +128,7 @@
         border-radius: 999px;
         background: linear-gradient(90deg, #25713B 0%, #69B342 100%);
         color: #FFFFFF;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 400;
         letter-spacing: 0;
         line-height: 1;
@@ -264,8 +264,8 @@
         display: block;
         padding: 8px 0;
         color: inherit;
-        font-size: 13px;
-        line-height: 1.35;
+        font-size: 15px;
+        line-height: 1.45;
         opacity: 0.72;
     }
 
@@ -290,7 +290,7 @@
         top: calc(100% - 8px);
         left: 50%;
         z-index: 60;
-        width: min(720px, calc(100vw - 64px));
+        width: min(800px, calc(100vw - 64px));
         padding-top: 22px;
         transform: translateX(-50%);
     }
@@ -298,8 +298,8 @@
     .ama-mega-panel {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 30px;
-        padding: 28px;
+        gap: 34px;
+        padding: 32px;
         border: 1px solid rgba(201, 169, 110, 0.24);
         border-radius: 22px;
         background: rgba(250, 248, 243, 0.97);
@@ -310,16 +310,16 @@
 
     .ama-mega-column + .ama-mega-column {
         border-left: 1px solid rgba(45, 74, 47, 0.12);
-        padding-left: 30px;
+        padding-left: 34px;
     }
 
     .ama-mega-heading {
         display: inline-flex;
         margin-bottom: 12px;
         color: #2D4A2F;
-        font-size: 10px;
-        font-weight: 400;
-        letter-spacing: 0.22em;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
     }
 
@@ -359,7 +359,7 @@
         margin-top: 8px;
         margin-bottom: 2px;
         color: #C9A96E;
-        font-size: 10px;
+        font-size: 12px;
         letter-spacing: 0.16em;
     }
 

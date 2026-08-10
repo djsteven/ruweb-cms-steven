@@ -1,3 +1,13 @@
+<style>
+    .ama-nav-list > li > a { font-size: 15px; }
+    .ama-nav-list .ama-dropdown-menu a,
+    .ama-nav-list .ama-mega-links a { font-size: 15px; line-height: 1.45; }
+    .ama-nav-list .ama-mega-menu { width: min(800px, calc(100vw - 64px)); }
+    .ama-mega-panel { gap: 34px; padding: 32px; }
+    .ama-mega-column + .ama-mega-column { padding-left: 34px; }
+    .ama-mega-heading { font-size: 12px; font-weight: 500; letter-spacing: .18em; }
+    .ama-mobile-panel .ama-mega-heading { font-size: 12px; }
+</style>
 <header class="ama-header-shell">
     @php
         $isBaseLocale = app()->getLocale() === \App\Models\Locale::baseCode();
