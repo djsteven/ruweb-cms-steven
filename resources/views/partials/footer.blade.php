@@ -64,7 +64,7 @@
             </section>
 
             <div class="ama-footer-map">
-                <iframe title="AmaTierra location" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=AmaTierra%20Retreat%20and%20Wellness%20Center%20Costa%20Rica&output=embed"></iframe>
+                <iframe title="Yoga y Hotel Ama Tierra location" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6678.51151587816!2d-84.42975402317984!3d9.905403674651648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa04d812ba90583%3A0x12265d8c144e1307!2sYoga%20y%20Hotel%20Ama%20Tierra!5e1!3m2!1ses-419!2scr!4v1786549428556!5m2!1ses-419!2scr"></iframe>
             </div>
         </div>
 
