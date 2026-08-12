@@ -17,6 +17,12 @@ class MenuComponent extends Component
             : Menu::findBySlug($slug);
 
         $this->items = $menu ? $menu->tree() : collect();
+
+        if (($location === 'header' || ($location === null && $slug === 'header'))) {
+            $this->items = $this->items
+                ->reject(fn ($item) => strcasecmp(trim((string) $item->label), 'Home') === 0)
+                ->values();
+        }
     }
 
     public function render()

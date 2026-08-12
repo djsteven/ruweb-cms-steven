@@ -19,20 +19,11 @@ class MenuSeeder extends Seeder
         if ($header->items()->count() === 0) {
             MenuItem::create([
                 'menu_id' => $header->id,
-                'label'   => 'Home',
-                'type'    => 'custom_link',
-                'url'     => '/',
-                'target'  => '_self',
-                'order'   => 0,
-            ]);
-
-            MenuItem::create([
-                'menu_id' => $header->id,
                 'label'   => 'Blog',
                 'type'    => 'custom_link',
                 'url'     => '/blog',
                 'target'  => '_self',
-                'order'   => 1,
+                'order'   => 0,
             ]);
 
             MenuItem::create([
@@ -41,7 +32,7 @@ class MenuSeeder extends Seeder
                 'type'    => 'custom_link',
                 'url'     => '/about',
                 'target'  => '_self',
-                'order'   => 2,
+                'order'   => 1,
             ]);
         }
 
