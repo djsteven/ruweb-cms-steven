@@ -9,11 +9,11 @@
     $features = $sections['features'] ?? [];
     $cta = $sections['cta'] ?? [];
     $heroBackground = isset($hero['image_id']) ? \App\Models\Media::find((int) $hero['image_id']) : null;
-    $heroVideoUrl = trim((string) ($hero['video_url'] ?? ''));
+    $heroVideoUrl = 'https://player.mediadelivery.net/embed/720722/c6350a6a-416e-4421-a117-873af28d0053';
 
     if ($heroVideoUrl !== '') {
         $heroVideoUrl = str_replace('player.mediadelivery.net/play/', 'player.mediadelivery.net/embed/', $heroVideoUrl);
-        $heroVideoSrc = $heroVideoUrl.(str_contains($heroVideoUrl, '?') ? '&' : '?').'autoplay=true&muted=true&loop=true&preload=true&responsive=false';
+        $heroVideoSrc = $heroVideoUrl.(str_contains($heroVideoUrl, '?') ? '&' : '?').'autoplay=true&loop=true&muted=true&preload=true&responsive=true';
     } else {
         $heroVideoSrc = null;
     }
@@ -105,8 +105,9 @@
             <iframe
                 src="{{ $heroVideoSrc }}"
                 title="AmaTierra retreat video"
-                allow="autoplay; fullscreen; picture-in-picture"
-                loading="eager"
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowfullscreen
+                loading="lazy"
                 class="pointer-events-none absolute left-1/2 top-1/2 h-[56.25vw] min-h-full w-full min-w-[177.78vh] -translate-x-1/2 -translate-y-1/2 border-0"
                 aria-hidden="true"
                 tabindex="-1"
