@@ -1,4 +1,14 @@
 <style>
+    .ama-header-shell.ama-header-integrated { position: sticky; top: 0; left: auto; width: 100%; transform: none; background: #faf8f3; }
+    body:has(#ruweb-admin-bar) .ama-header-integrated { top: 36px; }
+    .ama-header-integrated #site-header-pill { width: min(calc(100% - 64px), 1200px); margin-inline: auto; border: 0; border-radius: 0; background: transparent; color: #233e29; box-shadow: none; backdrop-filter: none; }
+    .ama-header-integrated #site-header-pill > div:first-child { padding: 12px 0; min-height: 88px; }
+    .ama-header-integrated .ama-nav-list { gap: clamp(16px, 2vw, 28px); }
+    .ama-header-integrated .ama-header-cta { box-shadow: none; }
+    @media (max-width: 639px) {
+        .ama-header-integrated #site-header-pill { width: calc(100% - 40px); }
+        .ama-header-integrated #site-header-pill > div:first-child { min-height: 76px; }
+    }
     .ama-nav-list > li > a { font-size: 15px; }
     .ama-nav-list .ama-dropdown-menu a,
     .ama-nav-list .ama-mega-links a { font-size: 15px; line-height: 1.45; }
@@ -8,7 +18,7 @@
     .ama-mega-heading { font-size: 12px; font-weight: 500; letter-spacing: .18em; }
     .ama-mobile-panel .ama-mega-heading { font-size: 12px; }
 </style>
-<header class="ama-header-shell">
+<header class="ama-header-shell ama-header-integrated">
     @php
         $isBaseLocale = app()->getLocale() === \App\Models\Locale::baseCode();
         $homeHref = $isBaseLocale
