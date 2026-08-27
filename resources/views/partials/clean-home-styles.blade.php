@@ -19,6 +19,18 @@
     .ama-clean-audience .ama-audience-content p:first-child { color: #537039; font-size: 12px; }
     .ama-clean-audience .ama-audience-content a { color: #233e29; border-color: #71805b; font-size: 12px; letter-spacing: .08em; }
     .ama-clean-audience .ama-audience-content a:hover { background: #233e29; color: #fff; }
+    /* Editorial cards: clean photography, generous spacing, aligned actions. */
+    .ama-clean-audience { background: #f3f0e7; padding: 72px 0 80px; }
+    .ama-audience-grid article { display: flex; flex-direction: column; padding: 14px; background: #fffdf8; border: 1px solid #e0e3d7; border-radius: 28px; box-shadow: 0 16px 44px rgba(35,62,41,.08); }
+    .ama-audience-photo { aspect-ratio: 8 / 5; border-radius: 18px; }
+    .ama-clean-audience .ama-audience-content { padding: 30px 22px 22px; flex: 1; display: flex; }
+    .ama-clean-audience .ama-audience-content > div { display: flex; flex-direction: column; width: 100%; }
+    .ama-clean-audience .ama-audience-content > div > div:last-child { margin-top: auto; padding-top: 28px; gap: 12px; }
+    .ama-clean-audience .ama-audience-content p:first-child { color: #637343; letter-spacing: .16em; margin-bottom: 16px; }
+    .ama-clean-audience .ama-audience-content a { color: #fff; background: #2d4a2f; border-color: #2d4a2f; border-radius: 999px; min-height: 48px; padding: 14px 22px; }
+    .ama-clean-audience .ama-audience-content a:not(:first-child) { background: transparent; color: #2d4a2f; border-color: #bcc5ac; }
+    .ama-clean-audience .ama-audience-content a:first-child::after { content: '→'; margin-left: 14px; font-size: 18px; }
+    .ama-clean-audience .ama-audience-content a:hover { background: #1a2a1c; border-color: #1a2a1c; color: #fff; }
     /* Staging also has an offers banner: keep its photo separate from its copy. */
     #home-offers-banner { padding-inline: 0; }
     #home-offers-banner > div { width: min(calc(100% - 64px), 1200px); margin-inline: auto; }
@@ -39,6 +51,8 @@
         #home-intro.ama-clean-intro { padding: 48px 0; }
         .ama-clean-intro p { font-size: 17px; }
         .ama-audience-grid { grid-template-columns: 1fr; gap: 48px; }
+        .ama-clean-audience { padding: 40px 0 48px; }
+        .ama-clean-audience .ama-audience-content { padding: 26px 10px 14px; }
     }
     @media (max-width: 639px) {
         #home-offers-banner > div { width: calc(100% - 40px); }
