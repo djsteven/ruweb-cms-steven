@@ -31,17 +31,9 @@
     .ama-clean-audience .ama-audience-content a:not(:first-child) { background: transparent; color: #2d4a2f; border-color: #bcc5ac; }
     .ama-clean-audience .ama-audience-content a:first-child::after { content: '→'; margin-left: 14px; font-size: 18px; }
     .ama-clean-audience .ama-audience-content a:hover { background: #1a2a1c; border-color: #1a2a1c; color: #fff; }
-    /* Staging also has an offers banner: keep its photo separate from its copy. */
+    /* Preserve the original photo-background banner within the shared content width. */
     #home-offers-banner { padding-inline: 0; }
     #home-offers-banner > div { width: min(calc(100% - 64px), 1200px); margin-inline: auto; }
-    #home-offers-banner > div > div { min-height: 0; background: transparent; border-radius: 0; box-shadow: none; }
-    #home-offers-banner > div > div > div.absolute { position: relative; aspect-ratio: 16 / 7; }
-    #home-offers-banner > div > div > div.absolute > div { display: none; }
-    #home-offers-banner > div > div > div.relative { max-width: none; padding: 32px 0; }
-    #home-offers-banner h2, #home-offers-banner h2 span, #home-offers-banner ul { color: #233e29; }
-    #home-offers-banner h2 { font-size: clamp(34px, 4vw, 48px); }
-    #home-offers-banner h2 span { display: inline; }
-    #home-offers-banner li > span:first-child { background: #71805b; }
     @media (max-width: 767px) {
         #home-offers .ama-offers-layout { grid-template-columns: minmax(0, 1fr); }
         #home-offers .ama-offers-copy-content,
