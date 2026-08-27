@@ -31,6 +31,9 @@
     #home-offers-banner h2 span { display: inline; }
     #home-offers-banner li > span:first-child { background: #71805b; }
     @media (max-width: 767px) {
+        #home-offers .ama-offers-layout { grid-template-columns: minmax(0, 1fr); }
+        #home-offers .ama-offers-copy-content,
+        #home-offers .ama-offers-carousel-wrap { min-width: 0; width: 100%; max-width: 100%; }
         #home-hero.ama-clean-hero { height: 60svh; min-height: 320px; }
         .ama-clean-hero iframe { width: max(100vw, 106.67svh); height: max(56.25vw, 60svh); min-width: 568.89px; min-height: 320px; }
         #home-intro.ama-clean-intro { padding: 48px 0; }
