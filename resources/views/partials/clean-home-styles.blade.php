@@ -1,5 +1,7 @@
 {{-- View-level styles also work on servers without a frontend build runtime. --}}
 <style>
+    .ama-home-container { width: min(calc(100% - 40px), 1200px); margin-inline: auto; }
+    @media (min-width: 640px) { .ama-home-container { width: min(calc(100% - 64px), 1200px); } }
     #home-hero.ama-clean-hero { position: relative; height: min(76svh, 860px); min-height: 420px; overflow: hidden; background: #1a2a1c; padding: 0; }
     .ama-clean-hero .ama-hero-media { position: absolute; inset: 0; }
     .ama-clean-hero iframe { position: absolute; left: 50%; top: 50%; width: max(100vw, 135.12svh); height: max(56.25vw, 76svh); min-width: 746.67px; min-height: 420px; transform: translate(-50%, -50%); border: 0; pointer-events: none; }
