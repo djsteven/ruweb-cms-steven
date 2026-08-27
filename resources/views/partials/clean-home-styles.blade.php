@@ -4,10 +4,10 @@
     @media (min-width: 640px) { .ama-home-container { width: min(calc(100% - 64px), 1200px); } }
     #home-hero.ama-clean-hero { position: relative; height: min(76svh, 860px); min-height: 420px; overflow: hidden; background: #1a2a1c; padding: 0; }
     .ama-clean-hero .ama-hero-media { position: absolute; inset: 0; }
-    .ama-clean-hero iframe { position: absolute; left: 50%; top: 50%; width: max(100vw, 135.12svh); height: max(56.25vw, 76svh); min-width: 746.67px; min-height: 420px; transform: translate(-50%, -50%); border: 0; pointer-events: none; }
-    #home-intro.ama-clean-intro { background: #faf8f3; color: #233e29; padding: 72px 0; text-align: center; }
-    .ama-clean-intro h1 { color: #233e29; font-size: clamp(38px, 4.6vw, 64px); line-height: 1.12; margin: 0; }
-    .ama-clean-intro p { max-width: 760px; margin: 26px auto 0; font-size: 19px; line-height: 1.75; color: #4c584c; }
+    .ama-clean-hero iframe { position: absolute; left: 50%; top: 50%; width: max(100vw, 135.12svh); height: max(56.25vw, 76svh); min-width: 746.67px; min-height: 420px; translate: none; transform: translate(-50%, -50%); border: 0; pointer-events: none; }
+    #home-intro.ama-clean-intro { background: #1a2a1c; color: #f0ebe0; padding: 72px 0; text-align: center; }
+    .ama-clean-intro h1 { color: #e8d5a8; font-size: clamp(38px, 4.6vw, 64px); line-height: 1.12; margin: 0; }
+    .ama-clean-intro p { max-width: 760px; margin: 26px auto 0; font-size: 19px; line-height: 1.75; color: #f0ebe0; }
     .ama-clean-audience { background: #faf8f3; color: #233e29; padding-bottom: 64px; }
     .ama-audience-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
     .ama-audience-grid article { min-width: 0; }
